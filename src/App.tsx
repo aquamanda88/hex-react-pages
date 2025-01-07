@@ -3,6 +3,7 @@ import { LoginReq } from './core/models/admin/auth.model';
 import { ProductFullDatum } from './core/models/utils.model';
 import axios from 'axios';
 import "./styles/_main.scss"
+import Swal from 'sweetalert2';
 
 const API_BASE = "https://ec-course-api.hexschool.io/v2"
 const API_PATH = "olivebranch"
@@ -43,7 +44,10 @@ function App() {
         setIsAuth(false)
       }
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: error.response.data.message
+      });
     }
   }
 
@@ -58,7 +62,10 @@ function App() {
         console.log(result.data.message);
       }
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: error.response.data.message
+      });
     }
   }
 
@@ -72,7 +79,10 @@ function App() {
         setProducts(result.data.products);
       }
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: error.response.data.message
+      });
     }finally {
       setIsLoading(false); 
     }
@@ -188,7 +198,7 @@ function App() {
         
     ):(
         <div className="container py-4">
-          <div className="row justify-content-center">
+          <div className="row justify-content-center mb-3">
             <h1 className="h3 mb-3 font-weight-normal text-center">請先登入</h1>
             <div className="card col-8">
               <form id="form" className="form-signin" onSubmit={handleSubmit}>
