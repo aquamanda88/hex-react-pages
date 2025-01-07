@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { LoginReq } from './core/models/admin/auth.model';
 import { ProductFullDatum } from './core/models/utils.model';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import "./styles/_main.scss"
 import Swal from 'sweetalert2';
 
@@ -44,10 +44,17 @@ function App() {
         setIsAuth(false)
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: error.response.data.message
-      });
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          icon: "error",
+          title: error.response?.data?.message 
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "發生無預期錯誤"
+        });
+      }
     }
   }
 
@@ -62,10 +69,17 @@ function App() {
         console.log(result.data.message);
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: error.response.data.message
-      });
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          icon: "error",
+          title: error.response?.data?.message 
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "發生無預期錯誤"
+        });
+      }
     }
   }
 
@@ -79,11 +93,18 @@ function App() {
         setProducts(result.data.products);
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: error.response.data.message
-      });
-    }finally {
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          icon: "error",
+          title: error.response?.data?.message 
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "發生無預期錯誤"
+        });
+      }
+    } finally {
       setIsLoading(false); 
     }
   }
