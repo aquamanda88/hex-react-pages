@@ -1,3 +1,4 @@
+export { default as Home } from './home';
 export { default as Week01 } from './week01';
 export { default as Week02 } from './week02';
 export { default as Week03 } from './week03';

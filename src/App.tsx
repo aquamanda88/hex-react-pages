@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { Navbar, Footer } from './components';
 import {
+  Home,
   Week01,
   Week02,
   Week03,
@@ -17,7 +18,8 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route index element={<Week01 />}></Route>
+        <Route index element={<Home />}></Route>
+        <Route path='/week01' element={<Week01 />}></Route>
         <Route path='/week02' element={<Week02 />}></Route>
         <Route path='/week03' element={<Week03 />}></Route>
         <Route path='/week04' element={<Week04 />}></Route>

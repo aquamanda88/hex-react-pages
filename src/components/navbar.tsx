@@ -11,8 +11,8 @@ export default function Navbar() {
             <ul className='nav col-12 col-lg-auto mb-2 justify-content-between mb-md-0'>
               <li>
                 <Link
-                  className={`nav-link px-2 py-4 ${location.pathname === '/' ? 'text-secondary' : 'text-white'}`}
-                  to='/'
+                  className={`nav-link px-2 py-4 ${location.pathname === '/week01' ? 'text-secondary' : 'text-white'}`}
+                  to='/week01'
                 >
                   第一週
                 </Link>
