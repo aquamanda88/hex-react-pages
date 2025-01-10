@@ -4,9 +4,11 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App.tsx';
 import './styles/_main.scss';
 
+const basename = import.meta.env.MODE === 'production' ? '/hex-react-pages/' : '/';
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <App />
     </BrowserRouter>
   </StrictMode>
