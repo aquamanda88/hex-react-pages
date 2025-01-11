@@ -79,7 +79,7 @@ export default function Week01() {
   ]);
   return (
     <>
-      <Header title='關注點分離' />
+      <Header title='從函式拆解認識設計模式' />
       <div className='container py-4'>
         <div className='row flex-column justify-content-center align-items-center'>
           <div className='col-lg-6'>

@@ -125,7 +125,7 @@ export default function Week02() {
   
   return (
     <>
-      <Header title='非同步與 AJAX' />
+      <Header title='RESTful API 串接' />
       {isAuth ? (
         <>
           <div className='container py-4'>
