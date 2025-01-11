@@ -11,7 +11,6 @@ import {
   Week07,
   Week08,
 } from './pages';
-import './styles/_main.scss';
 
 function App() {
   return (

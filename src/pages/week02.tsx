@@ -4,6 +4,7 @@ import axios, { AxiosError } from 'axios';
 import { LoginReq } from '../core/models/admin/auth.model';
 import { ProductFullDatum } from '../core/models/utils.model';
 import Swal from 'sweetalert2';
+import Button from '@material-ui/core/Button';
 
 const API_BASE = 'https://ec-course-api.hexschool.io/v2';
 const API_PATH = 'olivebranch';
@@ -234,42 +235,38 @@ export default function Week02() {
       ) : (
         <div className='container layout'>
           <div className='row justify-content-center mb-3'>
-            <h1 className='h3 mb-3 font-weight-normal text-center'>請先登入</h1>
-            <div className='card col-4'>
+            <div className='card col-4 col-md-6'>
+              <h2 className='h2 mb-3 font-weight-normal text-center'>請先登入</h2>
               <form id='form' className='form-signin' onSubmit={handleSubmit}>
-                <div className='form-floating mb-3'>
-                  <input
-                    type='email'
-                    className='form-control'
-                    id='username'
-                    name='username'
-                    placeholder='帳號'
-                    onChange={handleInputChange}
+                <div className="form-input-group">
+                  <div className='form-floating'>
+                    <input
+                      type='email'
+                      className='form-control'
+                      id='username'
+                      name='username'
+                      placeholder='帳號'
+                      onChange={handleInputChange}
                     value={formData.username}
-                    required
-                    autoFocus
-                  />
-                  <label htmlFor='username'>帳號</label>
-                </div>
-                <div className='form-floating'>
-                  <input
-                    type='password'
-                    className='form-control'
-                    id='password'
-                    name='password'
-                    placeholder='密碼'
-                    onChange={handleInputChange}
+                      required
+                    />
+                    <label htmlFor='username'>帳號</label>
+                  </div>
+                  <div className='form-floating'>
+                    <input
+                      type='password'
+                      className='form-control'
+                      id='password'
+                      name='password'
+                      placeholder='密碼'
+                      onChange={handleInputChange}
                     value={formData.password}
-                    required
-                  />
-                  <label htmlFor='password'>密碼</label>
+                      required
+                    />
+                    <label htmlFor='password'>密碼</label>
+                  </div>
                 </div>
-                <button
-                  className='btn btn-lg btn-primary w-100 mt-3'
-                  type='submit'
-                >
-                  登入
-                </button>
+                <Button className='button w-100' variant="contained" color="primary" type='submit'>登入</Button>
               </form>
             </div>
           </div>
