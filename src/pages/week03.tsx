@@ -8,6 +8,11 @@ import axios, { AxiosError } from 'axios';
 import { LoginReq } from '../core/models/admin/auth.model';
 import { ProductFullDatum } from '../core/models/utils.model';
 import Swal from 'sweetalert2';
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
 
 const API_BASE = 'https://ec-course-api.hexschool.io/v2';
 const API_PATH = 'olivebranch';
@@ -22,6 +27,31 @@ export default function Week03() {
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
   const [tempProduct, setTempProduct] = useState<ProductFullDatum | null>(null);
   const [checked, setChecked] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [formValues, setFormValues] = useState<ProductFullDatum| null>(null);
+
+  const handleOpen = (item: ProductFullDatum) => {
+    setTempProduct(item);
+    setFormValues({
+      is_enabled: item.is_enabled,
+      num: item.num,
+      title: item.title,
+      content: item.content,
+      description: item.description,
+      category: item.category,
+      unit: item.unit,
+      origin_price: item.origin_price,
+      price: item.price,
+      imageUrl: item.imageUrl,
+      imagesUrl: item.imagesUrl,
+      id: item.id,
+    });
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(e.target.checked);
@@ -34,6 +64,25 @@ export default function Week03() {
       ...formData,
       [name]: value,
     });
+  };
+
+  const handleInputEdit = (e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      // 保留 item 的完整結構
+      is_enabled: prevValues!.is_enabled,
+      num: prevValues!.num,
+      title: name === "title" ? value : prevValues!.title,
+      content: name === "content" ? value : prevValues!.content,
+      description: name === "description" ? value : prevValues!.description,
+      category: name === "category" ? value : prevValues!.category,
+      unit: name === "unit" ? value : prevValues!.unit,
+      origin_price: name === "origin_price" ? parseInt(value) : prevValues!.origin_price,
+      price: name === "price" ? parseInt(value) : prevValues!.price,
+      imageUrl: name === "imageUrl" ? value : prevValues!.imageUrl,
+      imagesUrl: name === "imagesUrl" ? [value] : prevValues!.imagesUrl,
+      id: prevValues!.id, // 不更新 id
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -124,7 +173,6 @@ export default function Week03() {
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
-
     if(token){
       checkLogin().then((res)=>{
         if(res){
@@ -180,9 +228,9 @@ export default function Week03() {
                             <td>
                               <button
                                 className='btn btn-secondary rounded-pill w-100'
-                                onClick={() => setTempProduct(item)}
+                                onClick={() => {handleOpen(item)}}
                               >
-                                查看細節
+                                編輯
                               </button>
                             </td>
                           </tr>
@@ -198,47 +246,90 @@ export default function Week03() {
               </div>
               <div className='col-lg-6'>
                 <h2>單一產品細節</h2>
-                {tempProduct ? (
-                  <div className='card mb-3'>
-                    <img
-                      src={tempProduct.imageUrl}
-                      className='object-fit card-img-top rounded'
-                      alt='主圖'
-                    />
-                    <div className='card-body'>
-                      <h5 className='card-title'>
-                        {tempProduct.title}
-                        <span className='badge rounded-pill bg-secondary ms-2'>
-                          {tempProduct.category}
-                        </span>
-                      </h5>
-                      <p className='card-text'>
-                        商品描述：{tempProduct.content}
-                      </p>
-                      <div className='d-flex align-items-center'>
-                        <p className='fs-5 mb-0 me-2'>
-                          <strong>${tempProduct.price}</strong>
-                        </p>
-                        <p className='card-text text-secondary'>
-                          <del>${tempProduct.origin_price}</del>
-                        </p>
-                      </div>
-                      <h5 className='mt-3'>更多圖片：</h5>
-                      <div className='d-flex flex-wrap'>
-                        {tempProduct.imagesUrl?.map((url, index) => (
-                          <img
-                            key={index}
-                            src={url}
-                            className='images object-fit'
-                            alt='副圖'
-                          />
-                        ))}
-                      </div>
-                    </div>
+                <Dialog
+                  fullScreen
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <div className="bg-light sticky-top d-flex justify-content-end">
+                  <DialogActions className="justify-content-center">
+                      <Button onClick={handleClose}>X</Button>
+                    </DialogActions>
                   </div>
-                ) : (
-                  <p className='text-secondary'>請選擇一個商品查看</p>
-                )}
+                  <div className="container">
+                    <DialogTitle id="alert-dialog-title">
+                      <input
+                        type='text'
+                        className='form-control'
+                        id='title'
+                        name='title'
+                        onChange={handleInputEdit}
+                        value={formValues?.title}
+                        required
+                      />
+                    </DialogTitle>
+                    <DialogContent>
+                      <img
+                        src={tempProduct?.imageUrl}
+                        className='object-fit card-img-top rounded mb-4'
+                        alt='主圖'
+                      />
+                      <DialogContentText id="alert-dialog-description">
+                      <textarea className="form-control mb-4" id="content" name="content" rows={2} defaultValue={formValues?.content} onChange={handleInputEdit}>
+                      </textarea>
+                      <div className="row">
+                        <div className="col-6">
+                          <label htmlFor="price" className="form-label">售價</label>
+                          <input
+                            type='number'
+                            className='form-control'
+                            id='price'
+                            name='price'
+                            onChange={handleInputEdit}
+                            value={formValues?.price}
+                            required
+                          />
+                        </div>
+                        <div className="col-6">
+                          <label htmlFor="origin_price" className="form-label">原價</label>
+                          <input
+                            type='number'
+                            className='form-control'
+                            id='origin_price'
+                            name='origin_price'
+                            onChange={handleInputEdit}
+                            value={formValues?.origin_price}
+                            required
+                          />
+                        </div>
+                      </div>
+                        <h5 className='mt-3'>更多圖片：</h5>
+                        <div className='d-flex flex-wrap'>
+                          {tempProduct?.imagesUrl?.map((url, index) => (
+                            <img
+                              key={index}
+                              src={url}
+                              className='images object-fit'
+                              alt='副圖'
+                            />
+                          ))}
+                        </div>
+                      </DialogContentText>
+                    </DialogContent>
+                    
+                  </div>
+                  <div className="bg-light fixed-bottom justify-content-center">
+                    <DialogActions className="justify-content-center">
+                      <Button onClick={handleClose}>取消</Button>
+                      <Button onClick={handleClose} autoFocus>
+                        儲存
+                      </Button>
+                    </DialogActions>
+                  </div>
+                </Dialog>
+                <p className='text-secondary'>請選擇一個商品查看</p>
               </div>
             </div>
           </div>
@@ -259,7 +350,7 @@ export default function Week03() {
                       name='username'
                       placeholder='Email'
                       onChange={handleInputChange}
-                    value={formData.username}
+                      value={formData.username}
                       required
                     />
                     <label htmlFor='username'>Email</label>
@@ -272,7 +363,7 @@ export default function Week03() {
                       name='password'
                       placeholder='Password'
                       onChange={handleInputChange}
-                    value={formData.password}
+                      value={formData.password}
                       required
                     />
                     <label htmlFor='password'>Password</label>
