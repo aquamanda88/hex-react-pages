@@ -1,3 +1,7 @@
+@use './scss/components/card';
+@use './scss/components/modal';
+@use './scss/components/spinners';
+
 body {
   background-color: #edf2fc;
 }
@@ -20,12 +24,6 @@ header {
   }
 }
 
-.card {
-  padding: 24px;
-  border: none;
-  box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.12);
-}
-
 .table {
   vertical-align: middle;
 }
@@ -34,30 +32,6 @@ header {
   -o-object-fit: cover;
   object-fit: cover;
   max-width: 100%;
-}
-
-.card-img-top {
-  height: 250px;
-}
-
-.images {
-  width: 150px;
-  height: 150px;
-  margin-right: 8px;
-}
-
-.loading {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  background-color: rgba(255, 255, 255, 0.25);
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
 }
 
 .form-input-group {
@@ -75,15 +49,6 @@ header {
     background-color: #2e9cca;
     opacity: 1;
   }
-}
-
-.modal-header {
-  box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.12);
-}
-
-.modal-content {
-  background-color: #f5f5f5;
-  padding: 32px 0;
 }
 
 .text-field-group {

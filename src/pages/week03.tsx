@@ -1,19 +1,13 @@
-import Button from '@material-ui/core/Button';
 import Header from '../components/header';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-
 import { useEffect, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { LoginReq } from '../core/models/admin/auth.model';
 import { ProductFullDatum } from '../core/models/utils.model';
-import Swal from 'sweetalert2';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
+import { Button, IconButton, TextField, Checkbox, FormControlLabel } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { TextField } from '@mui/material';
+import Swal from 'sweetalert2';
+import { Modal } from '../components';
 
 const API_BASE = 'https://ec-course-api.hexschool.io/v2';
 const API_PATH = 'olivebranch';
@@ -48,12 +42,8 @@ export default function Week03() {
     setOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const handleSave = () => {
-    console.log('tempProduct: ', tempProduct);
+    console.log(tempProduct);
     
   };
 
@@ -211,7 +201,7 @@ export default function Week03() {
               <div className='col-lg-6'>
                 <h2>所有文具商品</h2>
                 <div className='card mb-4'>
-                  <table className='table table-hover mb-0'>
+                  <table className='table mb-0'>
                     <thead className='text-center'>
                       <tr>
                         <th>產品名稱</th>
@@ -236,17 +226,19 @@ export default function Week03() {
                               {item.is_enabled ? '啟用' : '未啟用'}
                             </td>
                             <td>
-                              <Button
+                              <IconButton
                                 className='btn'
                                 onClick={() => {
                                   handleOpen(item);
                                 }}
                               >
                                 <EditIcon />
-                              </Button>
-                              <Button className='btn'>
-                                <DeleteIcon sx={{ color: '#dc3545' }} />
-                              </Button>
+                              </IconButton>
+                              <IconButton className='btn'>
+                                <DeleteIcon
+                                  sx={{ color: '#dc3545' }}
+                                />
+                              </IconButton>
                             </td>
                           </tr>
                         ))
@@ -260,161 +252,133 @@ export default function Week03() {
                 </div>
               </div>
               <div className='col-lg-6'>
-                <h2>單一產品細節</h2>
-                <Dialog
-                  fullScreen
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby='alert-dialog-title'
-                  aria-describedby='alert-dialog-description'
-                >
-                  <div className='modal-header bg-white sticky-top d-flex justify-content-end'>
-                    <DialogActions className='justify-content-center'>
-                      <Button onClick={handleClose}>
-                        <CloseIcon />
-                      </Button>
-                    </DialogActions>
-                  </div>
-                  <div className='modal-content'>
-                    <div className='container'>
-                      <div className='row'>
-                        <div className='text-field-group card'>
+                <Modal open={open} setOpen={setOpen} handleSave={handleSave}>
+                  <div className='row'>
+                    <div className='text-field-group card'>
+                      <TextField
+                        id='title'
+                        name='title'
+                        label='標題'
+                        value={tempProduct?.title}
+                        onChange={handleInputEdit}
+                        required
+                      />
+                      <TextField
+                        id='description'
+                        name='description'
+                        label='描述'
+                        multiline
+                        maxRows={4}
+                        defaultValue={tempProduct?.description}
+                        onChange={handleInputEdit}
+                      />
+                      <TextField
+                        id='content'
+                        name='content'
+                        label='說明'
+                        multiline
+                        maxRows={4}
+                        defaultValue={tempProduct?.content}
+                        onChange={handleInputEdit}
+                      />
+                      <div className='d-flex gap-3'>
+                        <TextField
+                          className='w-100'
+                          id='category'
+                          name='category'
+                          label='分類'
+                          variant='outlined'
+                          onChange={handleInputEdit}
+                          value={tempProduct?.category}
+                          required
+                        />
+                        <TextField
+                          className='w-100'
+                          id='unit'
+                          name='unit'
+                          label='單位'
+                          variant='outlined'
+                          onChange={handleInputEdit}
+                          value={tempProduct?.unit}
+                          required
+                        />
+                      </div>
+                      <div className='d-flex gap-3'>
+                        <TextField
+                          className='w-100'
+                          id='origin_price'
+                          name='origin_price'
+                          label='原價'
+                          type='number'
+                          onChange={handleInputEdit}
+                          value={tempProduct?.origin_price}
+                          required
+                        />
+                        <TextField
+                          className='w-100'
+                          id='price'
+                          name='price'
+                          label='售價'
+                          type='number'
+                          onChange={handleInputEdit}
+                          value={tempProduct?.price}
+                          required
+                        />
+                      </div>
+                      <div
+                        className='d-grid'
+                        style={{
+                          gridTemplateColumns: 'repeat(2, 1fr)',
+                          gap: '1.5rem',
+                        }}
+                      >
+                        <div className='image-group d-flex flex-column'>
                           <TextField
-                            id='title'
-                            name='title'
-                            label='標題'
-                            value={tempProduct?.title}
+                            className='w-100'
+                            id='imageUrl'
+                            name='imageUrl'
+                            label='主圖網址'
+                            variant='outlined'
                             onChange={handleInputEdit}
+                            value={tempProduct?.imageUrl}
                             required
                           />
-                          <TextField
-                            id='description'
-                            name='description'
-                            label='描述'
-                            multiline
-                            maxRows={4}
-                            defaultValue={tempProduct?.description}
-                            onChange={handleInputEdit}
+                          <img
+                            src={tempProduct?.imageUrl}
+                            className='object-fit rounded w-100 image-size'
+                            alt='主圖'
                           />
-                          <TextField
-                            id='content'
-                            name='content'
-                            label='說明'
-                            multiline
-                            maxRows={4}
-                            defaultValue={tempProduct?.content}
-                            onChange={handleInputEdit}
-                          />
-                          <div className='d-flex gap-3'>
-                            <TextField
-                              className='w-100'
-                              id='category'
-                              name='category'
-                              label='分類'
-                              variant='outlined'
-                              onChange={handleInputEdit}
-                              value={tempProduct?.category}
-                              required
-                            />
-                            <TextField
-                              className='w-100'
-                              id='unit'
-                              name='unit'
-                              label='單位'
-                              variant='outlined'
-                              onChange={handleInputEdit}
-                              value={tempProduct?.unit}
-                              required
-                            />
-                          </div>
-                          <div className='d-flex gap-3'>
-                            <TextField
-                              className='w-100'
-                              id='origin_price'
-                              name='origin_price'
-                              label='原價'
-                              type='number'
-                              onChange={handleInputEdit}
-                              value={tempProduct?.origin_price}
-                              required
-                            />
-                            <TextField
-                              className='w-100'
-                              id='price'
-                              name='price'
-                              label='售價'
-                              type='number'
-                              onChange={handleInputEdit}
-                              value={tempProduct?.price}
-                              required
-                            />
-                          </div>
-                          <div
-                            className='d-grid'
-                            style={{
-                              gridTemplateColumns: 'repeat(2, 1fr)',
-                              gap: '1.5rem',
-                            }}
-                          >
-                            <div className='image-group d-flex flex-column'>
-                              <TextField
-                                className='w-100'
-                                id='imageUrl'
-                                name='imageUrl'
-                                label='主圖網址'
-                                variant='outlined'
-                                onChange={handleInputEdit}
-                                value={tempProduct?.imageUrl}
-                                required
-                              />
-                              <img
-                                src={tempProduct?.imageUrl}
-                                className='object-fit rounded w-100 image-size'
-                                alt='主圖'
-                              />
-                            </div>
-                          </div>
-
-                          <div
-                            className='d-grid'
-                            style={{
-                              gridTemplateColumns: 'repeat(2, 1fr)',
-                              gap: '1.5rem',
-                            }}
-                          >
-                            {tempProduct?.imagesUrl?.map((url, index) => (
-                              <div className='image-group d-flex flex-column'>
-                                <TextField
-                                  id='imagesUrl'
-                                  name='imagesUrl'
-                                  label={`副圖網址 ${index + 1}`}
-                                  variant='outlined'
-                                  onChange={(e) => handleInputEdit(e, index)}
-                                  value={url}
-                                />
-                                <img
-                                  key={index}
-                                  src={url}
-                                  className='object-fit rounded image-size'
-                                  alt='副圖'
-                                />
-                              </div>
-                            ))}
-                          </div>
                         </div>
+                      </div>
+                      <div
+                        className='d-grid'
+                        style={{
+                          gridTemplateColumns: 'repeat(2, 1fr)',
+                          gap: '1.5rem',
+                        }}
+                      >
+                        {tempProduct?.imagesUrl?.map((url, index) => (
+                          <div className='image-group d-flex flex-column' key={index}>
+                            <TextField
+                              id='imagesUrl'
+                              name='imagesUrl'
+                              label={`副圖網址 ${index + 1}`}
+                              variant='outlined'
+                              onChange={(e) => handleInputEdit(e, index)}
+                              value={url}
+                            />
+                            <img
+                              key={index}
+                              src={url}
+                              className='object-fit rounded image-size'
+                              alt='副圖'
+                            />
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
-                  <div className='bg-white d-flex justify-content-center'>
-                    <div className='justify-content-center py-2'>
-                      <Button onClick={handleClose}>取消</Button>
-                      <Button onClick={handleSave} autoFocus>
-                        儲存
-                      </Button>
-                    </div>
-                  </div>
-                </Dialog>
-                <p className='text-secondary'>請選擇一個商品查看</p>
+                </Modal>
               </div>
             </div>
           </div>

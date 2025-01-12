@@ -1,19 +1,8 @@
 import * as React from 'react';
-import { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { Button, IconButton, Dialog, DialogActions } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
-export default function Modal() {
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
+export default function Modal({ open, setOpen, children, handleSave }) {
   const handleClose = () => {
     setOpen(false);
   };
@@ -21,32 +10,31 @@ export default function Modal() {
   return (
     <>
       <React.Fragment>
-        <Button variant="outlined" onClick={handleClickOpen}>
-          Open alert dialog
-        </Button>
         <Dialog
+          fullScreen
           open={open}
           onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'
         >
-          <DialogTitle id="alert-dialog-title">
-            {"Use Google's location service?"}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Let Google help apps determine location. This means sending anonymous
-              location data to Google, even when no apps are running.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Disagree</Button>
-            <Button onClick={handleClose} autoFocus>
-              Agree
-            </Button>
-          </DialogActions>
+          <div className='modal-header bg-white sticky-top d-flex justify-content-end'>
+            <DialogActions className='justify-content-center'>
+              <IconButton onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+            </DialogActions>
+          </div>
+          <div className='modal-content'>
+            <div className='container'>{children}</div>
+          </div>
+          <div className='bg-white d-flex justify-content-center'>
+            <div className='justify-content-center py-2'>
+              <Button onClick={handleClose}>取消</Button>
+              <Button onClick={handleSave}>儲存</Button>
+            </div>
+          </div>
         </Dialog>
       </React.Fragment>
     </>
-  )
+  );
 }
