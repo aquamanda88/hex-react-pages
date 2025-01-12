@@ -17,31 +17,31 @@ export interface ProductObj {
 /** 商品類 API 回傳基準欄位 (無 id) */
 export interface ProductDatum {
   /** 是否啟用 */
-  is_enabled: number;
+  is_enabled?: number;
   /** 數量 */
-  num: number;
+  num?: number;
   /** 標題 */
-  title: string;
+  title?: string;
   /** 描述 */
-  content: string;
+  content?: string;
   /** 說明 */
-  description: string;
+  description?: string;
   /** 分類 */
-  category: string;
+  category?: string;
   /** 單位 */
-  unit: string;
+  unit?: string;
   /** 原價 */
-  origin_price: number;
+  origin_price?: number;
   /** 售價 */
-  price: number;
+  price?: number;
   /** 主圖網址 */
-  imageUrl: string;
+  imageUrl?: string;
   /** 圖片網址陣列 */
-  imagesUrl: string[];
+  imagesUrl?: string[];
 }
 
 /** 商品類 API 回傳基準欄位 (有 id) */
 export interface ProductFullDatum extends ProductDatum {
   /** 產品資訊 id */
-  id: string;
+  id?: string;
 }
