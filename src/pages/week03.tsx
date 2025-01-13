@@ -1,13 +1,21 @@
-import Header from '../components/header';
 import { useEffect, useState } from 'react';
 import axios, { AxiosError } from 'axios';
+import { Header, Modal } from '../components';
 import { LoginReq } from '../core/models/admin/auth.model';
 import { ProductFullDatum } from '../core/models/utils.model';
-import { Button, IconButton, TextField, Checkbox, FormControlLabel } from '@mui/material';
+import {
+  Button,
+  IconButton,
+  TextField,
+  Checkbox,
+  FormControlLabel,
+} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
 import Swal from 'sweetalert2';
-import { Modal } from '../components';
 
 const API_BASE = 'https://ec-course-api.hexschool.io/v2';
 const API_PATH = 'olivebranch';
@@ -18,6 +26,10 @@ export default function Week03() {
     password: '',
   });
   const [isAuth, setIsAuth] = useState(false);
+  const [errors, setErrors] = useState<LoginReq>({
+    username: '',
+    password: '',
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
   const [checked, setChecked] = useState(false);
@@ -44,7 +56,6 @@ export default function Week03() {
 
   const handleSave = () => {
     console.log(tempProduct);
-    
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,12 +63,32 @@ export default function Week03() {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const name = e.target.name;
+    const { name, value } = e.target;
+
     setFormData({
       ...formData,
       [name]: value,
     });
+  };
+
+  const handleInputBlur = () => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const errorStatus: LoginReq = {
+      username: '',
+      password: '',
+    };
+
+    if (!formData.username) {
+      errorStatus.username = '請輸入帳號';
+    } else if (!emailPattern.test(formData.username)) {
+      errorStatus.username = '請輸入有效的 Email';
+    }
+
+    if (!formData.password) {
+      errorStatus.password = '請輸入密碼';
+    }
+
+    setErrors(errorStatus);
   };
 
   const handleInputEdit = (
@@ -85,7 +116,17 @@ export default function Week03() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login();
+
+    if (!formData.username && !formData.password) {
+      setErrors(() => ({
+        username: '請輸入帳號',
+        password: '請輸入密碼',
+      }));
+    }
+
+    if (formData.username !== '' && formData.password !== '') {
+      login();
+    }
   };
 
   const login = async () => {
@@ -199,8 +240,14 @@ export default function Week03() {
             </div>
             <div className='row flex-column justify-content-center align-items-center'>
               <div className='col-lg-6'>
-                <h2>所有文具商品</h2>
                 <div className='card mb-4'>
+                  <div className='d-flex justify-content-between'>
+                    <h2>所有商品</h2>
+                    <Button variant='text' className='btn btn-primary'>
+                      <AddIcon />
+                      <p className='btn-icon'>新增</p>
+                    </Button>
+                  </div>
                   <table className='table mb-0'>
                     <thead className='text-center'>
                       <tr>
@@ -223,7 +270,7 @@ export default function Week03() {
                                 item.is_enabled ? 'text-success' : 'text-danger'
                               }
                             >
-                              {item.is_enabled ? '啟用' : '未啟用'}
+                              {item.is_enabled ? <CheckIcon /> : <CloseIcon />}
                             </td>
                             <td>
                               <IconButton
@@ -235,9 +282,7 @@ export default function Week03() {
                                 <EditIcon />
                               </IconButton>
                               <IconButton className='btn'>
-                                <DeleteIcon
-                                  sx={{ color: '#dc3545' }}
-                                />
+                                <DeleteIcon sx={{ color: '#dc3545' }} />
                               </IconButton>
                             </td>
                           </tr>
@@ -358,7 +403,10 @@ export default function Week03() {
                         }}
                       >
                         {tempProduct?.imagesUrl?.map((url, index) => (
-                          <div className='image-group d-flex flex-column' key={index}>
+                          <div
+                            className='image-group d-flex flex-column'
+                            key={index}
+                          >
                             <TextField
                               id='imagesUrl'
                               name='imagesUrl'
@@ -388,37 +436,32 @@ export default function Week03() {
           <div className='row justify-content-center mb-3'>
             <div className='card col-4 col-md-6'>
               <h2 className='h2 mb-3 font-weight-normal text-center'>
-                Sign In
+                登入
               </h2>
-              <p>Enter your email and password to sign in!</p>
               <form id='form' className='form-signin' onSubmit={handleSubmit}>
                 <div className='form-input-group'>
-                  <div className='form-floating'>
-                    <input
-                      type='email'
-                      className='form-control'
-                      id='username'
-                      name='username'
-                      placeholder='Email'
-                      onChange={handleInputChange}
-                      value={formData.username}
-                      required
-                    />
-                    <label htmlFor='username'>Email</label>
-                  </div>
-                  <div className='form-floating'>
-                    <input
-                      type='password'
-                      className='form-control'
-                      id='password'
-                      name='password'
-                      placeholder='Password'
-                      onChange={handleInputChange}
-                      value={formData.password}
-                      required
-                    />
-                    <label htmlFor='password'>Password</label>
-                  </div>
+                  <TextField
+                    type='email'
+                    id='username'
+                    name='username'
+                    label='電子信箱'
+                    onChange={handleInputChange}
+                    onBlur={handleInputBlur}
+                    value={formData.username}
+                    error={!!errors.username}
+                    helperText={errors.username ? errors.username : ' '}
+                  />
+                  <TextField
+                    type='password'
+                    id='password'
+                    name='password'
+                    label='密碼'
+                    onChange={handleInputChange}
+                    onBlur={handleInputBlur}
+                    value={formData.password}
+                    error={!!errors.password}
+                    helperText={errors.password ? errors.password : ' '}
+                  />
                 </div>
                 <FormControlLabel
                   className='mb-2'
@@ -429,15 +472,15 @@ export default function Week03() {
                       onChange={handleCheckboxChange}
                     />
                   }
-                  label='Keep me logged in'
+                  label='保持登入'
                 />
                 <Button
-                  className='button w-100'
+                  className='btn btn-primary w-100'
                   variant='contained'
                   color='primary'
                   type='submit'
                 >
-                  Sign In
+                  登入
                 </Button>
               </form>
             </div>

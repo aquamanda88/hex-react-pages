@@ -135,6 +135,7 @@ export default function Week01() {
                 <img
                   src={selectedProduct.imageUrl}
                   className='object-fit card-img-top rounded'
+                  height={200}
                   alt='主圖'
                 />
                 <div className='card-body'>
@@ -162,6 +163,8 @@ export default function Week01() {
                         key={index}
                         src={url}
                         className='images object-fit'
+                        width={200}
+                        height={200}
                         alt='副圖'
                       />
                     ))}

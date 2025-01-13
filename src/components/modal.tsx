@@ -11,7 +11,6 @@ export default function Modal({ open, setOpen, children, handleSave }) {
     <>
       <React.Fragment>
         <Dialog
-          fullScreen
           open={open}
           onClose={handleClose}
           aria-labelledby='alert-dialog-title'
@@ -27,10 +26,10 @@ export default function Modal({ open, setOpen, children, handleSave }) {
           <div className='modal-content'>
             <div className='container'>{children}</div>
           </div>
-          <div className='bg-white d-flex justify-content-center'>
+          <div className='sticky-bottom bg-white d-flex justify-content-center'>
             <div className='justify-content-center py-2'>
-              <Button onClick={handleClose}>取消</Button>
-              <Button onClick={handleSave}>儲存</Button>
+              <Button className='button' color='secondary' onClick={handleClose}>取消</Button>
+              <Button className='button' color='primary' onClick={handleSave}>儲存</Button>
             </div>
           </div>
         </Dialog>

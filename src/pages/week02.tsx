@@ -192,6 +192,7 @@ export default function Week02() {
                     <img
                       src={tempProduct.imageUrl}
                       className='object-fit card-img-top rounded'
+                      height={250}
                       alt='主圖'
                     />
                     <div className='card-body'>
@@ -219,6 +220,8 @@ export default function Week02() {
                             key={index}
                             src={url}
                             className='images object-fit'
+                            width={200}
+                            height={200}
                             alt='副圖'
                           />
                         ))}
@@ -266,7 +269,7 @@ export default function Week02() {
                     <label htmlFor='password'>密碼</label>
                   </div>
                 </div>
-                <Button className='button w-100' variant="contained" color="primary" type='submit'>登入</Button>
+                <Button  className='btn btn-primary w-100' variant="contained" color="primary" type='submit'>登入</Button>
               </form>
             </div>
           </div>
