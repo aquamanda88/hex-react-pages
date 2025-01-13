@@ -27,9 +27,9 @@ export default function Modal({ open, setOpen, children, handleSave }) {
             <div className='container'>{children}</div>
           </div>
           <div className='sticky-bottom bg-white d-flex justify-content-center'>
-            <div className='justify-content-center py-2'>
-              <Button className='button' color='secondary' onClick={handleClose}>取消</Button>
-              <Button className='button' color='primary' onClick={handleSave}>儲存</Button>
+            <div className='d-flex justify-content-center py-2 gap-2'>
+              <Button className='btn btn-secondary' variant='contained' onClick={handleClose}>取消</Button>
+              <Button className='btn btn-primary' variant='contained' onClick={handleSave}>儲存</Button>
             </div>
           </div>
         </Dialog>

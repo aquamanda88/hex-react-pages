@@ -21,11 +21,11 @@ const API_BASE = 'https://ec-course-api.hexschool.io/v2';
 const API_PATH = 'olivebranch';
 
 export default function Week03() {
+  const [isAuth, setIsAuth] = useState(false);
   const [formData, setFormData] = useState<LoginReq>({
     username: '',
     password: '',
   });
-  const [isAuth, setIsAuth] = useState(false);
   const [errors, setErrors] = useState<LoginReq>({
     username: '',
     password: '',
@@ -33,25 +33,30 @@ export default function Week03() {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
   const [checked, setChecked] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteItem, setDeleteItem] = useState({
+    title: '',
+    id: '',
+  });
   const [tempProduct, setTempProduct] = useState<ProductFullDatum | null>(null);
 
-  const handleOpen = (item: ProductFullDatum) => {
+  const handleOpen = (item?: ProductFullDatum) => {
     setTempProduct({
-      is_enabled: item.is_enabled,
-      num: item.num,
-      title: item.title,
-      content: item.content,
-      description: item.description,
-      category: item.category,
-      unit: item.unit,
-      origin_price: item.origin_price,
-      price: item.price,
-      imageUrl: item.imageUrl,
-      imagesUrl: item.imagesUrl,
-      id: item.id,
+      is_enabled: item?.is_enabled ?? 0,
+      num: item?.num ?? 0,
+      title: item?.title ?? '',
+      content: item?.content ?? '',
+      description: item?.description ?? '',
+      category: item?.category ?? '',
+      unit: item?.unit ?? '',
+      origin_price: item?.origin_price ?? 0,
+      price: item?.price ?? 0,
+      imageUrl: item?.imageUrl ?? '',
+      imagesUrl: item?.imagesUrl ?? [],
+      id: item?.id ?? '',
     });
-    setOpen(true);
+    setEditOpen(true);
   };
 
   const handleSave = () => {
@@ -212,6 +217,44 @@ export default function Week03() {
     }
   };
 
+  const handleDeleteOpen = (title: string, id: string) => {
+    setDeleteItem({ title, id });
+    setDeleteOpen(true);
+  };
+
+  const deleteProduct = async () => {
+    try {
+      setDeleteOpen(false);
+      setIsLoading(true);
+      const result = await axios.delete(
+        `${API_BASE}/api/${API_PATH}/admin/product/${deleteItem.id}`,
+        {
+          headers: {
+            Authorization: sessionStorage.getItem('token'),
+          },
+        }
+      );
+      getProducts(sessionStorage.getItem('token') ?? '');
+      Swal.fire({
+        title: result.data.message
+      });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          icon: 'error',
+          title: error.response?.data?.message,
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '發生無預期錯誤',
+        });
+      }
+    }finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     if (token) {
@@ -243,7 +286,13 @@ export default function Week03() {
                 <div className='card mb-4'>
                   <div className='d-flex justify-content-between'>
                     <h2>所有商品</h2>
-                    <Button variant='text' className='btn btn-primary'>
+                    <Button
+                      variant='contained'
+                      className='btn btn-secondary'
+                      onClick={() => {
+                        handleOpen();
+                      }}
+                    >
                       <AddIcon />
                       <p className='btn-icon'>新增</p>
                     </Button>
@@ -274,14 +323,20 @@ export default function Week03() {
                             </td>
                             <td>
                               <IconButton
-                                className='btn'
                                 onClick={() => {
                                   handleOpen(item);
                                 }}
                               >
                                 <EditIcon />
                               </IconButton>
-                              <IconButton className='btn'>
+                              <IconButton
+                                onClick={() => {
+                                  handleDeleteOpen(
+                                    item.title ?? '',
+                                    item.id ?? ''
+                                  );
+                                }}
+                              >
                                 <DeleteIcon sx={{ color: '#dc3545' }} />
                               </IconButton>
                             </td>
@@ -296,8 +351,21 @@ export default function Week03() {
                   </table>
                 </div>
               </div>
+              <Modal
+                open={deleteOpen}
+                setOpen={setDeleteOpen}
+                handleSave={deleteProduct}
+              >
+                <div className='row'>
+                  <h2>是否要刪除{deleteItem.title}？</h2>
+                </div>
+              </Modal>
               <div className='col-lg-6'>
-                <Modal open={open} setOpen={setOpen} handleSave={handleSave}>
+                <Modal
+                  open={editOpen}
+                  setOpen={setEditOpen}
+                  handleSave={handleSave}
+                >
                   <div className='row'>
                     <div className='text-field-group card'>
                       <TextField
@@ -388,11 +456,13 @@ export default function Week03() {
                             value={tempProduct?.imageUrl}
                             required
                           />
-                          <img
-                            src={tempProduct?.imageUrl}
-                            className='object-fit rounded w-100 image-size'
-                            alt='主圖'
-                          />
+                          {tempProduct?.imageUrl && (
+                            <img
+                              src={tempProduct.imageUrl}
+                              className='object-fit rounded w-100 image-size'
+                              alt='主圖'
+                            />
+                          )}
                         </div>
                       </div>
                       <div
@@ -435,9 +505,7 @@ export default function Week03() {
         <div className='container layout'>
           <div className='row justify-content-center mb-3'>
             <div className='card col-4 col-md-6'>
-              <h2 className='h2 mb-3 font-weight-normal text-center'>
-                登入
-              </h2>
+              <h2 className='h2 mb-3 font-weight-normal text-center'>登入</h2>
               <form id='form' className='form-signin' onSubmit={handleSubmit}>
                 <div className='form-input-group'>
                   <TextField
