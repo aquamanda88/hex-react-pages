@@ -23,9 +23,9 @@ export interface ProductDatum {
   /** 標題 */
   title?: string;
   /** 描述 */
-  content?: string;
-  /** 說明 */
   description?: string;
+  /** 內容 */
+  content?: ContentDatum;
   /** 分類 */
   category?: string;
   /** 單位 */
@@ -44,4 +44,44 @@ export interface ProductDatum {
 export interface ProductFullDatum extends ProductDatum {
   /** 產品資訊 id */
   id?: string;
+}
+
+/** 內容擴充欄位 */
+export interface ContentDatum {
+  /** 作品名稱 */
+  name?: string;
+  /** 作者名稱 */
+  artists?: string;
+  /** 作者華文名稱 */
+  artists_zh_tw?: string;
+  /** 作品年份 */
+  year?: string;
+}
+
+/** 商品類 API 新增/編輯 驗證欄位 */
+export interface ProductValidation {
+  /** 標題 */
+  title?: boolean;
+  /** 分類 */
+  category?: boolean;
+  /** 單位 */
+  unit?: boolean;
+  /** 原價 */
+  origin_price?: boolean;
+  /** 售價 */
+  price?: boolean;
+}
+
+/** 商品類 API 新增/編輯 錯誤訊息欄位 */
+export interface ProductValidationMessage {
+  /** 標題 */
+  title?: string;
+  /** 分類 */
+  category?: string;
+  /** 單位 */
+  unit?: string;
+  /** 原價 */
+  origin_price?: string;
+  /** 售價 */
+  price?: string;
 }

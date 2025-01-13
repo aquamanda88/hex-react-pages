@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { Header, Modal } from '../components';
 import { LoginReq } from '../core/models/admin/auth.model';
-import { ProductFullDatum } from '../core/models/utils.model';
+import {
+  ProductDatum,
+  ProductFullDatum,
+  ProductValidation,
+  ProductValidationMessage,
+} from '../core/models/utils.model';
 import {
   Button,
   IconButton,
@@ -18,7 +23,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Swal from 'sweetalert2';
 
 const API_BASE = 'https://ec-course-api.hexschool.io/v2';
-const API_PATH = 'olivebranch';
+const API_PATH = 'olive-branch';
 
 export default function Week03() {
   const [isAuth, setIsAuth] = useState(false);
@@ -33,34 +38,91 @@ export default function Week03() {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
   const [checked, setChecked] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [deleteItem, setDeleteItem] = useState({
-    title: '',
-    id: '',
-  });
+  const [deleteItem, setDeleteItem] = useState({ title: '', id: '' });
   const [tempProduct, setTempProduct] = useState<ProductFullDatum | null>(null);
+  const [productErrors, setProductErrors] = useState<ProductValidation>({});
+  const [productErrorsMessage, setProductErrorsMessage] =
+    useState<ProductValidationMessage>({});
 
-  const handleOpen = (item?: ProductFullDatum) => {
+  const handleAddOpen = () => {
+    setTempProduct({
+      is_enabled: 0,
+      num: 0,
+      title: '',
+      content: {},
+      description: '',
+      category: '',
+      unit: '',
+      origin_price: 0,
+      price: 0,
+      imageUrl: '',
+      imagesUrl: [],
+    });
+    setProductErrors({
+      title: false,
+      category: false,
+      unit: false,
+      origin_price: false,
+      price: false,
+    });
+    setProductErrorsMessage({
+      title: '',
+      category: '',
+      unit: '',
+      origin_price: '',
+      price: '',
+    });
+    setAddOpen(true);
+  };
+
+  const handleEditOpen = (item?: ProductFullDatum) => {
     setTempProduct({
       is_enabled: item?.is_enabled ?? 0,
       num: item?.num ?? 0,
-      title: item?.title ?? '',
-      content: item?.content ?? '',
+      title: item?.title,
+      content: item?.content,
       description: item?.description ?? '',
-      category: item?.category ?? '',
-      unit: item?.unit ?? '',
-      origin_price: item?.origin_price ?? 0,
-      price: item?.price ?? 0,
+      category: item?.category,
+      unit: item?.unit,
+      origin_price: item?.origin_price,
+      price: item?.price,
       imageUrl: item?.imageUrl ?? '',
       imagesUrl: item?.imagesUrl ?? [],
-      id: item?.id ?? '',
+      id: item?.id,
     });
-    setEditOpen(true);
+    setAddOpen(true);
   };
 
   const handleSave = () => {
-    console.log(tempProduct);
+    const errorMessage = {
+      title: tempProduct?.title === '' ? '請輸入作品名稱' : '',
+      category: tempProduct?.category === '' ? '請輸入分類' : '',
+      unit: tempProduct?.unit === '' ? '請輸入單位' : '',
+      origin_price: tempProduct?.origin_price === 0 ? '請輸入原價' : '',
+      price: tempProduct?.price === 0 ? '請輸入售價' : '',
+    };
+    setProductErrors({
+      title: tempProduct?.title === '',
+      category: tempProduct?.category === '',
+      unit: tempProduct?.unit === '',
+      origin_price: tempProduct?.origin_price === 0,
+      price: tempProduct?.price === 0,
+    });
+
+    setProductErrorsMessage(errorMessage);
+    if (
+      tempProduct?.title !== '' &&
+      tempProduct?.category !== '' &&
+      tempProduct?.unit !== '' &&
+      tempProduct?.origin_price !== 0 &&
+      tempProduct?.price !== 0
+    ) {
+      const newTempProduct = { data: { ...tempProduct } };
+      delete newTempProduct.data.id;
+      addProduct(newTempProduct);
+    }
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +138,8 @@ export default function Week03() {
     });
   };
 
-  const handleInputBlur = () => {
+  const handleInputBlur = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const errorStatus: LoginReq = {
       username: '',
@@ -94,7 +157,32 @@ export default function Week03() {
     }
 
     setErrors(errorStatus);
+    setProductErrors({
+      ...productErrors,
+      [name]: value === '' ? true : false,
+    });
+    setProductErrorsMessage({
+      ...productErrorsMessage,
+      [name]: value === '' ? getErrorMessageForField(name) : '',
+    });
   };
+
+  function getErrorMessageForField(fieldName: string): string {
+    switch (fieldName) {
+      case 'title':
+        return '請輸入作品名稱';
+      case 'category':
+        return '請輸入類型';
+      case 'unit':
+        return '請輸入單位';
+      case 'origin_price':
+        return '請輸入原價';
+      case 'price':
+        return '請輸入售價';
+      default:
+        return '';
+    }
+  }
 
   const handleInputEdit = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -109,6 +197,13 @@ export default function Week03() {
         return {
           ...prevValues,
           imagesUrl: updatedImagesUrl,
+        };
+      }
+
+      if (name === 'price' || name === 'origin_price') {
+        return {
+          ...prevValues,
+          [name]: parseFloat(value),
         };
       }
 
@@ -222,6 +317,40 @@ export default function Week03() {
     setDeleteOpen(true);
   };
 
+  const addProduct = async (data: { data: ProductDatum }) => {
+    try {
+      setAddOpen(false);
+      setIsLoading(true);
+      const result = await axios.post(
+        `${API_BASE}/api/${API_PATH}/admin/product`,
+        data,
+        {
+          headers: {
+            Authorization: sessionStorage.getItem('token'),
+          },
+        }
+      );
+      getProducts(sessionStorage.getItem('token') ?? '');
+      Swal.fire({
+        title: result.data.message,
+      });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          icon: 'error',
+          title: error.response?.data?.message,
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '發生無預期錯誤',
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const deleteProduct = async () => {
     try {
       setDeleteOpen(false);
@@ -236,7 +365,7 @@ export default function Week03() {
       );
       getProducts(sessionStorage.getItem('token') ?? '');
       Swal.fire({
-        title: result.data.message
+        title: result.data.message,
       });
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -250,7 +379,7 @@ export default function Week03() {
           title: '發生無預期錯誤',
         });
       }
-    }finally {
+    } finally {
       setIsLoading(false);
     }
   };
@@ -282,7 +411,7 @@ export default function Week03() {
               </div>
             </div>
             <div className='row flex-column justify-content-center align-items-center'>
-              <div className='col-lg-6'>
+              <div className=''>
                 <div className='card mb-4'>
                   <div className='d-flex justify-content-between'>
                     <h2>所有商品</h2>
@@ -290,7 +419,7 @@ export default function Week03() {
                       variant='contained'
                       className='btn btn-secondary'
                       onClick={() => {
-                        handleOpen();
+                        handleAddOpen();
                       }}
                     >
                       <AddIcon />
@@ -300,31 +429,33 @@ export default function Week03() {
                   <table className='table mb-0'>
                     <thead className='text-center'>
                       <tr>
-                        <th>產品名稱</th>
+                        <th>作品名稱</th>
+                        <th>作品原文名稱</th>
+                        <th>作者名稱</th>
                         <th>原價</th>
                         <th>售價</th>
                         <th>是否啟用</th>
                         <th>修改</th>
                       </tr>
                     </thead>
-                    <tbody className='text-center'>
+                    <tbody>
                       {products && products.length > 0 ? (
                         products.map((item) => (
                           <tr key={item.id}>
                             <td>{item.title}</td>
-                            <td>{item.origin_price}</td>
-                            <td>{item.price}</td>
+                            <td>{item.content?.name}</td>
+                            <td>{item.content?.artists_zh_tw}</td>
+                            <td className='text-center'>{item.origin_price}</td>
+                            <td className='text-center'>{item.price}</td>
                             <td
-                              className={
-                                item.is_enabled ? 'text-success' : 'text-danger'
-                              }
+                              className={`${item.is_enabled ? 'text-success' : 'text-danger'} text-center`}
                             >
                               {item.is_enabled ? <CheckIcon /> : <CloseIcon />}
                             </td>
-                            <td>
+                            <td className='text-center'>
                               <IconButton
                                 onClick={() => {
-                                  handleOpen(item);
+                                  handleEditOpen(item);
                                 }}
                               >
                                 <EditIcon />
@@ -362,8 +493,8 @@ export default function Week03() {
               </Modal>
               <div className='col-lg-6'>
                 <Modal
-                  open={editOpen}
-                  setOpen={setEditOpen}
+                  open={addOpen}
+                  setOpen={setAddOpen}
                   handleSave={handleSave}
                 >
                   <div className='row'>
@@ -371,10 +502,49 @@ export default function Week03() {
                       <TextField
                         id='title'
                         name='title'
-                        label='標題'
+                        label='作品名稱'
                         value={tempProduct?.title}
                         onChange={handleInputEdit}
+                        onBlur={handleInputBlur}
+                        error={productErrors.title}
+                        helperText={
+                          productErrorsMessage.title
+                            ? productErrorsMessage.title
+                            : ' '
+                        }
                         required
+                      />
+                      <TextField
+                        id='content'
+                        name='content'
+                        label='作品原文名稱'
+                        defaultValue={tempProduct?.content?.name}
+                        onChange={handleInputEdit}
+                        helperText={' '}
+                      />
+                      <TextField
+                        id='content'
+                        name='content'
+                        label='作者名稱'
+                        defaultValue={tempProduct?.content?.artists_zh_tw}
+                        onChange={handleInputEdit}
+                        helperText={' '}
+                      />
+                      <TextField
+                        id='content'
+                        name='content'
+                        label='作者原文名稱'
+                        defaultValue={tempProduct?.content?.artists}
+                        onChange={handleInputEdit}
+                        helperText={' '}
+                      />
+                      <TextField
+                        id='content'
+                        name='content'
+                        label='作品年份'
+                        defaultValue={tempProduct?.content?.year}
+                        onChange={handleInputEdit}
+                        helperText={' '}
                       />
                       <TextField
                         id='description'
@@ -384,15 +554,7 @@ export default function Week03() {
                         maxRows={4}
                         defaultValue={tempProduct?.description}
                         onChange={handleInputEdit}
-                      />
-                      <TextField
-                        id='content'
-                        name='content'
-                        label='說明'
-                        multiline
-                        maxRows={4}
-                        defaultValue={tempProduct?.content}
-                        onChange={handleInputEdit}
+                        helperText={' '}
                       />
                       <div className='d-flex gap-3'>
                         <TextField
@@ -402,7 +564,14 @@ export default function Week03() {
                           label='分類'
                           variant='outlined'
                           onChange={handleInputEdit}
+                          onBlur={handleInputBlur}
                           value={tempProduct?.category}
+                          error={productErrors.category}
+                          helperText={
+                            productErrorsMessage.category
+                              ? productErrorsMessage.category
+                              : ' '
+                          }
                           required
                         />
                         <TextField
@@ -412,7 +581,14 @@ export default function Week03() {
                           label='單位'
                           variant='outlined'
                           onChange={handleInputEdit}
+                          onBlur={handleInputBlur}
                           value={tempProduct?.unit}
+                          error={productErrors.unit}
+                          helperText={
+                            productErrorsMessage.unit
+                              ? productErrorsMessage.unit
+                              : ' '
+                          }
                           required
                         />
                       </div>
@@ -424,7 +600,14 @@ export default function Week03() {
                           label='原價'
                           type='number'
                           onChange={handleInputEdit}
+                          onBlur={handleInputBlur}
                           value={tempProduct?.origin_price}
+                          error={productErrors.origin_price}
+                          helperText={
+                            productErrorsMessage.origin_price
+                              ? productErrorsMessage.origin_price
+                              : ' '
+                          }
                           required
                         />
                         <TextField
@@ -434,17 +617,18 @@ export default function Week03() {
                           label='售價'
                           type='number'
                           onChange={handleInputEdit}
+                          onBlur={handleInputBlur}
                           value={tempProduct?.price}
+                          error={productErrors.price}
+                          helperText={
+                            productErrorsMessage.price
+                              ? productErrorsMessage.price
+                              : ' '
+                          }
                           required
                         />
                       </div>
-                      <div
-                        className='d-grid'
-                        style={{
-                          gridTemplateColumns: 'repeat(2, 1fr)',
-                          gap: '1.5rem',
-                        }}
-                      >
+                      <div className='d-grid'>
                         <div className='image-group d-flex flex-column'>
                           <TextField
                             className='w-100'
@@ -454,12 +638,12 @@ export default function Week03() {
                             variant='outlined'
                             onChange={handleInputEdit}
                             value={tempProduct?.imageUrl}
-                            required
+                            helperText={' '}
                           />
                           {tempProduct?.imageUrl && (
                             <img
                               src={tempProduct.imageUrl}
-                              className='object-fit rounded w-100 image-size'
+                              className='object-fit rounded w-100'
                               alt='主圖'
                             />
                           )}
@@ -484,6 +668,7 @@ export default function Week03() {
                               variant='outlined'
                               onChange={(e) => handleInputEdit(e, index)}
                               value={url}
+                              helperText={' '}
                             />
                             <img
                               key={index}
