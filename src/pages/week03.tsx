@@ -20,6 +20,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import Swal from 'sweetalert2';
 
 const API_BASE = 'https://ec-course-api.hexschool.io/v2';
@@ -40,7 +41,7 @@ export default function Week03() {
   const [checked, setChecked] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [deleteItem, setDeleteItem] = useState({ title: '', id: '' });
+  const [deleteItem, setDeleteItem] = useState<ProductFullDatum>();
   const [tempProduct, setTempProduct] = useState<ProductFullDatum | null>(null);
   const [productErrors, setProductErrors] = useState<ProductValidation>({});
   const [productErrorsMessage, setProductErrorsMessage] =
@@ -138,7 +139,9 @@ export default function Week03() {
     });
   };
 
-  const handleInputBlur = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputBlur = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const errorStatus: LoginReq = {
@@ -312,8 +315,8 @@ export default function Week03() {
     }
   };
 
-  const handleDeleteOpen = (title: string, id: string) => {
-    setDeleteItem({ title, id });
+  const handleDeleteOpen = (deleteItem: ProductFullDatum) => {
+    setDeleteItem(deleteItem);
     setDeleteOpen(true);
   };
 
@@ -356,7 +359,7 @@ export default function Week03() {
       setDeleteOpen(false);
       setIsLoading(true);
       const result = await axios.delete(
-        `${API_BASE}/api/${API_PATH}/admin/product/${deleteItem.id}`,
+        `${API_BASE}/api/${API_PATH}/admin/product/${deleteItem?.id}`,
         {
           headers: {
             Authorization: sessionStorage.getItem('token'),
@@ -426,7 +429,7 @@ export default function Week03() {
                       <p className='btn-icon'>新增</p>
                     </Button>
                   </div>
-                  <table className='table mb-0'>
+                  <table className='table table-striped table-bordered mb-0'>
                     <thead className='text-center'>
                       <tr>
                         <th>作品名稱</th>
@@ -443,10 +446,12 @@ export default function Week03() {
                         products.map((item) => (
                           <tr key={item.id}>
                             <td>{item.title}</td>
-                            <td>{item.content?.name}</td>
-                            <td>{item.content?.artists_zh_tw}</td>
-                            <td className='text-center'>{item.origin_price}</td>
-                            <td className='text-center'>{item.price}</td>
+                            <td>{item.content?.name ?? 'Untitled'}</td>
+                            <td>
+                              {item.content?.artists_zh_tw ?? '未知的作者'}
+                            </td>
+                            <td className='text-end'>{item.origin_price}</td>
+                            <td className='text-end'>{item.price}</td>
                             <td
                               className={`${item.is_enabled ? 'text-success' : 'text-danger'} text-center`}
                             >
@@ -462,10 +467,7 @@ export default function Week03() {
                               </IconButton>
                               <IconButton
                                 onClick={() => {
-                                  handleDeleteOpen(
-                                    item.title ?? '',
-                                    item.id ?? ''
-                                  );
+                                  handleDeleteOpen(item);
                                 }}
                               >
                                 <DeleteIcon sx={{ color: '#dc3545' }} />
@@ -487,8 +489,35 @@ export default function Week03() {
                 setOpen={setDeleteOpen}
                 handleSave={deleteProduct}
               >
-                <div className='row'>
-                  <h2>是否要刪除{deleteItem.title}？</h2>
+                <div className='container'>
+                  <div className='row text-center justify-content-center'>
+                    <h4>是否確定要刪除</h4>
+                    <h2>《{deleteItem?.title}》</h2>
+                    <h5>
+                      <i>{deleteItem?.content?.name ?? 'Untitled'}</i>
+                    </h5>
+                    <p>
+                      <span>
+                        {deleteItem?.content?.artists_zh_tw ?? '未知的作者'}{' '}
+                      </span>
+                      <span>
+                        ({deleteItem?.content?.artists ?? 'Unknown'}),{' '}
+                      </span>
+                      <span>{deleteItem?.content?.year ?? 'Unknown'}</span>
+                    </p>
+                    {deleteItem?.imageUrl !== '' ? (
+                      <img
+                        src={deleteItem?.imageUrl}
+                        className='object-fit rounded preview-image'
+                        alt='主圖'
+                      />
+                    ) : (
+                      <InsertPhotoIcon
+                        className='no-image-icon'
+                        color='disabled'
+                      />
+                    )}
+                  </div>
                 </div>
               </Modal>
               <div className='col-lg-6'>
@@ -497,187 +526,189 @@ export default function Week03() {
                   setOpen={setAddOpen}
                   handleSave={handleSave}
                 >
-                  <div className='row'>
-                    <div className='text-field-group card'>
-                      <TextField
-                        id='title'
-                        name='title'
-                        label='作品名稱'
-                        value={tempProduct?.title}
-                        onChange={handleInputEdit}
-                        onBlur={handleInputBlur}
-                        error={productErrors.title}
-                        helperText={
-                          productErrorsMessage.title
-                            ? productErrorsMessage.title
-                            : ' '
-                        }
-                        required
-                      />
-                      <TextField
-                        id='content'
-                        name='content'
-                        label='作品原文名稱'
-                        defaultValue={tempProduct?.content?.name}
-                        onChange={handleInputEdit}
-                        helperText={' '}
-                      />
-                      <TextField
-                        id='content'
-                        name='content'
-                        label='作者名稱'
-                        defaultValue={tempProduct?.content?.artists_zh_tw}
-                        onChange={handleInputEdit}
-                        helperText={' '}
-                      />
-                      <TextField
-                        id='content'
-                        name='content'
-                        label='作者原文名稱'
-                        defaultValue={tempProduct?.content?.artists}
-                        onChange={handleInputEdit}
-                        helperText={' '}
-                      />
-                      <TextField
-                        id='content'
-                        name='content'
-                        label='作品年份'
-                        defaultValue={tempProduct?.content?.year}
-                        onChange={handleInputEdit}
-                        helperText={' '}
-                      />
-                      <TextField
-                        id='description'
-                        name='description'
-                        label='描述'
-                        multiline
-                        maxRows={4}
-                        defaultValue={tempProduct?.description}
-                        onChange={handleInputEdit}
-                        helperText={' '}
-                      />
-                      <div className='d-flex gap-3'>
+                  <div className='container'>
+                    <div className='row'>
+                      <div className='text-field-group'>
                         <TextField
-                          className='w-100'
-                          id='category'
-                          name='category'
-                          label='分類'
-                          variant='outlined'
+                          id='title'
+                          name='title'
+                          label='作品名稱'
+                          value={tempProduct?.title}
                           onChange={handleInputEdit}
                           onBlur={handleInputBlur}
-                          value={tempProduct?.category}
-                          error={productErrors.category}
+                          error={productErrors.title}
                           helperText={
-                            productErrorsMessage.category
-                              ? productErrorsMessage.category
+                            productErrorsMessage.title
+                              ? productErrorsMessage.title
                               : ' '
                           }
                           required
                         />
                         <TextField
-                          className='w-100'
-                          id='unit'
-                          name='unit'
-                          label='單位'
-                          variant='outlined'
+                          id='content'
+                          name='content'
+                          label='作品原文名稱'
+                          defaultValue={tempProduct?.content?.name}
                           onChange={handleInputEdit}
-                          onBlur={handleInputBlur}
-                          value={tempProduct?.unit}
-                          error={productErrors.unit}
-                          helperText={
-                            productErrorsMessage.unit
-                              ? productErrorsMessage.unit
-                              : ' '
-                          }
-                          required
-                        />
-                      </div>
-                      <div className='d-flex gap-3'>
-                        <TextField
-                          className='w-100'
-                          id='origin_price'
-                          name='origin_price'
-                          label='原價'
-                          type='number'
-                          onChange={handleInputEdit}
-                          onBlur={handleInputBlur}
-                          value={tempProduct?.origin_price}
-                          error={productErrors.origin_price}
-                          helperText={
-                            productErrorsMessage.origin_price
-                              ? productErrorsMessage.origin_price
-                              : ' '
-                          }
-                          required
+                          helperText={' '}
                         />
                         <TextField
-                          className='w-100'
-                          id='price'
-                          name='price'
-                          label='售價'
-                          type='number'
+                          id='content'
+                          name='content'
+                          label='作者名稱'
+                          defaultValue={tempProduct?.content?.artists_zh_tw}
                           onChange={handleInputEdit}
-                          onBlur={handleInputBlur}
-                          value={tempProduct?.price}
-                          error={productErrors.price}
-                          helperText={
-                            productErrorsMessage.price
-                              ? productErrorsMessage.price
-                              : ' '
-                          }
-                          required
+                          helperText={' '}
                         />
-                      </div>
-                      <div className='d-grid'>
-                        <div className='image-group d-flex flex-column'>
+                        <TextField
+                          id='content'
+                          name='content'
+                          label='作者原文名稱'
+                          defaultValue={tempProduct?.content?.artists}
+                          onChange={handleInputEdit}
+                          helperText={' '}
+                        />
+                        <TextField
+                          id='content'
+                          name='content'
+                          label='作品年份'
+                          defaultValue={tempProduct?.content?.year}
+                          onChange={handleInputEdit}
+                          helperText={' '}
+                        />
+                        <TextField
+                          id='description'
+                          name='description'
+                          label='描述'
+                          multiline
+                          maxRows={4}
+                          defaultValue={tempProduct?.description}
+                          onChange={handleInputEdit}
+                          helperText={' '}
+                        />
+                        <div className='d-flex gap-3'>
                           <TextField
                             className='w-100'
-                            id='imageUrl'
-                            name='imageUrl'
-                            label='主圖網址'
+                            id='category'
+                            name='category'
+                            label='分類'
                             variant='outlined'
                             onChange={handleInputEdit}
-                            value={tempProduct?.imageUrl}
-                            helperText={' '}
+                            onBlur={handleInputBlur}
+                            value={tempProduct?.category}
+                            error={productErrors.category}
+                            helperText={
+                              productErrorsMessage.category
+                                ? productErrorsMessage.category
+                                : ' '
+                            }
+                            required
                           />
-                          {tempProduct?.imageUrl && (
-                            <img
-                              src={tempProduct.imageUrl}
-                              className='object-fit rounded w-100'
-                              alt='主圖'
-                            />
-                          )}
+                          <TextField
+                            className='w-100'
+                            id='unit'
+                            name='unit'
+                            label='單位'
+                            variant='outlined'
+                            onChange={handleInputEdit}
+                            onBlur={handleInputBlur}
+                            value={tempProduct?.unit}
+                            error={productErrors.unit}
+                            helperText={
+                              productErrorsMessage.unit
+                                ? productErrorsMessage.unit
+                                : ' '
+                            }
+                            required
+                          />
                         </div>
-                      </div>
-                      <div
-                        className='d-grid'
-                        style={{
-                          gridTemplateColumns: 'repeat(2, 1fr)',
-                          gap: '1.5rem',
-                        }}
-                      >
-                        {tempProduct?.imagesUrl?.map((url, index) => (
-                          <div
-                            className='image-group d-flex flex-column'
-                            key={index}
-                          >
+                        <div className='d-flex gap-3'>
+                          <TextField
+                            className='w-100'
+                            id='origin_price'
+                            name='origin_price'
+                            label='原價'
+                            type='number'
+                            onChange={handleInputEdit}
+                            onBlur={handleInputBlur}
+                            value={tempProduct?.origin_price}
+                            error={productErrors.origin_price}
+                            helperText={
+                              productErrorsMessage.origin_price
+                                ? productErrorsMessage.origin_price
+                                : ' '
+                            }
+                            required
+                          />
+                          <TextField
+                            className='w-100'
+                            id='price'
+                            name='price'
+                            label='售價'
+                            type='number'
+                            onChange={handleInputEdit}
+                            onBlur={handleInputBlur}
+                            value={tempProduct?.price}
+                            error={productErrors.price}
+                            helperText={
+                              productErrorsMessage.price
+                                ? productErrorsMessage.price
+                                : ' '
+                            }
+                            required
+                          />
+                        </div>
+                        <div className='d-grid'>
+                          <div className='image-group d-flex flex-column'>
                             <TextField
-                              id='imagesUrl'
-                              name='imagesUrl'
-                              label={`副圖網址 ${index + 1}`}
+                              className='w-100'
+                              id='imageUrl'
+                              name='imageUrl'
+                              label='主圖網址'
                               variant='outlined'
-                              onChange={(e) => handleInputEdit(e, index)}
-                              value={url}
+                              onChange={handleInputEdit}
+                              value={tempProduct?.imageUrl}
                               helperText={' '}
                             />
-                            <img
-                              key={index}
-                              src={url}
-                              className='object-fit rounded image-size'
-                              alt='副圖'
-                            />
+                            {tempProduct?.imageUrl && (
+                              <img
+                                src={tempProduct.imageUrl}
+                                className='object-fit rounded w-100'
+                                alt='主圖'
+                              />
+                            )}
                           </div>
-                        ))}
+                        </div>
+                        <div
+                          className='d-grid'
+                          style={{
+                            gridTemplateColumns: 'repeat(2, 1fr)',
+                            gap: '1.5rem',
+                          }}
+                        >
+                          {tempProduct?.imagesUrl?.map((url, index) => (
+                            <div
+                              className='image-group d-flex flex-column'
+                              key={index}
+                            >
+                              <TextField
+                                id='imagesUrl'
+                                name='imagesUrl'
+                                label={`副圖網址 ${index + 1}`}
+                                variant='outlined'
+                                onChange={(e) => handleInputEdit(e, index)}
+                                value={url}
+                                helperText={' '}
+                              />
+                              <img
+                                key={index}
+                                src={url}
+                                className='object-fit rounded image-size'
+                                alt='副圖'
+                              />
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -3,5 +3,15 @@
 }
 
 .modal-content {
+  padding: 24px 0;
   background-color: #f5f5f5;
+}
+
+.preview-image {
+  width: 300px;
+  height: 300px;
+}
+
+.no-image-icon.MuiSvgIcon-colorDisabled {
+  font-size: 300px;
 }
