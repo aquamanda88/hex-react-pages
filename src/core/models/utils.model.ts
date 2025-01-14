@@ -14,6 +14,20 @@ export interface ProductObj {
   [key: string]: ProductFullDatum;
 }
 
+/** pagination */
+export interface PaginationDatum {
+  /** 總頁數 */
+  total_pages?: number;
+  /** 目前頁數 */
+  current_page?: number;
+  /** 是否有上一頁 */
+  has_pre?: boolean;
+  /** 是否有下一頁 */
+  has_next?: boolean;
+  /** 分類 */
+  category?: string;
+}
+
 /** 商品類 API 回傳基準欄位 (無 id) */
 export interface ProductDatum {
   /** 是否啟用 */

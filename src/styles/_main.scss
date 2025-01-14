@@ -41,7 +41,8 @@ header {
   margin-bottom: 16px;
 }
 
-.text-field-group {
+.text-field-group,
+.products-table {
   display: grid;
   gap: 12px;
 }
@@ -51,5 +52,5 @@ header {
 }
 
 .image-group {
-  gap: 16px;
+  gap: 12px;
 }

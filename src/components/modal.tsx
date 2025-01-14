@@ -2,7 +2,13 @@ import * as React from 'react';
 import { Button, IconButton, Dialog, DialogActions } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-export default function Modal({ open, setOpen, children, handleSave }) {
+export default function Modal({
+  open,
+  setOpen,
+  children,
+  handleSave,
+  isFullScreen = false, 
+}) {
   const handleClose = () => {
     setOpen(false);
   };
@@ -12,6 +18,7 @@ export default function Modal({ open, setOpen, children, handleSave }) {
       <React.Fragment>
         <Dialog
           open={open}
+          fullScreen={isFullScreen}
           onClose={handleClose}
           aria-labelledby='alert-dialog-title'
           aria-describedby='alert-dialog-description'
