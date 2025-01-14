@@ -47,9 +47,12 @@ export default function Week03() {
   const [currentPage, setCurrentPage] = useState(1);
   const [checked, setChecked] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [modalType, setModalType] = useState('');
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteItem, setDeleteItem] = useState<ProductFullDatum>();
   const [tempProduct, setTempProduct] = useState<ProductFullDatum | null>(null);
+  const [isEnabledChecked, setIsEnabledChecked] = useState(false);
   const [productErrors, setProductErrors] = useState<ProductValidation>({});
   const [productErrorsMessage, setProductErrorsMessage] =
     useState<ProductValidationMessage>({});
@@ -57,16 +60,12 @@ export default function Week03() {
   const handleAddOpen = () => {
     setTempProduct({
       is_enabled: 0,
-      num: 0,
       title: '',
-      content: {},
-      description: '',
       category: '',
       unit: '',
       origin_price: 0,
       price: 0,
       imageUrl: '',
-      imagesUrl: [],
     });
     setProductErrors({
       title: false,
@@ -82,6 +81,8 @@ export default function Week03() {
       origin_price: '',
       price: '',
     });
+    setIsEnabledChecked(false);
+    setModalType('add');
     setAddOpen(true);
   };
 
@@ -100,7 +101,9 @@ export default function Week03() {
       imagesUrl: item?.imagesUrl ?? [],
       id: item?.id,
     });
-    setAddOpen(true);
+    setIsEnabledChecked(item?.is_enabled === 1);
+    setModalType('edit');
+    setEditOpen(true);
   };
 
   const handleSave = () => {
@@ -146,8 +149,18 @@ export default function Week03() {
     }
   };
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(e.target.checked);
+  const handleCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    checkFn: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    const { checked } = e.target;
+    checkFn(e.target.checked);
+    if (checkFn === setIsEnabledChecked) {
+      setTempProduct({
+        ...tempProduct,
+        is_enabled: checked ? 1 : 0,
+      });
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -207,30 +220,17 @@ export default function Week03() {
     }
   }
 
-  const handlePageChange = (
-    _: React.ChangeEvent<unknown>,
-    page: number
-  ) => {
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
     getProducts(sessionStorage.getItem('token') ?? '', page);
   };
 
   const handleInputEdit = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    index?: number
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
 
     setTempProduct((prevValues) => {
-      if (name === 'imagesUrl' && index !== undefined) {
-        const updatedImagesUrl = [...(prevValues?.imagesUrl ?? [])];
-        updatedImagesUrl[index] = value;
-        return {
-          ...prevValues,
-          imagesUrl: updatedImagesUrl,
-        };
-      }
-
       if (name === 'price' || name === 'origin_price') {
         return {
           ...prevValues,
@@ -567,8 +567,8 @@ export default function Week03() {
               </Modal>
               <div className='col-lg-6'>
                 <Modal
-                  open={addOpen}
-                  setOpen={setAddOpen}
+                  open={modalType === 'add' ? addOpen : editOpen}
+                  setOpen={modalType === 'add' ? setAddOpen : setEditOpen}
                   handleSave={handleSave}
                   isFullScreen={true}
                 >
@@ -711,6 +711,19 @@ export default function Week03() {
                             />
                           </div>
                         </div>
+                        <FormControlLabel
+                          className='mb-2'
+                          control={
+                            <Checkbox
+                              checked={isEnabledChecked}
+                              color='primary'
+                              onChange={(e) =>
+                                handleCheckboxChange(e, setIsEnabledChecked)
+                              }
+                            />
+                          }
+                          label='是否啟用'
+                        />
                       </div>
                       <div className='col-md-6'>
                         <div className='d-grid'>
@@ -789,7 +802,7 @@ export default function Week03() {
                     <Checkbox
                       checked={checked}
                       color='primary'
-                      onChange={handleCheckboxChange}
+                      onChange={(e) => handleCheckboxChange(e, setChecked)}
                     />
                   }
                   label='保持登入'
