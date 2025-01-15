@@ -7,7 +7,7 @@ export default function Week01() {
   const [products] = useState<ProductFullDatum[]>([
     {
       category: '甜甜圈',
-      content: '尺寸：14x14cm',
+      content: {content: '尺寸：14x14cm'},
       description:
         '濃郁的草莓風味，中心填入滑順不膩口的卡士達內餡，帶來滿滿幸福感！',
       id: '-L9tH8jxVb2Ka_DYPwng',
@@ -25,7 +25,7 @@ export default function Week01() {
     },
     {
       category: '蛋糕',
-      content: '尺寸：6寸',
+      content: {content: '尺寸：6寸'},
       description:
         '蜜蜂蜜蛋糕，夾層夾上酸酸甜甜的檸檬餡，清爽可口的滋味讓人口水直流！',
       id: '-McJ-VvcwfN1_Ye_NtVA',
@@ -43,7 +43,7 @@ export default function Week01() {
     },
     {
       category: '蛋糕',
-      content: '尺寸：6寸',
+      content: {content: '尺寸：6寸'},
       description: '法式煎薄餅加上濃郁可可醬，呈現經典的美味及口感。',
       id: '-McJ-VyqaFlLzUMmpPpm',
       is_enabled: 1,
@@ -61,7 +61,7 @@ export default function Week01() {
     },
     {
       category: '蛋糕',
-      content: '尺寸：6寸',
+      content: {content: '尺寸：6寸'},
       description: '好好吃杯子蛋糕。',
       id: '-Jd3-N8dLFlLzUMPS3pm',
       is_enabled: 1,
@@ -146,7 +146,7 @@ export default function Week01() {
                     </span>
                   </h5>
                   <p className='card-text'>
-                    商品描述：{selectedProduct.content}
+                    商品描述：{selectedProduct?.content?.content}
                   </p>
                   <div className='d-flex align-items-center'>
                     <p className='fs-5 mb-0 me-2'>

@@ -203,7 +203,7 @@ export default function Week02() {
                         </span>
                       </h5>
                       <p className='card-text'>
-                        商品描述：{tempProduct.content}
+                        商品描述：{tempProduct?.content?.content}
                       </p>
                       <div className='d-flex align-items-center'>
                         <p className='fs-5 mb-0 me-2'>

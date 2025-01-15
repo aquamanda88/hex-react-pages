@@ -62,6 +62,8 @@ export interface ProductFullDatum extends ProductDatum {
 
 /** 內容擴充欄位 */
 export interface ContentDatum {
+  /** 內容 */
+  content?: string;
   /** 作品名稱 */
   name?: string;
   /** 作者名稱 */
