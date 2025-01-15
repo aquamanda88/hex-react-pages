@@ -3,6 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { Header, Modal, Spinners } from '../components';
 import { LoginReq, LoginValidation } from '../core/models/admin/auth.model';
 import {
+  ContentDatum,
   PaginationDatum,
   ProductDatum,
   ProductFullDatum,
@@ -88,6 +89,28 @@ export default function Week03() {
     const { name, value } = e.target;
 
     setTempProduct((prevValues) => {
+      const updatedContent = { ...prevValues?.content };
+      
+      if (name in updatedContent) {
+        updatedContent[name as keyof ContentDatum] = value;
+      }
+
+      if (
+        name === 'content' ||
+        name === 'name' ||
+        name === 'artists' ||
+        name === 'artists_zh_tw' ||
+        name === 'year'
+      ) {
+        return {
+          ...prevValues,
+          content: {
+            ...updatedContent,
+            [name]: value,
+          },
+        };
+      }
+
       if (name === 'price' || name === 'origin_price') {
         return {
           ...prevValues,
@@ -147,6 +170,13 @@ export default function Week03() {
     setTempProduct({
       is_enabled: 0,
       title: '',
+      content: {
+        content: '',
+        name: '',
+        artists: '',
+        artists_zh_tw: '',
+        year: '',
+      },
       category: '',
       unit: '',
       origin_price: 0,
@@ -170,7 +200,13 @@ export default function Week03() {
       is_enabled: editItem?.is_enabled ?? 0,
       num: editItem?.num ?? 0,
       title: editItem?.title,
-      content: editItem?.content,
+      content: {
+        content: editItem?.content?.content ?? '',
+        name: editItem?.content?.name ?? '',
+        artists: editItem?.content?.artists ?? '',
+        artists_zh_tw: editItem?.content?.artists_zh_tw ?? '',
+        year: editItem?.content?.year ?? '',
+      },
       description: editItem?.description ?? '',
       category: editItem?.category,
       unit: editItem?.unit,
@@ -764,8 +800,8 @@ export default function Week03() {
                             required
                           />
                           <TextField
-                            id='content'
-                            name='content'
+                            id='name'
+                            name='name'
                             label='作品原文名稱'
                             defaultValue={tempProduct?.content?.name}
                             onChange={handleInputChange}
@@ -774,8 +810,8 @@ export default function Week03() {
                           <div className='d-flex gap-3'>
                             <TextField
                               className='w-100'
-                              id='content'
-                              name='content'
+                              id='artists_zh_tw'
+                              name='artists_zh_tw'
                               label='作者名稱'
                               defaultValue={tempProduct?.content?.artists_zh_tw}
                               onChange={handleInputChange}
@@ -783,8 +819,8 @@ export default function Week03() {
                             />
                             <TextField
                               className='w-100'
-                              id='content'
-                              name='content'
+                              id='artists'
+                              name='artists'
                               label='作者原文名稱'
                               defaultValue={tempProduct?.content?.artists}
                               onChange={handleInputChange}
@@ -793,8 +829,8 @@ export default function Week03() {
                           </div>
 
                           <TextField
-                            id='content'
-                            name='content'
+                            id='year'
+                            name='year'
                             label='作品年份'
                             defaultValue={tempProduct?.content?.year}
                             onChange={handleInputChange}
