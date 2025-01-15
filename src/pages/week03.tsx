@@ -153,20 +153,7 @@ export default function Week03() {
       price: 0,
       imageUrl: '',
     });
-    setProductErrors({
-      title: false,
-      category: false,
-      unit: false,
-      origin_price: false,
-      price: false,
-    });
-    setProductErrorsMessage({
-      title: '',
-      category: '',
-      unit: '',
-      origin_price: '',
-      price: '',
-    });
+    clearProductsValidation();
     setIsEnabledChecked(false);
     setModalType('add');
     setAddOpen(true);
@@ -178,6 +165,7 @@ export default function Week03() {
    * @prop editItem - 欲編輯的商品資料
    */
   const handleEditOpen = (editItem?: ProductFullDatum) => {
+    clearProductsValidation();
     setTempProduct({
       is_enabled: editItem?.is_enabled ?? 0,
       num: editItem?.num ?? 0,
@@ -497,6 +485,28 @@ export default function Week03() {
       setIsProductLoading(false);
     }
   };
+
+  /**
+   * 初始化商品表單驗證
+   *
+   * @returns 無回傳值
+   */
+  function clearProductsValidation(): void {
+    setProductErrors({
+      title: false,
+      category: false,
+      unit: false,
+      origin_price: false,
+      price: false,
+    });
+    setProductErrorsMessage({
+      title: '',
+      category: '',
+      unit: '',
+      origin_price: '',
+      price: '',
+    });
+  }
 
   /**
    * 取得錯誤訊息
