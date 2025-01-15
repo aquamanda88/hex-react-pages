@@ -3,9 +3,17 @@ import { BaseData } from "../utils.model";
 /** 登入 request */
 export interface LoginReq {
   /** 會員帳號 */
-  username: string;
+  username?: string;
   /** 會員密碼 */
-  password: string;
+  password?: string;
+}
+
+/** 登入 request 驗證欄位 */
+export interface LoginValidation {
+  /** 會員帳號 */
+  username?: boolean;
+  /** 會員密碼 */
+  password?: boolean;
 }
 
 /** 登入 response */

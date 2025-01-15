@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios, { AxiosError } from 'axios';
-import { Header, Modal } from '../components';
-import { LoginReq } from '../core/models/admin/auth.model';
+import { Header, Modal, Spinners } from '../components';
+import { LoginReq, LoginValidation } from '../core/models/admin/auth.model';
 import {
   PaginationDatum,
   ProductDatum,
@@ -32,16 +32,14 @@ const API_PATH = 'olive-branch';
 
 export default function Week03() {
   const [isAuth, setIsAuth] = useState(false);
-  const [formData, setFormData] = useState<LoginReq>({
-    username: '',
-    password: '',
-  });
-  const [errors, setErrors] = useState<LoginReq>({
-    username: '',
-    password: '',
-  });
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [formData, setFormData] = useState<LoginReq>({});
+  const [loginErrors, setLoginErrors] = useState<LoginValidation>({});
+  const [loginErrorsMessage, setLoginErrorsMessage] = useState<LoginReq>({});
+  const [productErrors, setProductErrors] = useState<ProductValidation>({});
+  const [productErrorsMessage, setProductErrorsMessage] =
+    useState<ProductValidationMessage>({});
+  const [isLoginLoading, setIsLoginLoading] = useState(true);
+  const [isProductLoading, setIsProductLoading] = useState(true);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
   const [pagination, setPagination] = useState<PaginationDatum>({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,10 +51,98 @@ export default function Week03() {
   const [deleteItem, setDeleteItem] = useState<ProductFullDatum>();
   const [tempProduct, setTempProduct] = useState<ProductFullDatum | null>(null);
   const [isEnabledChecked, setIsEnabledChecked] = useState(false);
-  const [productErrors, setProductErrors] = useState<ProductValidation>({});
-  const [productErrorsMessage, setProductErrorsMessage] =
-    useState<ProductValidationMessage>({});
 
+  /**
+   * 處理分頁事件
+   *
+   * @prop _ - ChangeEvent
+   * @prop page - 選取的頁數
+   */
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+    getProducts(sessionStorage.getItem('token') ?? '', page);
+  };
+
+  /**
+   * 處理登入頁 input 內容變更事件
+   *
+   * @prop e - ChangeEvent
+   */
+  const handleLoginInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  /**
+   * 處理商品 input 內容變更事件
+   *
+   * @prop e - ChangeEvent
+   */
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setTempProduct((prevValues) => {
+      if (name === 'price' || name === 'origin_price') {
+        return {
+          ...prevValues,
+          [name]: parseFloat(value),
+        };
+      }
+
+      return {
+        ...prevValues,
+        [name]: value,
+      };
+    });
+  };
+
+  /**
+   * 處理 input 模糊事件
+   *
+   * @prop e - ChangeEvent
+   */
+  const handleInputBlur = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    setLoginErrors({
+      ...loginErrors,
+      [name]:
+        value === '' || !emailPattern.test(formData.username ?? '')
+          ? true
+          : false,
+    });
+    setProductErrors({
+      ...productErrors,
+      [name]: value === '' ? true : false,
+    });
+    setLoginErrorsMessage({
+      ...loginErrorsMessage,
+      [name]:
+        value === ''
+          ? getErrorMessageForField(name)
+          : !emailPattern.test(formData.username ?? '')
+            ? '請輸入有效的 Email'
+            : '',
+    });
+    setProductErrorsMessage({
+      ...productErrorsMessage,
+      [name]: value === '' ? getErrorMessageForField(name) : '',
+    });
+  };
+
+  /**
+   * 處理開啟新增商品 modal 事件
+   *
+   */
   const handleAddOpen = () => {
     setTempProduct({
       is_enabled: 0,
@@ -86,27 +172,366 @@ export default function Week03() {
     setAddOpen(true);
   };
 
-  const handleEditOpen = (item?: ProductFullDatum) => {
+  /**
+   * 處理開啟編輯商品 modal 事件
+   *
+   * @prop editItem - 欲編輯的商品資料
+   */
+  const handleEditOpen = (editItem?: ProductFullDatum) => {
     setTempProduct({
-      is_enabled: item?.is_enabled ?? 0,
-      num: item?.num ?? 0,
-      title: item?.title,
-      content: item?.content,
-      description: item?.description ?? '',
-      category: item?.category,
-      unit: item?.unit,
-      origin_price: item?.origin_price,
-      price: item?.price,
-      imageUrl: item?.imageUrl ?? '',
-      imagesUrl: item?.imagesUrl ?? [],
-      id: item?.id,
+      is_enabled: editItem?.is_enabled ?? 0,
+      num: editItem?.num ?? 0,
+      title: editItem?.title,
+      content: editItem?.content,
+      description: editItem?.description ?? '',
+      category: editItem?.category,
+      unit: editItem?.unit,
+      origin_price: editItem?.origin_price,
+      price: editItem?.price,
+      imageUrl: editItem?.imageUrl ?? '',
+      imagesUrl: editItem?.imagesUrl ?? [],
+      id: editItem?.id,
     });
-    setIsEnabledChecked(item?.is_enabled === 1);
+    setIsEnabledChecked(editItem?.is_enabled === 1);
     setModalType('edit');
     setEditOpen(true);
   };
 
+  /**
+   * 處理開啟刪除商品 modal 事件
+   *
+   * @prop deleteItem - 欲刪除的商品資料
+   */
+  const handleDeleteOpen = (deleteItem: ProductFullDatum) => {
+    setDeleteItem(deleteItem);
+    setDeleteOpen(true);
+  };
+
+  /**
+   * 處理新增商品事件
+   *
+   */
   const handleSave = () => {
+    doProductsValidation();
+
+    if (
+      tempProduct?.title !== '' &&
+      tempProduct?.category !== '' &&
+      tempProduct?.unit !== '' &&
+      tempProduct?.origin_price !== 0 &&
+      tempProduct?.price !== 0
+    ) {
+      const newTempProduct = { data: { ...tempProduct } };
+      delete newTempProduct.data.id;
+
+      if (modalType === 'add') {
+        addProduct(newTempProduct);
+      } else if (modalType === 'edit') {
+        editProduct(tempProduct?.id ?? '', newTempProduct);
+      }
+    }
+  };
+
+  /**
+   * 處理 checkbox 變更事件
+   *
+   * @prop e - ChangeEvent
+   * @prop checkFn - 傳入的 useState
+   */
+  const handleCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    checkFn: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    const { checked } = e.target;
+    checkFn(e.target.checked);
+    if (checkFn === setIsEnabledChecked) {
+      setTempProduct({
+        ...tempProduct,
+        is_enabled: checked ? 1 : 0,
+      });
+    }
+  };
+
+  /**
+   * 處理送出表單事件
+   *
+   * @prop e - FormEvent
+   */
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const errorMessage = {
+      username: !formData?.username
+        ? '請輸入帳號'
+        : !emailPattern.test(formData.username ?? '')
+          ? '請輸入有效的 Email'
+          : '',
+      password: !formData?.password ? '請輸入密碼' : '',
+    };
+
+    setLoginErrors({
+      username:
+        !formData?.username || !emailPattern.test(formData.username ?? ''),
+      password: !formData?.password,
+    });
+    setLoginErrorsMessage(errorMessage);
+
+    if (formData.username && formData.password) {
+      login();
+    }
+  };
+
+  /**
+   * 呼叫登入 API
+   *
+   */
+  const login = async () => {
+    try {
+      const result = await axios.post(`${API_BASE}/admin/signin`, formData);
+      if (result.data.token) {
+        setIsAuth(true);
+        if (checked) {
+          sessionStorage.setItem('token', result.data.token);
+        }
+        getProducts(result.data.token);
+        setIsLoginLoading(false);
+      } else {
+        setIsAuth(false);
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          icon: 'error',
+          title: error.response?.data?.message,
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '發生無預期錯誤',
+        });
+      }
+    }
+  };
+
+  /**
+   * 呼叫登入驗證 API
+   *
+   */
+  const checkLogin = async () => {
+    try {
+      const result = await axios.post(
+        `${API_BASE}/api/user/check`,
+        {},
+        {
+          headers: { Authorization: sessionStorage.getItem('token') },
+        }
+      );
+      return result.data.success;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          icon: 'error',
+          title: error.response?.data?.message,
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '發生無預期錯誤',
+        });
+      }
+    }
+  };
+
+  /**
+   * 呼叫取得商品列表 API
+   *
+   * @prop token - 權限 token
+   * @prop page - 選取頁數
+   */
+  const getProducts = async (token: string, page?: number) => {
+    try {
+      const URL_PATH = page ? `products?page=${page}` : 'products';
+      setIsProductLoading(true);
+      const result = await axios.get(
+        `${API_BASE}/api/${API_PATH}/admin/${URL_PATH}`,
+        {
+          headers: {
+            Authorization: checked ? sessionStorage.getItem('token') : token,
+          },
+        }
+      );
+      if (result.data) {
+        setPagination(result.data.pagination);
+        setProducts(result.data.products);
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          icon: 'error',
+          title: error.response?.data?.message,
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '發生無預期錯誤',
+        });
+      }
+    } finally {
+      setIsProductLoading(false);
+    }
+  };
+
+  /**
+   * 呼叫新增商品列表 API
+   *
+   * @prop data - 欲新增商品物件
+   */
+  const addProduct = async (data: { data: ProductDatum }) => {
+    try {
+      setAddOpen(false);
+      setIsProductLoading(true);
+      const result = await axios.post(
+        `${API_BASE}/api/${API_PATH}/admin/product`,
+        data,
+        {
+          headers: {
+            Authorization: sessionStorage.getItem('token'),
+          },
+        }
+      );
+      getProducts(sessionStorage.getItem('token') ?? '');
+      Swal.fire({
+        title: result.data.message,
+      });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          icon: 'error',
+          title: error.response?.data?.message,
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '發生無預期錯誤',
+        });
+      }
+    } finally {
+      setIsProductLoading(false);
+    }
+  };
+
+  /**
+   * 呼叫編輯商品列表 API
+   *
+   * @prop id - 商品 ID
+   * @prop data - 欲編輯商品物件
+   */
+  const editProduct = async (id: string, data: { data: ProductDatum }) => {
+    try {
+      setEditOpen(false);
+      setIsProductLoading(true);
+      const result = await axios.put(
+        `${API_BASE}/api/${API_PATH}/admin/product/${id}`,
+        data,
+        {
+          headers: {
+            Authorization: sessionStorage.getItem('token'),
+          },
+        }
+      );
+      getProducts(sessionStorage.getItem('token') ?? '');
+      Swal.fire({
+        title: result.data.message,
+      });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          icon: 'error',
+          title: error.response?.data?.message,
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '發生無預期錯誤',
+        });
+      }
+    } finally {
+      setIsProductLoading(false);
+    }
+  };
+
+  /**
+   * 呼叫刪除商品列表 API
+   *
+   */
+  const deleteProduct = async () => {
+    try {
+      setDeleteOpen(false);
+      setIsProductLoading(true);
+      const result = await axios.delete(
+        `${API_BASE}/api/${API_PATH}/admin/product/${deleteItem?.id}`,
+        {
+          headers: {
+            Authorization: sessionStorage.getItem('token'),
+          },
+        }
+      );
+      getProducts(sessionStorage.getItem('token') ?? '');
+      Swal.fire({
+        title: result.data.message,
+      });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          icon: 'error',
+          title: error.response?.data?.message,
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '發生無預期錯誤',
+        });
+      }
+    } finally {
+      setIsProductLoading(false);
+    }
+  };
+
+  /**
+   * 取得錯誤訊息
+   *
+   * @param inputName - input 欄位 name 屬性值
+   *
+   * @returns 相對應欄位之錯誤訊息
+   */
+  function getErrorMessageForField(inputName: string): string {
+    switch (inputName) {
+      case 'username':
+        return '請輸入帳號';
+      case 'password':
+        return '請輸入密碼';
+      case 'title':
+        return '請輸入作品名稱';
+      case 'category':
+        return '請輸入類型';
+      case 'unit':
+        return '請輸入單位';
+      case 'origin_price':
+        return '請輸入原價';
+      case 'price':
+        return '請輸入售價';
+      default:
+        return '';
+    }
+  }
+
+  /**
+   * 驗證商品表單
+   *
+   * @returns 無回傳值
+   */
+  function doProductsValidation(): void {
     const errorMessage = {
       title: tempProduct?.title === '' ? '請輸入作品名稱' : '',
       category: tempProduct?.category === '' ? '請輸入分類' : '',
@@ -134,296 +559,29 @@ export default function Week03() {
         isNaN(tempProduct?.origin_price ?? 0),
       price: tempProduct?.price === 0 || isNaN(tempProduct?.price ?? 0),
     });
-
     setProductErrorsMessage(errorMessage);
-    if (
-      tempProduct?.title !== '' &&
-      tempProduct?.category !== '' &&
-      tempProduct?.unit !== '' &&
-      tempProduct?.origin_price !== 0 &&
-      tempProduct?.price !== 0
-    ) {
-      const newTempProduct = { data: { ...tempProduct } };
-      delete newTempProduct.data.id;
-      addProduct(newTempProduct);
-    }
-  };
-
-  const handleCheckboxChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    checkFn: React.Dispatch<React.SetStateAction<boolean>>
-  ) => {
-    const { checked } = e.target;
-    checkFn(e.target.checked);
-    if (checkFn === setIsEnabledChecked) {
-      setTempProduct({
-        ...tempProduct,
-        is_enabled: checked ? 1 : 0,
-      });
-    }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleInputBlur = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const errorStatus: LoginReq = {
-      username: '',
-      password: '',
-    };
-
-    if (!formData.username) {
-      errorStatus.username = '請輸入帳號';
-    } else if (!emailPattern.test(formData.username)) {
-      errorStatus.username = '請輸入有效的 Email';
-    }
-
-    if (!formData.password) {
-      errorStatus.password = '請輸入密碼';
-    }
-
-    setErrors(errorStatus);
-    setProductErrors({
-      ...productErrors,
-      [name]: value === '' ? true : false,
-    });
-    setProductErrorsMessage({
-      ...productErrorsMessage,
-      [name]: value === '' ? getErrorMessageForField(name) : '',
-    });
-  };
-
-  function getErrorMessageForField(fieldName: string): string {
-    switch (fieldName) {
-      case 'title':
-        return '請輸入作品名稱';
-      case 'category':
-        return '請輸入類型';
-      case 'unit':
-        return '請輸入單位';
-      case 'origin_price':
-        return '請輸入原價';
-      case 'price':
-        return '請輸入售價';
-      default:
-        return '';
-    }
   }
-
-  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
-    setCurrentPage(page);
-    getProducts(sessionStorage.getItem('token') ?? '', page);
-  };
-
-  const handleInputEdit = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-
-    setTempProduct((prevValues) => {
-      if (name === 'price' || name === 'origin_price') {
-        return {
-          ...prevValues,
-          [name]: parseFloat(value),
-        };
-      }
-
-      return {
-        ...prevValues,
-        [name]: value,
-      };
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!formData.username && !formData.password) {
-      setErrors(() => ({
-        username: '請輸入帳號',
-        password: '請輸入密碼',
-      }));
-    }
-
-    if (formData.username !== '' && formData.password !== '') {
-      login();
-    }
-  };
-
-  const login = async () => {
-    try {
-      const result = await axios.post(`${API_BASE}/admin/signin`, formData);
-      if (result.data.token) {
-        setIsAuth(true);
-        if (checked) {
-          sessionStorage.setItem('token', result.data.token);
-        }
-        getProducts(result.data.token);
-      } else {
-        setIsAuth(false);
-      }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        Swal.fire({
-          icon: 'error',
-          title: error.response?.data?.message,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: '發生無預期錯誤',
-        });
-      }
-    }
-  };
-
-  const checkLogin = async () => {
-    try {
-      const result = await axios.post(
-        `${API_BASE}/api/user/check`,
-        {},
-        {
-          headers: { Authorization: sessionStorage.getItem('token') },
-        }
-      );
-      return result.data.success;
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        Swal.fire({
-          icon: 'error',
-          title: error.response?.data?.message,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: '發生無預期錯誤',
-        });
-      }
-    }
-  };
-
-  const getProducts = async (token: string, page?: number) => {
-    try {
-      const URL_PATH = page ? `products?page=${page}` : 'products';
-      setIsLoading(true);
-      const result = await axios.get(
-        `${API_BASE}/api/${API_PATH}/admin/${URL_PATH}`,
-        {
-          headers: {
-            Authorization: checked ? sessionStorage.getItem('token') : token,
-          },
-        }
-      );
-      if (result.data) {
-        setPagination(result.data.pagination);
-        setProducts(result.data.products);
-      }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        Swal.fire({
-          icon: 'error',
-          title: error.response?.data?.message,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: '發生無預期錯誤',
-        });
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDeleteOpen = (deleteItem: ProductFullDatum) => {
-    setDeleteItem(deleteItem);
-    setDeleteOpen(true);
-  };
-
-  const addProduct = async (data: { data: ProductDatum }) => {
-    try {
-      setAddOpen(false);
-      setIsLoading(true);
-      const result = await axios.post(
-        `${API_BASE}/api/${API_PATH}/admin/product`,
-        data,
-        {
-          headers: {
-            Authorization: sessionStorage.getItem('token'),
-          },
-        }
-      );
-      getProducts(sessionStorage.getItem('token') ?? '');
-      Swal.fire({
-        title: result.data.message,
-      });
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        Swal.fire({
-          icon: 'error',
-          title: error.response?.data?.message,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: '發生無預期錯誤',
-        });
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const deleteProduct = async () => {
-    try {
-      setDeleteOpen(false);
-      setIsLoading(true);
-      const result = await axios.delete(
-        `${API_BASE}/api/${API_PATH}/admin/product/${deleteItem?.id}`,
-        {
-          headers: {
-            Authorization: sessionStorage.getItem('token'),
-          },
-        }
-      );
-      getProducts(sessionStorage.getItem('token') ?? '');
-      Swal.fire({
-        title: result.data.message,
-      });
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        Swal.fire({
-          icon: 'error',
-          title: error.response?.data?.message,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: '發生無預期錯誤',
-        });
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
+    setLoginErrors({
+      username: false,
+      password: false,
+    });
+    setLoginErrorsMessage({
+      username: '',
+      password: '',
+    });
     if (token) {
+      setIsLoginLoading(true);
       checkLogin().then((res) => {
         if (res) {
           setIsAuth(true);
-          getProducts(token);
+          getProducts(token).finally(() => {
+            setIsLoginLoading(false);
+          });
+        } else {
+          setIsLoginLoading(false);
         }
       });
     }
@@ -435,8 +593,11 @@ export default function Week03() {
       {isAuth ? (
         <>
           <div className='container py-4'>
+            <div className={`${isLoginLoading ? 'd-flex' : 'd-none'} loading`}>
+              <Spinners />
+            </div>
             <div className='row flex-column justify-content-center align-items-center'>
-              <div className=''>
+              <div>
                 <div className='card mb-4'>
                   <div className='d-flex justify-content-between mb-4'>
                     <h2>所有商品</h2>
@@ -452,7 +613,7 @@ export default function Week03() {
                     </Button>
                   </div>
                   <div className='products-table'>
-                    {isLoading ? (
+                    {isProductLoading ? (
                       <Skeleton variant='rectangular' width='100%'>
                         <div style={{ paddingTop: '300px' }} />
                       </Skeleton>
@@ -532,7 +693,8 @@ export default function Week03() {
               <Modal
                 open={deleteOpen}
                 setOpen={setDeleteOpen}
-                handleSave={deleteProduct}
+                confirmBtnText={'刪除'}
+                handleConfirm={deleteProduct}
               >
                 <div className='container'>
                   <div className='row text-center justify-content-center'>
@@ -569,7 +731,7 @@ export default function Week03() {
                 <Modal
                   open={modalType === 'add' ? addOpen : editOpen}
                   setOpen={modalType === 'add' ? setAddOpen : setEditOpen}
-                  handleSave={handleSave}
+                  handleConfirm={handleSave}
                   isFullScreen={true}
                 >
                   <div className='container card'>
@@ -581,7 +743,7 @@ export default function Week03() {
                             name='title'
                             label='作品名稱'
                             value={tempProduct?.title}
-                            onChange={handleInputEdit}
+                            onChange={handleInputChange}
                             onBlur={handleInputBlur}
                             error={productErrors.title}
                             helperText={
@@ -596,7 +758,7 @@ export default function Week03() {
                             name='content'
                             label='作品原文名稱'
                             defaultValue={tempProduct?.content?.name}
-                            onChange={handleInputEdit}
+                            onChange={handleInputChange}
                             helperText={' '}
                           />
                           <div className='d-flex gap-3'>
@@ -606,7 +768,7 @@ export default function Week03() {
                               name='content'
                               label='作者名稱'
                               defaultValue={tempProduct?.content?.artists_zh_tw}
-                              onChange={handleInputEdit}
+                              onChange={handleInputChange}
                               helperText={' '}
                             />
                             <TextField
@@ -615,7 +777,7 @@ export default function Week03() {
                               name='content'
                               label='作者原文名稱'
                               defaultValue={tempProduct?.content?.artists}
-                              onChange={handleInputEdit}
+                              onChange={handleInputChange}
                               helperText={' '}
                             />
                           </div>
@@ -625,7 +787,7 @@ export default function Week03() {
                             name='content'
                             label='作品年份'
                             defaultValue={tempProduct?.content?.year}
-                            onChange={handleInputEdit}
+                            onChange={handleInputChange}
                             helperText={' '}
                           />
                           <TextField
@@ -635,7 +797,7 @@ export default function Week03() {
                             multiline
                             maxRows={6}
                             defaultValue={tempProduct?.description}
-                            onChange={handleInputEdit}
+                            onChange={handleInputChange}
                             helperText={' '}
                           />
                           <div className='d-flex gap-3'>
@@ -645,7 +807,7 @@ export default function Week03() {
                               name='category'
                               label='分類'
                               variant='outlined'
-                              onChange={handleInputEdit}
+                              onChange={handleInputChange}
                               onBlur={handleInputBlur}
                               value={tempProduct?.category}
                               error={productErrors.category}
@@ -662,7 +824,7 @@ export default function Week03() {
                               name='unit'
                               label='單位'
                               variant='outlined'
-                              onChange={handleInputEdit}
+                              onChange={handleInputChange}
                               onBlur={handleInputBlur}
                               value={tempProduct?.unit}
                               error={productErrors.unit}
@@ -681,7 +843,7 @@ export default function Week03() {
                               name='origin_price'
                               label='原價'
                               type='number'
-                              onChange={handleInputEdit}
+                              onChange={handleInputChange}
                               onBlur={handleInputBlur}
                               value={tempProduct?.origin_price}
                               error={productErrors.origin_price}
@@ -698,7 +860,7 @@ export default function Week03() {
                               name='price'
                               label='售價'
                               type='number'
-                              onChange={handleInputEdit}
+                              onChange={handleInputChange}
                               onBlur={handleInputBlur}
                               value={tempProduct?.price}
                               error={productErrors.price}
@@ -734,21 +896,15 @@ export default function Week03() {
                               name='imageUrl'
                               label='主圖網址'
                               variant='outlined'
-                              onChange={handleInputEdit}
+                              onChange={handleInputChange}
                               value={tempProduct?.imageUrl}
                               helperText={' '}
                             />
-                            {!isLoaded && tempProduct?.imageUrl !== '' && (
-                              <Skeleton variant='rectangular' width='100%'>
-                                <div style={{ paddingTop: '50%' }} />
-                              </Skeleton>
-                            )}
                             {tempProduct?.imageUrl !== '' ? (
                               <img
                                 src={tempProduct?.imageUrl}
                                 className='object-fit rounded'
                                 alt='主圖'
-                                onLoad={() => setIsLoaded(true)}
                               />
                             ) : (
                               <InsertPhotoIcon
@@ -778,22 +934,30 @@ export default function Week03() {
                     id='username'
                     name='username'
                     label='電子信箱'
-                    onChange={handleInputChange}
+                    onChange={handleLoginInputChange}
                     onBlur={handleInputBlur}
                     value={formData.username}
-                    error={!!errors.username}
-                    helperText={errors.username ? errors.username : ' '}
+                    error={loginErrors.username}
+                    helperText={
+                      loginErrorsMessage.username
+                        ? loginErrorsMessage.username
+                        : ' '
+                    }
                   />
                   <TextField
                     type='password'
                     id='password'
                     name='password'
                     label='密碼'
-                    onChange={handleInputChange}
+                    onChange={handleLoginInputChange}
                     onBlur={handleInputBlur}
                     value={formData.password}
-                    error={!!errors.password}
-                    helperText={errors.password ? errors.password : ' '}
+                    error={loginErrors.password}
+                    helperText={
+                      loginErrorsMessage.password
+                        ? loginErrorsMessage.password
+                        : ' '
+                    }
                   />
                 </div>
                 <FormControlLabel
