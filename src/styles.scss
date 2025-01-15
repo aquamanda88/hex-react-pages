@@ -1,4 +1,2 @@
-// bootstrap
-@use "bootstrap/dist/css/bootstrap.min.css";
 // 客製化樣式
-@use "./styles/main.scss";
+@import './styles/main.scss';

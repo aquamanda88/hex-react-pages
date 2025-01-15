@@ -1,7 +1,13 @@
-@use './scss/components/button';
-@use './scss/components/card';
-@use './scss/components/modal';
-@use './scss/components/spinners';
+// bootstrap
+@import 'bootstrap/dist/css/bootstrap.min.css';
+// helpers
+@import './scss/helpers/variables';
+@import './scss/helpers/mixins';
+// components
+@import './scss/components/button';
+@import './scss/components/card';
+@import './scss/components/modal';
+@import './scss/components/spinners';
 
 body {
   background-color: #edf2fc;
@@ -9,6 +15,10 @@ body {
 
 header {
   background-color: #ffffff;
+}
+
+.text-main {
+  color: #1583b1;
 }
 
 .layout {
