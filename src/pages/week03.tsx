@@ -90,7 +90,7 @@ export default function Week03() {
 
     setTempProduct((prevValues) => {
       const updatedContent = { ...prevValues?.content };
-      
+
       if (name in updatedContent) {
         updatedContent[name as keyof ContentDatum] = value;
       }
@@ -573,6 +573,25 @@ export default function Week03() {
   }
 
   /**
+   * 取得價格驗證錯誤訊息
+   *
+   * @param price - 價格數值
+   *
+   * @returns 相對應欄位之錯誤訊息
+   */
+  function doPriceValidation(name: string, price: number): string {
+    if (price === 0) {
+      return `${name}不可為 0 元`;
+    } else if (isNaN(price)) {
+      return `請輸入${name}`;
+    } else if (price < 0) {
+      return `${name}不可為負數`;
+    } else {
+      return '';
+    }
+  }
+
+  /**
    * 驗證商品表單
    *
    * @returns 無回傳值
@@ -582,18 +601,8 @@ export default function Week03() {
       title: tempProduct?.title === '' ? '請輸入作品名稱' : '',
       category: tempProduct?.category === '' ? '請輸入分類' : '',
       unit: tempProduct?.unit === '' ? '請輸入單位' : '',
-      origin_price:
-        tempProduct?.origin_price === 0
-          ? '原價不可為 0 元'
-          : isNaN(tempProduct?.origin_price ?? 0)
-            ? '請輸入原價'
-            : '',
-      price:
-        tempProduct?.price === 0
-          ? '售價不可為 0 元'
-          : isNaN(tempProduct?.price ?? 0)
-            ? '請輸入售價'
-            : '',
+      origin_price: doPriceValidation('原價', tempProduct?.origin_price ?? 0),
+      price: doPriceValidation('售價', tempProduct?.price ?? 0),
     };
 
     setProductErrors({
@@ -601,9 +610,8 @@ export default function Week03() {
       category: tempProduct?.category === '',
       unit: tempProduct?.unit === '',
       origin_price:
-        tempProduct?.origin_price === 0 ||
-        isNaN(tempProduct?.origin_price ?? 0),
-      price: tempProduct?.price === 0 || isNaN(tempProduct?.price ?? 0),
+        doPriceValidation('原價', tempProduct?.origin_price ?? 0) !== '',
+      price: doPriceValidation('售價', tempProduct?.price ?? 0) !== '',
     });
     setProductErrorsMessage(errorMessage);
   }
