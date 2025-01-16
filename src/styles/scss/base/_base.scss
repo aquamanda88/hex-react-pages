@@ -1,0 +1,77 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+h1 {
+  margin-bottom: 0;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #222222;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+a {
+  display: block;
+  text-decoration: none;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+body {
+  font-family: Roboto, 'Noto Sans TC', sans-serif, Helvetica, Arial;
+  background-color: #edf2fc;
+}
+
+header {
+  background-color: #ffffff;
+}
+
+main.container-fluid {
+  padding: 16px 60px;
+}
+
+/** Text */
+.text-color-main {
+  @include text-color(#29648a);
+  &:hover {
+    @include bg-color(transparent);
+    @include text-color(#1583b1);
+  }
+}
+.text-color-gray-500 {
+  @include text-color($gray-500);
+}
+
+.w-8 {
+  width: 8%;
+}
+.w-10 {
+  width: 10%;
+}
+.w-12 {
+  width: 12%;
+}
+.w-15 {
+  width: 15%;
+}
+.w-20 {
+  width: 20%;
+}
+.w-30 {
+  width: 30%;
+}

@@ -9,7 +9,7 @@ export default function Footer() {
               <p>
                 本站的所有畫作圖片均來自於
                 <a
-                  className='link-secondary text-decoration-none'
+                  className='text-color-main d-inline-block'
                   href='https://www.nga.gov/notices/open-access-policy.html'
                   target='_blank'
                 >

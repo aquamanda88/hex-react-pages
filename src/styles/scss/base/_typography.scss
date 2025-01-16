@@ -1,0 +1,81 @@
+/** 中文字體 */
+// 標題1
+.font-zh-h1 {
+  @include font(36px, 0.04em);
+}
+
+// 標題2
+.font-zh-h2 {
+  @include font(24px, 0.04em);
+}
+
+// 標題3
+.font-zh-h3 {
+  @include font(20px, 0.04em);
+}
+
+// 按鈕
+.font-zh-button {
+  @include font(16px, 0.02em, 150%);
+}
+
+// 內文-medium
+.font-zh-p-medium {
+  @include font(16px, 0.02em, 150%);
+}
+
+// 內文-regular
+.font-zh-p-regular {
+  @include font(16px, 0.02em, 150%);
+}
+
+// 備註文字-medium
+.font-zh-small-medium {
+  @include font(14px, 0.02em, 150%);
+}
+
+// 備註文字-regular
+.font-zh-small-regular {
+  @include font(14px, 0.02em, 150%);
+}
+
+/** 英文字體 */
+// h1
+.font-en-h1 {
+  @include font(36px, 0.005em);
+}
+
+// h2
+.font-en-h2 {
+  @include font(24px, 0.005em);
+}
+
+// h3
+.font-en-h3 {
+  @include font(20px, 0.005em);
+}
+
+// button
+.font-en-button {
+  @include font(16px, 0.005em);
+}
+
+// p/medium
+.font-en-p-medium {
+  @include font(16px, 0.005em, 150%);
+}
+
+// p/regular
+.font-en-p-regular {
+  @include font(16px, 0.005em, 150%);
+}
+
+// small/medium
+.font-en-small-medium {
+  @include font(14px, 0.005em, 150%);
+}
+
+// small/regular
+.font-en-small-regular {
+  @include font(14px, 0.005em, 150%);
+}

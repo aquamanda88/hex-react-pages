@@ -1,98 +1,68 @@
+/** contained 型按鈕 */
 .MuiButton-contained {
   &.btn {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 8px 16px;
-    font-size: 18px;
-    font-weight: 400;
-    box-shadow: none;
-    &:hover {
-      box-shadow: none;
-    }
+    @extend %btn-share;
   }
 
   &.btn-primary {
-    background-color: #2e9cca;
-    color: #ffffff;
+    @include bg-color(#2e9cca);
+    @include text-color($white);
     &:hover {
-      background-color: #1583b1;
-      color: #ffffff;
+      @include common-hover($white, $main);
     }
   }
 
   &.btn-secondary {
-    background-color: #efefef;
-    color: #29648a;
+    @include bg-color(#efefef);
+    @include text-color(#29648a);
     &:hover {
-      background-color: #d6d6d6;
-      color: #29648a;
+      @include common-hover(#29648a, #d6d6d6);
     }
   }
 }
-
+/** outlined 型按鈕 */
 .MuiButton-outlined {
   &.btn {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 8px 16px;
-    font-size: 18px;
-    font-weight: 400;
+    @extend %btn-share;
   }
 
   &.btn-primary {
-    border-color: #2e9cca;
-    color: #2e9cca;
+    @include border-color(#2e9cca);
+    @include text-color(#2e9cca);
     &:hover {
-      background-color: #2e9cca;
-      color: #ffffff;
+      @include bg-color(#2e9cca);
+      @include text-color($white);
     }
   }
 }
-
+/** text 型按鈕 */
 .MuiButton-text {
   &.btn {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 8px 16px;
-    font-size: 18px;
-    font-weight: 400;
+    @extend %btn-share;
   }
 
   &.btn-primary {
-    color: #29648a;
+    @include text-color(#29648a);
     &:hover {
-      background-color: #efefef;
-      color: #29648a;
+      @include bg-color(#efefef);
+      @include text-color(#29648a);
     }
   }
 
   &.btn-secondary {
-    color: #29648a;
+    @include text-color(#29648a);
     &:hover {
-      background-color: transparent;
-      color: #1583b1;
+      @include bg-color(transparent);
+      @include text-color(#1583b1);
     }
   }
 }
-
+/** icon 型按鈕 */
 .btn {
   .MuiSvgIcon-fontSizeMedium {
-    font-size: 24px;
+    @include font(24px, 0.02em);
   }
   .btn-icon {
     margin-bottom: 0;
-  }
-}
-
-.button.MuiButton-textPrimary {
-  background-color: #2e9cca;
-  font-size: 18px;
-  font-weight: 400;
-  transition: all 0.2s;
-  &:hover {
-    background-color: #1583b1;
   }
 }
