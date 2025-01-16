@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import axios, { AxiosError } from 'axios';
 import { Header, Modal, Spinners } from '../components';
 import { LoginReq, LoginValidation } from '../core/models/admin/auth.model';
 import {
@@ -27,9 +26,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import Swal from 'sweetalert2';
-
-const API_BASE = 'https://ec-course-api.hexschool.io/v2';
-const API_PATH = 'olive-branch';
+import apiService from '../services/api.service';
+import productApiService from '../services/products.service';
 
 export default function Week03() {
   const [isAuth, setIsAuth] = useState(false);
@@ -61,7 +59,7 @@ export default function Week03() {
    */
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
-    getProducts(sessionStorage.getItem('token') ?? '', page);
+    getProducts(page);
   };
 
   /**
@@ -311,30 +309,16 @@ export default function Week03() {
    *
    */
   const login = async () => {
-    try {
-      const result = await axios.post(`${API_BASE}/admin/signin`, formData);
-      if (result.data.token) {
-        setIsAuth(true);
-        if (checked) {
-          sessionStorage.setItem('token', result.data.token);
-        }
-        getProducts(result.data.token);
-        setIsLoginLoading(false);
-      } else {
-        setIsAuth(false);
+    const result = await apiService.login(formData);
+    if (result.data.token) {
+      setIsAuth(true);
+      if (checked) {
+        sessionStorage.setItem('token', result.data.token);
       }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        Swal.fire({
-          icon: 'error',
-          title: error.response?.data?.message,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: '發生無預期錯誤',
-        });
-      }
+      getProducts();
+      setIsLoginLoading(false);
+    } else {
+      setIsAuth(false);
     }
   };
 
@@ -343,146 +327,75 @@ export default function Week03() {
    *
    */
   const checkLogin = async () => {
-    try {
-      const result = await axios.post(
-        `${API_BASE}/api/user/check`,
-        {},
-        {
-          headers: { Authorization: sessionStorage.getItem('token') },
-        }
-      );
-      return result.data.success;
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        Swal.fire({
-          icon: 'error',
-          title: error.response?.data?.message,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: '發生無預期錯誤',
-        });
-      }
-    }
+    const result = await apiService.checkLogin();
+    return result.data.success;
   };
 
   /**
    * 呼叫取得商品列表 API
    *
-   * @prop token - 權限 token
    * @prop page - 選取頁數
    */
-  const getProducts = async (token: string, page?: number) => {
-    try {
-      const URL_PATH = page ? `products?page=${page}` : 'products';
-      setIsProductLoading(true);
-      const result = await axios.get(
-        `${API_BASE}/api/${API_PATH}/admin/${URL_PATH}`,
-        {
-          headers: {
-            Authorization: checked ? sessionStorage.getItem('token') : token,
-          },
-        }
-      );
-      if (result.data) {
-        setPagination(result.data.pagination);
-        setProducts(result.data.products);
-      }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        Swal.fire({
-          icon: 'error',
-          title: error.response?.data?.message,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: '發生無預期錯誤',
-        });
-      }
-    } finally {
-      setIsProductLoading(false);
-    }
+  const getProducts = async (page?: number) => {
+    setIsProductLoading(true);
+
+    productApiService
+      .getProducts(page)
+      .then(({ data: { pagination, products } }) => {
+        setPagination(pagination);
+        setProducts(products);
+      })
+      .finally(() => {
+        setIsProductLoading(false);
+      });
   };
 
   /**
    * 呼叫新增商品列表 API
    *
-   * @prop data - 欲新增商品物件
+   * @prop addProductData - 欲新增商品物件
    */
-  const addProduct = async (data: { data: ProductDatum }) => {
-    try {
-      setAddOpen(false);
-      setIsProductLoading(true);
-      const result = await axios.post(
-        `${API_BASE}/api/${API_PATH}/admin/product`,
-        data,
-        {
-          headers: {
-            Authorization: sessionStorage.getItem('token'),
-          },
-        }
-      );
-      getProducts(sessionStorage.getItem('token') ?? '');
-      Swal.fire({
-        title: result.data.message,
+  const addProduct = async (addProductData: { data: ProductDatum }) => {
+    setAddOpen(false);
+    setIsProductLoading(true);
+
+    productApiService
+      .addProduct(addProductData)
+      .then(({ data: { message } }) => {
+        getProducts();
+        Swal.fire({
+          title: message,
+        });
+      })
+      .finally(() => {
+        setIsProductLoading(false);
       });
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        Swal.fire({
-          icon: 'error',
-          title: error.response?.data?.message,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: '發生無預期錯誤',
-        });
-      }
-    } finally {
-      setIsProductLoading(false);
-    }
   };
 
   /**
    * 呼叫編輯商品列表 API
    *
    * @prop id - 商品 ID
-   * @prop data - 欲編輯商品物件
+   * @prop editProductData - 欲編輯商品物件
    */
-  const editProduct = async (id: string, data: { data: ProductDatum }) => {
-    try {
-      setEditOpen(false);
-      setIsProductLoading(true);
-      const result = await axios.put(
-        `${API_BASE}/api/${API_PATH}/admin/product/${id}`,
-        data,
-        {
-          headers: {
-            Authorization: sessionStorage.getItem('token'),
-          },
-        }
-      );
-      getProducts(sessionStorage.getItem('token') ?? '');
-      Swal.fire({
-        title: result.data.message,
+  const editProduct = async (
+    id: string,
+    editProductData: { data: ProductDatum }
+  ) => {
+    setEditOpen(false);
+    setIsProductLoading(true);
+
+    productApiService
+      .editProduct(id, editProductData)
+      .then(({ data: { message } }) => {
+        getProducts();
+        Swal.fire({
+          title: message,
+        });
+      })
+      .finally(() => {
+        setIsProductLoading(false);
       });
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        Swal.fire({
-          icon: 'error',
-          title: error.response?.data?.message,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: '發生無預期錯誤',
-        });
-      }
-    } finally {
-      setIsProductLoading(false);
-    }
   };
 
   /**
@@ -490,36 +403,20 @@ export default function Week03() {
    *
    */
   const deleteProduct = async () => {
-    try {
-      setDeleteOpen(false);
-      setIsProductLoading(true);
-      const result = await axios.delete(
-        `${API_BASE}/api/${API_PATH}/admin/product/${deleteItem?.id}`,
-        {
-          headers: {
-            Authorization: sessionStorage.getItem('token'),
-          },
-        }
-      );
-      getProducts(sessionStorage.getItem('token') ?? '');
-      Swal.fire({
-        title: result.data.message,
+    setDeleteOpen(false);
+    setIsProductLoading(true);
+
+    productApiService
+      .deleteProduct(deleteItem?.id ?? '')
+      .then(({ data: { message } }) => {
+        getProducts();
+        Swal.fire({
+          title: message,
+        });
+      })
+      .finally(() => {
+        setIsProductLoading(false);
       });
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        Swal.fire({
-          icon: 'error',
-          title: error.response?.data?.message,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: '發生無預期錯誤',
-        });
-      }
-    } finally {
-      setIsProductLoading(false);
-    }
   };
 
   /**
@@ -575,17 +472,18 @@ export default function Week03() {
   /**
    * 取得價格驗證錯誤訊息
    *
+   * @param type - 價格類型
    * @param price - 價格數值
    *
    * @returns 相對應欄位之錯誤訊息
    */
-  function doPriceValidation(name: string, price: number): string {
+  function doPriceValidation(type: string, price: number): string {
     if (price === 0) {
-      return `${name}不可為 0 元`;
+      return `${type}不可為 0 元`;
     } else if (isNaN(price)) {
-      return `請輸入${name}`;
+      return `請輸入${type}`;
     } else if (price < 0) {
-      return `${name}不可為負數`;
+      return `${type}不可為負數`;
     } else {
       return '';
     }
@@ -631,7 +529,7 @@ export default function Week03() {
       checkLogin().then((res) => {
         if (res) {
           setIsAuth(true);
-          getProducts(token).finally(() => {
+          getProducts().finally(() => {
             setIsLoginLoading(false);
           });
         } else {
@@ -639,6 +537,7 @@ export default function Week03() {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
