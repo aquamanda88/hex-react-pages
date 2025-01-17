@@ -7,6 +7,26 @@ const API_PATH = 'olive-branch';
 /** 產品 API 服務 */
 export class ProductApiService {
   /**
+   * 上傳圖片
+   *
+   * @returns API 回傳的資料
+   */
+  uploadImage(imageData: FormData) {
+    /** 權限 token */
+    const token = sessionStorage.getItem('token');
+
+    return axiosCustomer.post(
+      `${API_BASE}/api/${API_PATH}/admin/upload`,
+      imageData,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+  }
+
+  /**
    * 取得產品資料
    *
    * @param page - 頁數

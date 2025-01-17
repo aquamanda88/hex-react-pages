@@ -1,3 +1,18 @@
+.MuiTextField-root {
+  .MuiInputLabel-root {
+    font-size: 16px;
+  }
+  .MuiInputBase-root input,
+  .MuiInputBase-multiline {
+    padding: 16px 14px;
+  }
+}
+
+.MuiFormControlLabel-root {
+  .MuiCheckbox-root.Mui-checked {
+    color: $main;
+  }
+}
 .form-input-group {
   display: grid;
   gap: 12px;

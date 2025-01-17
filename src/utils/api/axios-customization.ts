@@ -21,20 +21,28 @@ axiosInstance.interceptors.request.use(
  * @param status - API 錯誤狀態
  * @returns 無回傳值
  */
-function formatErrorMessage(message: string, status: number) {
+function formatErrorMessage(message: string, status?: number) {
   Swal.fire({
     icon: 'error',
-    text: `(${status}) ${message}`,
+    text: status ? `(${status}) ${message}` : message,
+    customClass: {
+      container: 'my-swal-container',
+    },
   });
 }
 
 axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
-    const message = error?.response?.data?.message;
-    formatErrorMessage(message, error.status)
+    if (error.response) {
+      const { data, status } = error.response;
+      const { message } = data;
+      const formattedMessage =
+        message.message ? message.message : message;
+      formatErrorMessage(formattedMessage, status);
+    } else {
+      formatErrorMessage(error.message);
+    }
     return Promise.reject(error);
   }
 );

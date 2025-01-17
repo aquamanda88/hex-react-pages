@@ -2,6 +2,7 @@
 .MuiButton-contained {
   &.btn {
     @extend %btn-share;
+    border: none;
   }
 
   &.btn-primary {

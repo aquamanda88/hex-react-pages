@@ -49,7 +49,7 @@ export default function Modal({
             </DialogActions>
           </div>
           <div className='modal-content'>{children}</div>
-          <div className='sticky-bottom bg-white d-flex justify-content-center'>
+          <div className='modal-footer sticky-bottom bg-white d-flex justify-content-center'>
             <div className='d-flex justify-content-center py-2 gap-2'>
               {confirmBtnText === '刪除' ? (
                 <>

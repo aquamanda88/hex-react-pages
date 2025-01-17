@@ -48,5 +48,5 @@
   align-items: center;
   gap: 4px;
   @include font(16px, 0.02em, 150%);
-  @include btn-style(12px, 16px);
+  @include btn-style(16px, 14px);
 }
