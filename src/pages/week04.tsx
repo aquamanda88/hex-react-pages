@@ -182,18 +182,11 @@ export default function Week04() {
     setTempProduct({
       is_enabled: 0,
       title: '',
-      content: {
-        content: '',
-        name: '',
-        artists: '',
-        artists_zh_tw: '',
-        year: '',
-      },
+      content: {},
       category: '',
       unit: '',
       origin_price: 0,
       price: 0,
-      imageUrl: '',
     });
     clearProductsValidation();
     setIsEnabledChecked(false);
@@ -213,11 +206,11 @@ export default function Week04() {
       num: editItem?.num ?? 0,
       title: editItem?.title,
       content: {
-        content: editItem?.content?.content ?? '',
-        name: editItem?.content?.name ?? '',
-        artists: editItem?.content?.artists ?? '',
-        artists_zh_tw: editItem?.content?.artists_zh_tw ?? '',
-        year: editItem?.content?.year ?? '',
+        content: editItem?.content?.content,
+        name: editItem?.content?.name,
+        artists: editItem?.content?.artists,
+        artists_zh_tw: editItem?.content?.artists_zh_tw,
+        year: editItem?.content?.year,
       },
       description: editItem?.description ?? '',
       category: editItem?.category,
@@ -628,9 +621,15 @@ export default function Week04() {
                             products.map((item) => (
                               <tr key={item.id}>
                                 <td>{item.title}</td>
-                                <td>{item.content?.name ?? 'Untitled'}</td>
                                 <td>
-                                  {item.content?.artists_zh_tw ?? '未知的作者'}
+                                  {item.content?.name !== ''
+                                    ? item.content?.name
+                                    : 'Untitled'}
+                                </td>
+                                <td>
+                                  {item.content?.artists_zh_tw !== ''
+                                    ? item.content?.artists_zh_tw
+                                    : '未知的作者'}
                                 </td>
                                 <td className='text-end'>
                                   {item.origin_price}
@@ -897,7 +896,7 @@ export default function Week04() {
                                 multiple
                               />
                             </Button>
-                            {tempProduct?.imageUrl !== '' ? (
+                            {tempProduct?.imageUrl ? (
                               <img
                                 src={tempProduct?.imageUrl}
                                 className='object-fit rounded'
