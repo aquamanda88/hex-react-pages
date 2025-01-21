@@ -22,13 +22,29 @@ axiosInstance.interceptors.request.use(
  * @returns 無回傳值
  */
 function formatErrorMessage(message: string, status?: number) {
-  Swal.fire({
-    icon: 'error',
-    text: status ? `(${status}) ${message}` : message,
-    customClass: {
-      container: 'my-swal-container',
-    },
-  });
+  if (status === 401) {
+    Swal.fire({
+      icon: 'error',
+      text: status ? `(${status}) ${message}` : message,
+      showCancelButton: false,
+      confirmButtonText: '回到登入頁',
+      customClass: {
+        container: 'my-swal-container',
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.reload();
+      }
+    });
+  } else {
+    Swal.fire({
+      icon: 'error',
+      text: status ? `(${status}) ${message}` : message,
+      customClass: {
+        container: 'my-swal-container',
+      },
+    });
+  }
 }
 
 axiosInstance.interceptors.response.use(
@@ -37,8 +53,7 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       const { data, status } = error.response;
       const { message } = data;
-      const formattedMessage =
-        message.message ? message.message : message;
+      const formattedMessage = message.message ? message.message : message;
       formatErrorMessage(formattedMessage, status);
     } else {
       formatErrorMessage(error.message);

@@ -51,41 +51,20 @@ export default function Modal({
           <div className='modal-content'>{children}</div>
           <div className='modal-footer sticky-bottom bg-white d-flex justify-content-center'>
             <div className='d-flex justify-content-center py-2 gap-2'>
-              {confirmBtnText === '刪除' ? (
-                <>
-                  <Button
-                    className='btn btn-secondary'
-                    variant='contained'
-                    onClick={handleConfirm}
-                  >
-                    {confirmBtnText ? confirmBtnText : '儲存'}
-                  </Button>
-                  <Button
-                    className='btn btn-primary'
-                    variant='contained'
-                    onClick={handleClose}
-                  >
-                    取消
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    className='btn btn-secondary'
-                    variant='contained'
-                    onClick={handleClose}
-                  >
-                    取消
-                  </Button>
-                  <Button
-                    className='btn btn-primary'
-                    variant='contained'
-                    onClick={handleConfirm}
-                  >
-                    {confirmBtnText ? confirmBtnText : '儲存'}
-                  </Button>
-                </>
-              )}
+              <Button
+                className='btn btn-secondary'
+                variant='contained'
+                onClick={handleClose}
+              >
+                取消
+              </Button>
+              <Button
+                className={`${confirmBtnText ? 'btn-danger' : 'btn-primary'} btn`}
+                variant='contained'
+                onClick={handleConfirm}
+              >
+                {confirmBtnText ? confirmBtnText : '儲存'}
+              </Button>
             </div>
           </div>
         </Dialog>

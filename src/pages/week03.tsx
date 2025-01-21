@@ -31,6 +31,7 @@ import productApiService from '../services/products.service';
 
 export default function Week03() {
   const [isAuth, setIsAuth] = useState(false);
+  const [temporaryToken, setTemporaryToken] = useState('');
   const [formData, setFormData] = useState<LoginReq>({});
   const [loginErrors, setLoginErrors] = useState<LoginValidation>({});
   const [loginErrorsMessage, setLoginErrorsMessage] = useState<LoginReq>({});
@@ -168,18 +169,11 @@ export default function Week03() {
     setTempProduct({
       is_enabled: 0,
       title: '',
-      content: {
-        content: '',
-        name: '',
-        artists: '',
-        artists_zh_tw: '',
-        year: '',
-      },
+      content: {},
       category: '',
       unit: '',
       origin_price: 0,
       price: 0,
-      imageUrl: '',
     });
     clearProductsValidation();
     setIsEnabledChecked(false);
@@ -199,11 +193,11 @@ export default function Week03() {
       num: editItem?.num ?? 0,
       title: editItem?.title,
       content: {
-        content: editItem?.content?.content ?? '',
-        name: editItem?.content?.name ?? '',
-        artists: editItem?.content?.artists ?? '',
-        artists_zh_tw: editItem?.content?.artists_zh_tw ?? '',
-        year: editItem?.content?.year ?? '',
+        content: editItem?.content?.content,
+        name: editItem?.content?.name,
+        artists: editItem?.content?.artists,
+        artists_zh_tw: editItem?.content?.artists_zh_tw,
+        year: editItem?.content?.year,
       },
       description: editItem?.description ?? '',
       category: editItem?.category,
@@ -314,8 +308,11 @@ export default function Week03() {
       setIsAuth(true);
       if (checked) {
         sessionStorage.setItem('token', result.data.token);
+        getProducts(undefined, temporaryToken);
+      } else {
+        setTemporaryToken(result.data.token);
+        getProducts(undefined, result.data.token);
       }
-      getProducts();
       setIsLoginLoading(false);
     } else {
       setIsAuth(false);
@@ -336,11 +333,11 @@ export default function Week03() {
    *
    * @prop page - 選取頁數
    */
-  const getProducts = async (page?: number) => {
+  const getProducts = async (page?: number, temporaryToken?: string) => {
     setIsProductLoading(true);
 
     productApiService
-      .getProducts(page)
+      .getProducts(page, temporaryToken)
       .then(({ data: { pagination, products } }) => {
         setPagination(pagination);
         setProducts(products);
@@ -360,9 +357,9 @@ export default function Week03() {
     setIsProductLoading(true);
 
     productApiService
-      .addProduct(addProductData)
+      .addProduct(addProductData, temporaryToken)
       .then(({ data: { message } }) => {
-        getProducts();
+        getProducts(undefined, temporaryToken);
         Swal.fire({
           title: message,
         });
@@ -386,9 +383,9 @@ export default function Week03() {
     setIsProductLoading(true);
 
     productApiService
-      .editProduct(id, editProductData)
+      .editProduct(id, editProductData, temporaryToken)
       .then(({ data: { message } }) => {
-        getProducts();
+        getProducts(undefined, temporaryToken);
         Swal.fire({
           title: message,
         });
@@ -407,9 +404,9 @@ export default function Week03() {
     setIsProductLoading(true);
 
     productApiService
-      .deleteProduct(deleteItem?.id ?? '')
+      .deleteProduct(deleteItem?.id ?? '', temporaryToken)
       .then(({ data: { message } }) => {
-        getProducts();
+        getProducts(undefined, temporaryToken);
         Swal.fire({
           title: message,
         });
@@ -477,10 +474,10 @@ export default function Week03() {
    *
    * @returns 相對應欄位之錯誤訊息
    */
-  function doPriceValidation(type: string, price: number): string {
+  function doPriceValidation(type: string, price: number): string {   
     if (price === 0) {
       return `${type}不可為 0 元`;
-    } else if (isNaN(price)) {
+    } else if (isNaN(price) || Object.is(price, null)) {
       return `請輸入${type}`;
     } else if (price < 0) {
       return `${type}不可為負數`;
@@ -665,7 +662,7 @@ export default function Week03() {
                       </span>
                       <span>{deleteItem?.content?.year ?? 'Unknown'}</span>
                     </p>
-                    {deleteItem?.imageUrl !== '' ? (
+                    {deleteItem?.imageUrl ? (
                       <img
                         src={deleteItem?.imageUrl}
                         className='object-fit rounded preview-image p-0'
@@ -796,6 +793,13 @@ export default function Week03() {
                               name='origin_price'
                               label='原價'
                               type='number'
+                              slotProps={{
+                                input: {
+                                  inputProps: {
+                                    min: 0,
+                                  },
+                                },
+                              }}
                               onChange={handleInputChange}
                               onBlur={handleInputBlur}
                               value={tempProduct?.origin_price}
@@ -813,6 +817,13 @@ export default function Week03() {
                               name='price'
                               label='售價'
                               type='number'
+                              slotProps={{
+                                input: {
+                                  inputProps: {
+                                    min: 0,
+                                  },
+                                },
+                              }}
                               onChange={handleInputChange}
                               onBlur={handleInputBlur}
                               value={tempProduct?.price}
@@ -853,7 +864,7 @@ export default function Week03() {
                               value={tempProduct?.imageUrl}
                               helperText={' '}
                             />
-                            {tempProduct?.imageUrl !== '' ? (
+                            {tempProduct?.imageUrl ? (
                               <img
                                 src={tempProduct?.imageUrl}
                                 className='object-fit rounded'

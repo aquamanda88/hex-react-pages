@@ -66,6 +66,7 @@ export default function Home() {
                     <th scope='col'>#</th>
                     <th scope='col'>Primary</th>
                     <th scope='col'>Secondary</th>
+                    <th scope='col'>Danger</th>
                     <th scope='col'>Disabled</th>
                   </tr>
                 </thead>
@@ -79,6 +80,12 @@ export default function Home() {
                     </td>
                     <td>
                       <Button className='btn btn-secondary' variant='contained'>
+                        測試文字
+                      </Button>
+                    </td>
+
+                    <td>
+                      <Button className='btn btn-danger' variant='contained'>
                         測試文字
                       </Button>
                     </td>
@@ -98,6 +105,12 @@ export default function Home() {
                     </td>
                     <td>
                       <Button className='btn btn-secondary' variant='contained'>
+                        <AddIcon />
+                        <p className='btn-icon'>測試文字</p>
+                      </Button>
+                    </td>
+                    <td>
+                      <Button className='btn btn-danger' variant='contained'>
                         <AddIcon />
                         <p className='btn-icon'>測試文字</p>
                       </Button>
@@ -172,6 +185,9 @@ export default function Home() {
                     </td>
                     <td>
                       <Button className='btn btn-secondary'>測試文字</Button>
+                    </td>
+                    <td>
+                      <Button className='btn btn-danger'>測試文字</Button>
                     </td>
                     <td>
                       <Button className='btn' disabled>

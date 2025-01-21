@@ -11,9 +11,9 @@ export class ProductApiService {
    *
    * @returns API 回傳的資料
    */
-  uploadImage(imageData: FormData) {
+  uploadImage(imageData: FormData, temporaryToken?: string) {
     /** 權限 token */
-    const token = sessionStorage.getItem('token');
+    const token = temporaryToken ? temporaryToken : sessionStorage.getItem('token');
 
     return axiosCustomer.post(
       `${API_BASE}/api/${API_PATH}/admin/upload`,
@@ -33,9 +33,9 @@ export class ProductApiService {
    *
    * @returns API 回傳的資料
    */
-  getProducts(page?: number) {
+  getProducts(page?: number, temporaryToken?: string) {
     /** 權限 token */
-    const token = sessionStorage.getItem('token');
+    const token = temporaryToken ? temporaryToken : sessionStorage.getItem('token');
     /** API 網址 */
     const URL_PATH = page ? `products?page=${page}` : 'products';
 
@@ -53,9 +53,9 @@ export class ProductApiService {
    *
    * @returns API 回傳的資料
    */
-  addProduct(addProductData: { data: ProductDatum }) {
+  addProduct(addProductData: { data: ProductDatum }, temporaryToken?: string) {
     /** 權限 token */
-    const token = sessionStorage.getItem('token');
+    const token = temporaryToken ? temporaryToken : sessionStorage.getItem('token');
 
     return axiosCustomer.post(
       `${API_BASE}/api/${API_PATH}/admin/product`,
@@ -76,9 +76,9 @@ export class ProductApiService {
    *
    * @returns API 回傳的資料
    */
-  editProduct(id: string, editProductData: { data: ProductDatum }) {
+  editProduct(id: string, editProductData: { data: ProductDatum }, temporaryToken?: string) {
     /** 權限 token */
-    const token = sessionStorage.getItem('token');
+    const token = temporaryToken ? temporaryToken : sessionStorage.getItem('token');
 
     return axiosCustomer.put(
       `${API_BASE}/api/${API_PATH}/admin/product/${id}`,
@@ -98,9 +98,9 @@ export class ProductApiService {
    *
    * @returns API 回傳的資料
    */
-  deleteProduct(id: string) {
+  deleteProduct(id: string, temporaryToken?: string) {
     /** 權限 token */
-    const token = sessionStorage.getItem('token');
+    const token = temporaryToken ? temporaryToken : sessionStorage.getItem('token');
 
     return axiosCustomer.delete(
       `${API_BASE}/api/${API_PATH}/admin/product/${id}`,

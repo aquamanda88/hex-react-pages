@@ -20,6 +20,14 @@
       @include common-hover(#29648a, #d6d6d6);
     }
   }
+
+  &.btn-danger {
+    @include bg-color(#cc2e41);
+    @include text-color($white);
+    &:hover {
+      @include common-hover($white, #b31528);
+    }
+  }
 }
 /** outlined 型按鈕 */
 .MuiButton-outlined {
