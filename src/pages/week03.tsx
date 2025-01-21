@@ -31,7 +31,6 @@ import productApiService from '../services/products.service';
 
 export default function Week03() {
   const [isAuth, setIsAuth] = useState(false);
-  const [temporaryToken, setTemporaryToken] = useState('');
   const [formData, setFormData] = useState<LoginReq>({});
   const [loginErrors, setLoginErrors] = useState<LoginValidation>({});
   const [loginErrorsMessage, setLoginErrorsMessage] = useState<LoginReq>({});
@@ -43,7 +42,6 @@ export default function Week03() {
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
   const [pagination, setPagination] = useState<PaginationDatum>({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [checked, setChecked] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [modalType, setModalType] = useState('');
@@ -306,13 +304,8 @@ export default function Week03() {
     const result = await apiService.login(formData);
     if (result.data.token) {
       setIsAuth(true);
-      if (checked) {
-        sessionStorage.setItem('token', result.data.token);
-        getProducts(undefined, temporaryToken);
-      } else {
-        setTemporaryToken(result.data.token);
-        getProducts(undefined, result.data.token);
-      }
+      sessionStorage.setItem('token', result.data.token);
+      getProducts();
       setIsLoginLoading(false);
     } else {
       setIsAuth(false);
@@ -324,7 +317,8 @@ export default function Week03() {
    *
    */
   const checkLogin = async () => {
-    const result = await apiService.checkLogin();
+    const token = sessionStorage.getItem('token') ?? '';
+    const result = await apiService.checkLogin(token);
     return result.data.success;
   };
 
@@ -333,11 +327,11 @@ export default function Week03() {
    *
    * @prop page - 選取頁數
    */
-  const getProducts = async (page?: number, temporaryToken?: string) => {
+  const getProducts = async (page?: number) => {
     setIsProductLoading(true);
 
     productApiService
-      .getProducts(page, temporaryToken)
+      .getProducts(page)
       .then(({ data: { pagination, products } }) => {
         setPagination(pagination);
         setProducts(products);
@@ -357,9 +351,9 @@ export default function Week03() {
     setIsProductLoading(true);
 
     productApiService
-      .addProduct(addProductData, temporaryToken)
+      .addProduct(addProductData)
       .then(({ data: { message } }) => {
-        getProducts(undefined, temporaryToken);
+        getProducts();
         Swal.fire({
           title: message,
         });
@@ -383,9 +377,9 @@ export default function Week03() {
     setIsProductLoading(true);
 
     productApiService
-      .editProduct(id, editProductData, temporaryToken)
+      .editProduct(id, editProductData)
       .then(({ data: { message } }) => {
-        getProducts(undefined, temporaryToken);
+        getProducts();
         Swal.fire({
           title: message,
         });
@@ -404,9 +398,9 @@ export default function Week03() {
     setIsProductLoading(true);
 
     productApiService
-      .deleteProduct(deleteItem?.id ?? '', temporaryToken)
+      .deleteProduct(deleteItem?.id ?? '')
       .then(({ data: { message } }) => {
-        getProducts(undefined, temporaryToken);
+        getProducts();
         Swal.fire({
           title: message,
         });
@@ -474,7 +468,7 @@ export default function Week03() {
    *
    * @returns 相對應欄位之錯誤訊息
    */
-  function doPriceValidation(type: string, price: number): string {   
+  function doPriceValidation(type: string, price: number): string {
     if (price === 0) {
       return `${type}不可為 0 元`;
     } else if (isNaN(price) || Object.is(price, null)) {
@@ -924,17 +918,6 @@ export default function Week03() {
                     }
                   />
                 </div>
-                <FormControlLabel
-                  className='mb-2'
-                  control={
-                    <Checkbox
-                      checked={checked}
-                      color='primary'
-                      onChange={(e) => handleCheckboxChange(e, setChecked)}
-                    />
-                  }
-                  label='保持登入'
-                />
                 <Button
                   className='btn btn-primary w-100'
                   variant='contained'

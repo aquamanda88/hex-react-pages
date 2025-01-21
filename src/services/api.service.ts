@@ -3,7 +3,7 @@ import axiosCustomer from '../utils/api/axios-customization';
 /** API 呼叫路徑 */
 const API_BASE = 'https://ec-course-api.hexschool.io/v2';
 
-/** API 呼叫服務 */
+/** 登入 API 服務 */
 export class ApiService {
   /**
    * 登入
@@ -19,11 +19,10 @@ export class ApiService {
   /**
    * 登入驗證
    *
+   * @param token - token
    * @returns API 回傳的資料
    */
-  checkLogin() {
-    /** 權限 token */
-    const token = sessionStorage.getItem('token');
+  checkLogin(token: string) {
     return axiosCustomer.post(`${API_BASE}/api/user/check`, {}, {
       headers: {
         Authorization: token,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Header, Modal, Spinners } from '../components';
-import { LoginReq, LoginValidation } from '../core/models/admin/auth.model';
+import { LoginReq } from '../core/models/admin/auth.model';
 import {
   ContentDatum,
   PaginationDatum,
@@ -11,7 +11,6 @@ import {
 } from '../core/models/utils.model';
 import {
   Button,
-  IconButton,
   TextField,
   Checkbox,
   FormControlLabel,
@@ -20,16 +19,14 @@ import {
   Pagination,
   styled,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Swal from 'sweetalert2';
 import apiService from '../services/api.service';
 import productApiService from '../services/products.service';
+import Login from './login';
+import Table from '../components/table';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -44,11 +41,9 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 export default function Week04() {
-  const [isAuth, setIsAuth] = useState(false);
-  const [temporaryToken, setTemporaryToken] = useState('');
+  const token = sessionStorage.getItem('token');
+
   const [formData, setFormData] = useState<LoginReq>({});
-  const [loginErrors, setLoginErrors] = useState<LoginValidation>({});
-  const [loginErrorsMessage, setLoginErrorsMessage] = useState<LoginReq>({});
   const [productErrors, setProductErrors] = useState<ProductValidation>({});
   const [productErrorsMessage, setProductErrorsMessage] =
     useState<ProductValidationMessage>({});
@@ -57,7 +52,6 @@ export default function Week04() {
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
   const [pagination, setPagination] = useState<PaginationDatum>({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [checked, setChecked] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [modalType, setModalType] = useState('');
@@ -147,27 +141,10 @@ export default function Week04() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    setLoginErrors({
-      ...loginErrors,
-      [name]:
-        value === '' || !emailPattern.test(formData.username ?? '')
-          ? true
-          : false,
-    });
     setProductErrors({
       ...productErrors,
       [name]: value === '' ? true : false,
-    });
-    setLoginErrorsMessage({
-      ...loginErrorsMessage,
-      [name]:
-        value === ''
-          ? getErrorMessageForField(name)
-          : !emailPattern.test(formData.username ?? '')
-            ? '請輸入有效的 Email'
-            : '',
     });
     setProductErrorsMessage({
       ...productErrorsMessage,
@@ -283,62 +260,12 @@ export default function Week04() {
   };
 
   /**
-   * 處理送出表單事件
-   *
-   * @prop e - FormEvent
-   */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    const errorMessage = {
-      username: !formData?.username
-        ? '請輸入帳號'
-        : !emailPattern.test(formData.username ?? '')
-          ? '請輸入有效的 Email'
-          : '',
-      password: !formData?.password ? '請輸入密碼' : '',
-    };
-
-    setLoginErrors({
-      username:
-        !formData?.username || !emailPattern.test(formData.username ?? ''),
-      password: !formData?.password,
-    });
-    setLoginErrorsMessage(errorMessage);
-
-    if (formData.username && formData.password) {
-      login();
-    }
-  };
-
-  /**
-   * 呼叫登入 API
-   *
-   */
-  const login = async () => {
-    const result = await apiService.login(formData);
-    if (result.data.token) {
-      setIsAuth(true);
-      if (checked) {
-        sessionStorage.setItem('token', result.data.token);
-        getProducts(undefined, temporaryToken);
-      } else {
-        setTemporaryToken(result.data.token);
-        getProducts(undefined, result.data.token);
-      }
-      setIsLoginLoading(false);
-    } else {
-      setIsAuth(false);
-    }
-  };
-
-  /**
    * 呼叫登入驗證 API
    *
+   * @prop token - token
    */
-  const checkLogin = async () => {
-    const result = await apiService.checkLogin();
+  const checkLogin = async (token: string) => {
+    const result = await apiService.checkLogin(token);
     return result.data.success;
   };
 
@@ -373,11 +300,11 @@ export default function Week04() {
    *
    * @prop page - 選取頁數
    */
-  const getProducts = async (page?: number, temporaryToken?: string) => {
+  const getProducts = async (page?: number) => {
     setIsProductLoading(true);
 
     productApiService
-      .getProducts(page, temporaryToken)
+      .getProducts(page)
       .then(({ data: { pagination, products } }) => {
         setPagination(pagination);
         setProducts(products);
@@ -397,9 +324,9 @@ export default function Week04() {
     setIsProductLoading(true);
 
     productApiService
-      .addProduct(addProductData, temporaryToken)
+      .addProduct(addProductData)
       .then(({ data: { message } }) => {
-        getProducts(undefined, temporaryToken);
+        getProducts();
         Swal.fire({
           title: message,
         });
@@ -423,9 +350,9 @@ export default function Week04() {
     setIsProductLoading(true);
 
     productApiService
-      .editProduct(id, editProductData, temporaryToken)
+      .editProduct(id, editProductData)
       .then(({ data: { message } }) => {
-        getProducts(undefined, temporaryToken);
+        getProducts();
         Swal.fire({
           title: message,
         });
@@ -444,9 +371,9 @@ export default function Week04() {
     setIsProductLoading(true);
 
     productApiService
-      .deleteProduct(deleteItem?.id ?? '', temporaryToken)
+      .deleteProduct(deleteItem?.id ?? '')
       .then(({ data: { message } }) => {
-        getProducts(undefined, temporaryToken);
+        getProducts();
         Swal.fire({
           title: message,
         });
@@ -487,10 +414,6 @@ export default function Week04() {
    */
   function getErrorMessageForField(inputName: string): string {
     switch (inputName) {
-      case 'username':
-        return '請輸入帳號';
-      case 'password':
-        return '請輸入密碼';
       case 'title':
         return '請輸入作品名稱';
       case 'category':
@@ -552,20 +475,10 @@ export default function Week04() {
   }
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    setLoginErrors({
-      username: false,
-      password: false,
-    });
-    setLoginErrorsMessage({
-      username: '',
-      password: '',
-    });
+    setIsLoginLoading(true);
     if (token) {
-      setIsLoginLoading(true);
-      checkLogin().then((res) => {
+      checkLogin(token).then((res) => {
         if (res) {
-          setIsAuth(true);
           getProducts().finally(() => {
             setIsLoginLoading(false);
           });
@@ -580,7 +493,7 @@ export default function Week04() {
   return (
     <>
       <Header title='元件化' />
-      {isAuth ? (
+      {token ? (
         <>
           <div className='container py-4'>
             <div className={`${isLoginLoading ? 'd-flex' : 'd-none'} loading`}>
@@ -608,71 +521,11 @@ export default function Week04() {
                         <div style={{ paddingTop: '300px' }} />
                       </Skeleton>
                     ) : (
-                      <table className='table table-striped table-bordered mb-0'>
-                        <thead className='text-center'>
-                          <tr>
-                            <th>作品名稱</th>
-                            <th>作品原文名稱</th>
-                            <th>作者名稱</th>
-                            <th>原價</th>
-                            <th>售價</th>
-                            <th>是否啟用</th>
-                            <th>修改</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {products && products.length > 0 ? (
-                            products.map((item) => (
-                              <tr key={item.id}>
-                                <td>{item.title}</td>
-                                <td>
-                                  {item.content?.name !== ''
-                                    ? item.content?.name
-                                    : 'Untitled'}
-                                </td>
-                                <td>
-                                  {item.content?.artists_zh_tw !== ''
-                                    ? item.content?.artists_zh_tw
-                                    : '未知的作者'}
-                                </td>
-                                <td className='text-end'>
-                                  {item.origin_price}
-                                </td>
-                                <td className='text-end'>{item.price}</td>
-                                <td
-                                  className={`${item.is_enabled ? 'text-success' : 'text-danger'} text-center`}
-                                >
-                                  {item.is_enabled ? (
-                                    <CheckIcon />
-                                  ) : (
-                                    <CloseIcon />
-                                  )}
-                                </td>
-                                <td className='text-center'>
-                                  <IconButton
-                                    onClick={() => {
-                                      handleEditOpen(item);
-                                    }}
-                                  >
-                                    <EditIcon />
-                                  </IconButton>
-                                  <IconButton
-                                    onClick={() => {
-                                      handleDeleteOpen(item);
-                                    }}
-                                  >
-                                    <DeleteIcon sx={{ color: '#dc3545' }} />
-                                  </IconButton>
-                                </td>
-                              </tr>
-                            ))
-                          ) : (
-                            <tr>
-                              <td colSpan={7}>尚無產品資料</td>
-                            </tr>
-                          )}
-                        </tbody>
-                      </table>
+                      <Table
+                        data={products}
+                        handleEditOpen={handleEditOpen}
+                        handleDeleteOpen={handleDeleteOpen}
+                      />
                     )}
                     <div className='d-flex justify-content-center'>
                       <Stack spacing={2}>
@@ -777,7 +630,6 @@ export default function Week04() {
                               helperText={' '}
                             />
                           </div>
-
                           <TextField
                             id='year'
                             name='year'
@@ -937,66 +789,7 @@ export default function Week04() {
           </div>
         </>
       ) : (
-        <div className='container layout'>
-          <div className='row justify-content-center mb-3'>
-            <div className='card col-4 col-md-6'>
-              <h2 className='h2 mb-3 font-weight-normal text-center'>登入</h2>
-              <form id='form' className='form-signin' onSubmit={handleSubmit}>
-                <div className='form-input-group'>
-                  <TextField
-                    type='email'
-                    id='username'
-                    name='username'
-                    label='電子信箱'
-                    onChange={handleLoginInputChange}
-                    onBlur={handleInputBlur}
-                    value={formData.username}
-                    error={loginErrors.username}
-                    helperText={
-                      loginErrorsMessage.username
-                        ? loginErrorsMessage.username
-                        : ' '
-                    }
-                  />
-                  <TextField
-                    type='password'
-                    id='password'
-                    name='password'
-                    label='密碼'
-                    onChange={handleLoginInputChange}
-                    onBlur={handleInputBlur}
-                    value={formData.password}
-                    error={loginErrors.password}
-                    helperText={
-                      loginErrorsMessage.password
-                        ? loginErrorsMessage.password
-                        : ' '
-                    }
-                  />
-                </div>
-                <FormControlLabel
-                  className='mb-2'
-                  control={
-                    <Checkbox
-                      checked={checked}
-                      color='primary'
-                      onChange={(e) => handleCheckboxChange(e, setChecked)}
-                    />
-                  }
-                  label='保持登入'
-                />
-                <Button
-                  className='btn btn-primary w-100'
-                  variant='contained'
-                  color='primary'
-                  type='submit'
-                >
-                  登入
-                </Button>
-              </form>
-            </div>
-          </div>
-        </div>
+        <Login formData={formData} handleInputChange={handleLoginInputChange} />
       )}
     </>
   );
