@@ -134,7 +134,8 @@ export default function Week01() {
               <div className='card mb-3'>
                 <img
                   src={selectedProduct.imageUrl}
-                  className='object-fit card-img-top rounded'
+                  className='rounded'
+                  style={{objectFit: 'cover', maxWidth: '100%', height: '250px'}}
                   height={200}
                   alt='主圖'
                 />
@@ -162,7 +163,7 @@ export default function Week01() {
                       <img
                         key={index}
                         src={url}
-                        className='images object-fit'
+                        style={{objectFit: 'cover', width: '150px', height: '150px', marginRight: '8px'}}
                         width={200}
                         height={200}
                         alt='副圖'

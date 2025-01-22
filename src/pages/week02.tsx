@@ -107,11 +107,13 @@ export default function Week02() {
           icon: 'error',
           title: error.response?.data?.message,
         });
+        setIsLoading(false);
       } else {
         Swal.fire({
           icon: 'error',
           title: '發生無預期錯誤',
         });
+        setIsLoading(false);
       }
     } finally {
       setIsLoading(false);
@@ -123,7 +125,7 @@ export default function Week02() {
       checkLogin();
     }
   }, [isAuth]);
-  
+
   return (
     <>
       <Header title='RESTful API 串接' />
@@ -191,7 +193,12 @@ export default function Week02() {
                   <div className='card mb-3'>
                     <img
                       src={tempProduct.imageUrl}
-                      className='object-fit card-img-top rounded'
+                      className='rounded'
+                      style={{
+                        objectFit: 'cover',
+                        maxWidth: '100%',
+                        height: '250px',
+                      }}
                       height={250}
                       alt='主圖'
                     />
@@ -219,7 +226,13 @@ export default function Week02() {
                           <img
                             key={index}
                             src={url}
-                            className='images object-fit'
+                            style={{
+                              objectFit: 'cover',
+                              width: '150px',
+                              height: '150px',
+                              marginRight: '8px',
+                              marginBottom: '8px',
+                            }}
                             width={200}
                             height={200}
                             alt='副圖'
@@ -239,9 +252,11 @@ export default function Week02() {
         <div className='container layout'>
           <div className='row justify-content-center mb-3'>
             <div className='card col-4 col-md-6'>
-              <h2 className='h2 mb-3 font-weight-normal text-center'>請先登入</h2>
+              <h2 className='h2 mb-3 font-weight-normal text-center'>
+                請先登入
+              </h2>
               <form id='form' className='form-signin' onSubmit={handleSubmit}>
-                <div className="form-input-group">
+                <div className='form-input-group'>
                   <div className='form-floating'>
                     <input
                       type='email'
@@ -250,7 +265,7 @@ export default function Week02() {
                       name='username'
                       placeholder='帳號'
                       onChange={handleInputChange}
-                    value={formData.username}
+                      value={formData.username}
                       required
                     />
                     <label htmlFor='username'>帳號</label>
@@ -263,13 +278,20 @@ export default function Week02() {
                       name='password'
                       placeholder='密碼'
                       onChange={handleInputChange}
-                    value={formData.password}
+                      value={formData.password}
                       required
                     />
                     <label htmlFor='password'>密碼</label>
                   </div>
                 </div>
-                <Button  className='btn btn-primary w-100' variant="contained" color="primary" type='submit'>登入</Button>
+                <Button
+                  className='btn btn-primary w-100'
+                  variant='contained'
+                  color='primary'
+                  type='submit'
+                >
+                  登入
+                </Button>
               </form>
             </div>
           </div>
