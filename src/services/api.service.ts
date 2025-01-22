@@ -12,8 +12,7 @@ export class ApiService {
    * @returns API 回傳的資料
    */
   login(formData: LoginReq) {
-    return axiosCustomer.post(`${API_BASE}/admin/signin`, formData, {
-    });
+    return axiosCustomer.post(`${API_BASE}/admin/signin`, formData, {});
   }
 
   /**
@@ -23,11 +22,33 @@ export class ApiService {
    * @returns API 回傳的資料
    */
   checkLogin(token: string) {
-    return axiosCustomer.post(`${API_BASE}/api/user/check`, {}, {
-      headers: {
-        Authorization: token,
-      },
-    });
+    return axiosCustomer.post(
+      `${API_BASE}/api/user/check`,
+      {},
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+  }
+
+  /**
+   * 登出
+   *
+   * @param token - token
+   * @returns API 回傳的資料
+   */
+  logout(token: string) {
+    return axiosCustomer.post(
+      `${API_BASE}/logout`,
+      {},
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
   }
 }
 

@@ -187,9 +187,6 @@ export default function Home() {
                       <Button className='btn btn-secondary'>測試文字</Button>
                     </td>
                     <td>
-                      <Button className='btn btn-danger'>測試文字</Button>
-                    </td>
-                    <td>
                       <Button className='btn' disabled>
                         測試文字
                       </Button>

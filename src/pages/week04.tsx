@@ -270,6 +270,18 @@ export default function Week04() {
   };
 
   /**
+   * 呼叫登出 API
+   *
+   * @prop token - token
+   */
+  const logout = async (token: string) => {
+    apiService.logout(token).then(() => {
+      sessionStorage.removeItem('token');
+      window.location.reload();
+    });
+  };
+
+  /**
    * 呼叫圖片上傳 API
    *
    * @prop e - ChangeEvent
@@ -501,6 +513,17 @@ export default function Week04() {
             </div>
             <div className='row flex-column justify-content-center align-items-center'>
               <div>
+                <div className='d-flex justify-content-center mb-4'>
+                  <Button
+                    variant='outlined'
+                    className='btn btn-primary'
+                    onClick={() => {
+                      logout(token);
+                    }}
+                  >
+                    登出
+                  </Button>
+                </div>
                 <div className='card mb-4'>
                   <div className='d-flex justify-content-between mb-4'>
                     <h2>所有商品</h2>

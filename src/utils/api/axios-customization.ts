@@ -22,12 +22,27 @@ axiosInstance.interceptors.request.use(
  * @returns 無回傳值
  */
 function formatErrorMessage(message: string, status?: number) {
-  if (status === 401) {
+  if (message === '驗證錯誤, 請重新登入' || message === '請重新登入') {
     Swal.fire({
       icon: 'error',
       text: status ? `(${status}) ${message}` : message,
       showCancelButton: false,
       confirmButtonText: '回到登入頁',
+      customClass: {
+        container: 'my-swal-container',
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sessionStorage.removeItem('token');
+        window.location.reload();
+      }
+    });
+  } else if (message === '請重新登出') {
+    Swal.fire({
+      icon: 'error',
+      text: status ? `(${status}) ${message}` : message,
+      showCancelButton: false,
+      confirmButtonText: '確認',
       customClass: {
         container: 'my-swal-container',
       },
@@ -40,6 +55,8 @@ function formatErrorMessage(message: string, status?: number) {
     Swal.fire({
       icon: 'error',
       text: status ? `(${status}) ${message}` : message,
+      showCancelButton: false,
+      confirmButtonText: '確認',
       customClass: {
         container: 'my-swal-container',
       },
