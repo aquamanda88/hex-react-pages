@@ -82,11 +82,15 @@ export default function Login({ formData, handleInputChange }: LoginProps) {
    */
   const login = async () => {
     setIsLoginLoading(true);
-    const result = await apiService.login(formData);
-    if (result.data.token) {
-      sessionStorage.setItem('token', result.data.token);
-      window.location.reload();
-    }
+    apiService
+      .login(formData)
+      .then(({ data: { token } }) => {
+        sessionStorage.setItem('token', token);
+        window.location.reload();
+      })
+      .finally(() => {
+        setIsLoginLoading(false);
+      });
   };
 
   /**
@@ -107,7 +111,7 @@ export default function Login({ formData, handleInputChange }: LoginProps) {
     }
   }
 
-  useEffect(() => {    
+  useEffect(() => {
     setLoginErrors({
       username: false,
       password: false,

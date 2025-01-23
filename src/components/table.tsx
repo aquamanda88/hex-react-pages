@@ -67,7 +67,7 @@ const Table: React.FC<TableProps> = ({
           ))
         ) : (
           <tr>
-            <td colSpan={7}>尚無產品資料</td>
+            <td className='text-center' colSpan={7}>尚無產品資料</td>
           </tr>
         )}
       </tbody>
