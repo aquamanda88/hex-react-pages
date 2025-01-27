@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Navbar, Footer } from './components';
 import {
   Home,
+  ProductDetail,
   Week01,
   Week02,
   Week03,
@@ -26,6 +27,7 @@ function App() {
         <Route path='/week06' element={<Week06 />}></Route>
         <Route path='/week07' element={<Week07 />}></Route>
         <Route path='/week08' element={<Week08 />}></Route>
+        <Route path="/product/:id" element={<ProductDetail />} />
       </Routes>
       <Footer></Footer>
     </>

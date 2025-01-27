@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import productApiService from '../services/user/products.service';
 import { PaginationDatum, ProductFullDatum } from '../core/models/utils.model';
 import { Pagination, Skeleton, Stack } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export default function ProductsList() {
   const [isProductLoading, setIsProductLoading] = useState(true);
@@ -46,38 +47,40 @@ export default function ProductsList() {
 
   return (
     <div className='container py-4'>
-      <div className='row'>
-        {isProductLoading ? (
-          <>
-            <div className='col col-12 col-lg-4'>
-              <Skeleton variant='rectangular' height='350px'></Skeleton>
-            </div>
-            <div className='col col-12 col-lg-4'>
-              <Skeleton variant='rectangular' height='350px'></Skeleton>
-            </div>
-            <div className='col col-12 col-lg-4'>
-              <Skeleton variant='rectangular' height='350px'></Skeleton>
-            </div>
-          </>
-        ) : (
-          products.map((item) => {
-            return (
+      <div className='card mb-4'>
+        <div className='row'>
+          {isProductLoading ? (
+            <>
               <div className='col col-12 col-lg-4'>
-                <a href='#'>
-                  <img
-                    src={item.imageUrl}
-                    className='item-image'
-                    alt={item.imageUrl}
-                  ></img>
-                  <div>
-                    <h3>{item.title}</h3>
-                    <p>NT$ {item.price}</p>
-                  </div>
-                </a>
+                <Skeleton variant='rectangular' height='350px'></Skeleton>
               </div>
-            );
-          })
-        )}
+              <div className='col col-12 col-lg-4'>
+                <Skeleton variant='rectangular' height='350px'></Skeleton>
+              </div>
+              <div className='col col-12 col-lg-4'>
+                <Skeleton variant='rectangular' height='350px'></Skeleton>
+              </div>
+            </>
+          ) : (
+            products.map((item) => {
+              return (
+                <div className='col col-12 col-lg-4'>
+                  <Link to={`/product/${item.id}`}>
+                    <img
+                      src={item.imageUrl}
+                      className='item-image'
+                      alt={item.imageUrl}
+                    ></img>
+                    <div>
+                      <h3>{item.title}</h3>
+                      <p>NT$ {item.price}</p>
+                    </div>
+                  </Link>
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
       <div className='d-flex justify-content-center'>
         <Stack spacing={2}>
