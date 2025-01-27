@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { LoginReq, LoginValidation } from '../core/models/admin/auth.model';
 import { Button, TextField } from '@mui/material';
-import apiService from '../services/api.service';
+import authService from '../services/auth.service';
 import { Spinners } from '../components';
 
 /** 元件參數型別 */
@@ -82,7 +82,7 @@ export default function Login({ formData, handleInputChange }: LoginProps) {
    */
   const login = async () => {
     setIsLoginLoading(true);
-    apiService
+    authService
       .login(formData)
       .then(({ data: { token } }) => {
         sessionStorage.setItem('token', token);

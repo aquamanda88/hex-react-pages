@@ -23,8 +23,8 @@ import AddIcon from '@mui/icons-material/Add';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Swal from 'sweetalert2';
-import apiService from '../services/api.service';
-import productApiService from '../services/products.service';
+import authService from '../services/auth.service';
+import productApiService from '../services/admin/products.service';
 import Login from './login';
 import Table from '../components/table';
 
@@ -265,7 +265,7 @@ export default function Week04() {
    * @prop token - token
    */
   const checkLogin = async (token: string) => {
-    const result = await apiService.checkLogin(token);
+    const result = await authService.checkLogin(token);
     return result.data.success;
   };
 
@@ -275,7 +275,7 @@ export default function Week04() {
    * @prop token - token
    */
   const logout = async (token: string) => {
-    apiService.logout(token).then(() => {
+    authService.logout(token).then(() => {
       sessionStorage.removeItem('token');
       window.location.reload();
     });

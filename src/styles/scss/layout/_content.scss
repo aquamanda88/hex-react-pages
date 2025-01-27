@@ -18,3 +18,9 @@
 .image-group {
   gap: 12px;
 }
+
+.item-image {
+  -o-object-fit: cover;
+  object-fit: cover;
+  height: 350px;
+}

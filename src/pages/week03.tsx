@@ -26,8 +26,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import Swal from 'sweetalert2';
-import apiService from '../services/api.service';
-import productApiService from '../services/products.service';
+import authService from '../services/auth.service';
+import productApiService from '../services/admin/products.service';
 
 export default function Week03() {
   const [isAuth, setIsAuth] = useState(false);
@@ -301,7 +301,7 @@ export default function Week03() {
    *
    */
   const login = async () => {
-    const result = await apiService.login(formData);
+    const result = await authService.login(formData);
     if (result.data.token) {
       setIsAuth(true);
       sessionStorage.setItem('token', result.data.token);
@@ -318,7 +318,7 @@ export default function Week03() {
    */
   const checkLogin = async () => {
     const token = sessionStorage.getItem('token') ?? '';
-    const result = await apiService.checkLogin(token);
+    const result = await authService.checkLogin(token);
     return result.data.success;
   };
 

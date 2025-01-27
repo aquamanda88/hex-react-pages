@@ -4,7 +4,7 @@ import axiosCustomer from '../utils/api/axios-customization';
 const API_BASE = 'https://ec-course-api.hexschool.io/v2';
 
 /** 登入 API 服務 */
-export class ApiService {
+export class AuthService {
   /**
    * 登入
    *
@@ -52,4 +52,4 @@ export class ApiService {
   }
 }
 
-export default new ApiService();
+export default new AuthService();

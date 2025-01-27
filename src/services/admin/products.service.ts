@@ -1,5 +1,5 @@
-import { ProductDatum } from '../core/models/utils.model';
-import axiosCustomer from '../utils/api/axios-customization';
+import { ProductDatum } from '../../core/models/utils.model';
+import axiosCustomer from '../../utils/api/axios-customization';
 /** API 呼叫路徑 */
 const API_BASE = 'https://ec-course-api.hexschool.io/v2';
 /** 專案路徑名稱 */
