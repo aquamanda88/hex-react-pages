@@ -1,3 +1,13 @@
 .table {
   vertical-align: middle;
 }
+
+.cart-table {
+  text-align: center;
+  .cart-image {
+    width: 100px;
+    height: 100px;
+    -o-object-fit: cover;
+    object-fit: cover;
+  }
+}

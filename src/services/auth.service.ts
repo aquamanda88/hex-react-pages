@@ -1,7 +1,6 @@
 import { LoginReq } from '../core/models/admin/auth.model';
+import { basicConstant } from '../core/constants/basic.constants';
 import axiosCustomer from '../utils/api/axios-customization';
-/** API 呼叫路徑 */
-const API_BASE = 'https://ec-course-api.hexschool.io/v2';
 
 /** 登入 API 服務 */
 export class AuthService {
@@ -12,7 +11,7 @@ export class AuthService {
    * @returns API 回傳的資料
    */
   login(formData: LoginReq) {
-    return axiosCustomer.post(`${API_BASE}/admin/signin`, formData, {});
+    return axiosCustomer.post(`${basicConstant.API_BASE}/admin/signin`, formData, {});
   }
 
   /**
@@ -23,7 +22,7 @@ export class AuthService {
    */
   checkLogin(token: string) {
     return axiosCustomer.post(
-      `${API_BASE}/api/user/check`,
+      `${basicConstant.API_BASE}/api/user/check`,
       {},
       {
         headers: {
@@ -41,7 +40,7 @@ export class AuthService {
    */
   logout(token: string) {
     return axiosCustomer.post(
-      `${API_BASE}/logout`,
+      `${basicConstant.API_BASE}/logout`,
       {},
       {
         headers: {

@@ -40,6 +40,20 @@ export default function ProductsList() {
       });
   };
 
+  /**
+   * 價格加上千分位
+   *
+   * @param price - 價格
+   * @returns 加上千分位之價格
+   */
+  function formatPrice(price: number | undefined): string {
+    if (price) {
+      return new Intl.NumberFormat().format(price);
+    } else {
+      return '0';
+    }
+  }
+
   useEffect(() => {
     getProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,7 +87,7 @@ export default function ProductsList() {
                     ></img>
                     <div>
                       <h3>{item.title}</h3>
-                      <p>NT$ {item.price}</p>
+                      <p>TWD {formatPrice(item.price)}</p>
                     </div>
                   </Link>
                 </div>

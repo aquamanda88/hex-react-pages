@@ -4,3 +4,15 @@
     opacity: 0.7;
   }
 }
+
+.menu-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  gap: 16px;
+}
+
+.MuiBadge-badge.MuiBadge-colorPrimary {
+  background-color: $gray-300;
+}

@@ -20,6 +20,20 @@ const Table: React.FC<TableProps> = ({
   handleEditOpen,
   handleDeleteOpen,
 }) => {
+  /**
+   * 價格加上千分位
+   *
+   * @param price - 價格
+   * @returns 加上千分位之價格
+   */
+  function formatPrice(price: number | undefined): string {
+    if (price) {
+      return new Intl.NumberFormat().format(price);
+    } else {
+      return '0';
+    }
+  }
+
   return (
     <table className='table table-striped table-bordered mb-0'>
       <thead className='text-center'>
@@ -40,8 +54,8 @@ const Table: React.FC<TableProps> = ({
               <td>{item.title}</td>
               <td>{item.content?.name ?? 'Untitled'}</td>
               <td>{item.content?.artists_zh_tw ?? '未知的作者'}</td>
-              <td className='text-end'>{item.origin_price}</td>
-              <td className='text-end'>{item.price}</td>
+              <td className='text-end'>{formatPrice(item.origin_price)}</td>
+              <td className='text-end'>{formatPrice(item.price)}</td>
               <td
                 className={`${item.is_enabled ? 'text-success' : 'text-danger'} text-center`}
               >
@@ -67,7 +81,9 @@ const Table: React.FC<TableProps> = ({
           ))
         ) : (
           <tr>
-            <td className='text-center' colSpan={7}>尚無產品資料</td>
+            <td className='text-center' colSpan={7}>
+              尚無產品資料
+            </td>
           </tr>
         )}
       </tbody>

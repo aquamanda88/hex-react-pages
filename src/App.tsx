@@ -12,6 +12,7 @@ import {
   Week07,
   Week08,
 } from './pages';
+import Cart from './pages/cart';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path='/week07' element={<Week07 />}></Route>
         <Route path='/week08' element={<Week08 />}></Route>
         <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
       <Footer></Footer>
     </>

@@ -1,12 +1,7 @@
 import axiosCustomer from '../../utils/api/axios-customization';
-/** API 呼叫路徑 */
-const API_BASE = 'https://ec-course-api.hexschool.io/v2';
-/** 專案路徑名稱 */
-const API_PATH = 'olive-branch';
-
+import { basicConstant } from '../../core/constants/basic.constants';
 /** 產品 API 服務 */
 export class ProductApiService {
-
   /**
    * 取得產品資料
    *
@@ -16,7 +11,9 @@ export class ProductApiService {
   getProducts(page?: number) {
     /** API 網址 */
     const URL_PATH = page ? `products?page=${page}` : 'products';
-    return axiosCustomer.get(`${API_BASE}/api/${API_PATH}/${URL_PATH}`);
+    return axiosCustomer.get(
+      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/${URL_PATH}`
+    );
   }
 
   /**
@@ -26,7 +23,9 @@ export class ProductApiService {
    * @returns API 回傳的資料
    */
   getProductDetail(id: string) {
-    return axiosCustomer.get(`${API_BASE}/api/${API_PATH}/product/${id}`);
+    return axiosCustomer.get(
+      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/product/${id}`
+    );
   }
 }
 

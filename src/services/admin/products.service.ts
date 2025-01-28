@@ -1,15 +1,12 @@
 import { ProductDatum } from '../../core/models/utils.model';
+import { basicConstant } from '../../core/constants/basic.constants';
 import axiosCustomer from '../../utils/api/axios-customization';
-/** API 呼叫路徑 */
-const API_BASE = 'https://ec-course-api.hexschool.io/v2';
-/** 專案路徑名稱 */
-const API_PATH = 'olive-branch';
 
 /** 產品 API 服務 */
 export class ProductApiService {
   /**
    * 上傳圖片
-   * 
+   *
    * @param imageData - 欲上傳圖片資料
    * @param temporaryToken - 未保持登入時 token
    * @returns API 回傳的資料
@@ -19,7 +16,7 @@ export class ProductApiService {
     const token = sessionStorage.getItem('token');
 
     return axiosCustomer.post(
-      `${API_BASE}/api/${API_PATH}/admin/upload`,
+      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/upload`,
       imageData,
       {
         headers: {
@@ -42,11 +39,14 @@ export class ProductApiService {
     /** API 網址 */
     const URL_PATH = page ? `products?page=${page}` : 'products';
 
-    return axiosCustomer.get(`${API_BASE}/api/${API_PATH}/admin/${URL_PATH}`, {
-      headers: {
-        Authorization: token,
-      },
-    });
+    return axiosCustomer.get(
+      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/${URL_PATH}`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
   }
 
   /**
@@ -61,7 +61,7 @@ export class ProductApiService {
     const token = sessionStorage.getItem('token');
 
     return axiosCustomer.post(
-      `${API_BASE}/api/${API_PATH}/admin/product`,
+      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/product`,
       addProductData,
       {
         headers: {
@@ -84,7 +84,7 @@ export class ProductApiService {
     const token = sessionStorage.getItem('token');
 
     return axiosCustomer.put(
-      `${API_BASE}/api/${API_PATH}/admin/product/${id}`,
+      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/product/${id}`,
       editProductData,
       {
         headers: {
@@ -106,7 +106,7 @@ export class ProductApiService {
     const token = sessionStorage.getItem('token');
 
     return axiosCustomer.delete(
-      `${API_BASE}/api/${API_PATH}/admin/product/${id}`,
+      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/product/${id}`,
       {
         headers: {
           Authorization: token,
