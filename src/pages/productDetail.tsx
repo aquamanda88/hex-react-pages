@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import productApiService from '../services/user/products.service';
 import { useParams } from 'react-router-dom';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { ProductDatum } from '../core/models/utils.model';
 import { Spinners } from '../components';
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import {
   CartDataDatum,
   CartDataRequest,
@@ -19,7 +21,21 @@ export default function ProductDetail() {
   const [product, setProduct] = useState<ProductDatum>({});
   const [, setCart] = useState<CartDataDatum>();
   const [cartCount, setCartCount] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const favoriteList = localStorage.getItem('favoriteList') ?? '';
   const { id } = useParams();
+
+  const handleFavoriteChange = () => {
+    setIsFavorite(!isFavorite);
+    const favoriteListArray = favoriteList.split(', ');
+    if (isFavorite && id) {
+      const newArr = favoriteListArray.filter((item) => item !== id);
+      localStorage.setItem('favoriteList', newArr.join(', '));
+    } else if (!isFavorite && id) {
+      favoriteListArray.push(id);
+      localStorage.setItem('favoriteList', favoriteListArray.join(', '));
+    }
+  };
 
   /**
    * 呼叫取得商品列表 API
@@ -82,6 +98,11 @@ export default function ProductDetail() {
       });
   };
 
+  function checkFavoriteItem(): void {
+    const isFavoriteItem = id ? favoriteList.split(', ').includes(id) : false;
+    setIsFavorite(isFavoriteItem);
+  }
+
   /**
    * 取得購物車總數量
    *
@@ -92,8 +113,23 @@ export default function ProductDetail() {
     return carts.reduce((sum, item) => sum + item.qty, 0);
   }
 
+  /**
+   * 價格加上千分位
+   *
+   * @param price - 價格
+   * @returns 加上千分位之價格
+   */
+  function formatPrice(price: number | undefined): string {
+    if (price) {
+      return new Intl.NumberFormat().format(price);
+    } else {
+      return '0';
+    }
+  }
+
   useEffect(() => {
     getProductDetail(id ?? '');
+    checkFavoriteItem();
     getCart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -115,9 +151,14 @@ export default function ProductDetail() {
             )}
           </div>
           <div className='col col-6'>
-            <h5>
-              {product.content?.artists_zh_tw} ({product.content?.artists})
-            </h5>
+            <div className='d-flex justify-content-between align-items-center'>
+              <h5 className='mb-0'>
+                {product.content?.artists_zh_tw} ({product.content?.artists})
+              </h5>
+              <IconButton onClick={handleFavoriteChange}>
+                {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+              </IconButton>
+            </div>
             <h2>{product.title}</h2>
             <h3>
               <i>{product.content?.name}</i>
@@ -129,6 +170,10 @@ export default function ProductDetail() {
               </span>
             </h5>
             <p>{product.description}</p>
+            <p>
+              <span className='me-2'>NTD {formatPrice(product.price)}</span>
+              <del>NTD {formatPrice(product.origin_price)}</del>
+            </p>
             <Button
               className='btn btn-primary w-100'
               component='label'

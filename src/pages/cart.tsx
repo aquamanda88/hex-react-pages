@@ -85,58 +85,56 @@ export default function Cart() {
           <Spinners />
         </div>
         <h2>購物車詳情頁</h2>
-        <table className='cart-table table'>
-          <thead className='text-center'>
-            <tr>
-              <th>移除</th>
-              <th colSpan={2}>作品資料</th>
-              <th>數量</th>
-              <th>作品單價</th>
-              <th>總價</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cart?.carts && cart?.carts.length > 0 ? (
-              cart?.carts.map((item) => (
-                <tr key={item.id}>
-                  <td>
-                    <IconButton onClick={() => deleteCartItem(item.id)}>
-                      <CloseIcon />
-                    </IconButton>
-                  </td>
-                  <td>
-                    <img
-                      className='cart-image'
-                      src={item.product.imageUrl}
-                      alt={item.product.content?.name}
-                    />
-                  </td>
-                  <td>
-                    <p>{item.product.title}</p>
-                    <p>({item.product.content?.name})</p>
-                  </td>
-                  <td>{item.qty}</td>
-                  <td>{formatPrice(item.product.price)}</td>
-                  <td>{formatPrice(item.final_total)}</td>
+        {cart?.carts && cart?.carts.length > 0 ? (
+          <>
+            <table className='cart-table table'>
+              <thead className='text-center'>
+                <tr>
+                  <th>移除</th>
+                  <th colSpan={2}>作品資料</th>
+                  <th>數量</th>
+                  <th>作品單價</th>
+                  <th>總價</th>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td className='text-center' colSpan={7}>
-                  尚無產品資料
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        <div className='row justify-content-end'>
-          <div className='col-12 col-lg-6'>
-            <div className='d-flex justify-content-between'>
-              <h4>總價</h4>
-              <h3>TWD {formatPrice(cart?.final_total)}</h3>
+              </thead>
+              <tbody>
+                {cart?.carts.map((item) => (
+                  <tr key={item.id}>
+                    <td>
+                      <IconButton onClick={() => deleteCartItem(item.id)}>
+                        <CloseIcon />
+                      </IconButton>
+                    </td>
+                    <td>
+                      <img
+                        className='cart-image'
+                        src={item.product.imageUrl}
+                        alt={item.product.content?.name}
+                      />
+                    </td>
+                    <td>
+                      <p>{item.product.title}</p>
+                      <p className='mb-0'>({item.product.content?.name})</p>
+                    </td>
+                    <td>{item.qty}</td>
+                    <td>{formatPrice(item.product.price)}</td>
+                    <td>{formatPrice(item.final_total)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className='row justify-content-end'>
+              <div className='col-12 col-lg-6'>
+                <div className='d-flex justify-content-between'>
+                  <h4>總價</h4>
+                  <h3>TWD {formatPrice(cart?.final_total)}</h3>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        ) : (
+          <p>目前購物車為空</p>
+        )}
       </div>
     </>
   );

@@ -1,14 +1,36 @@
 import { useEffect, useState } from 'react';
 import productApiService from '../services/user/products.service';
 import { PaginationDatum, ProductFullDatum } from '../core/models/utils.model';
-import { Pagination, Skeleton, Stack } from '@mui/material';
+import { Checkbox, Pagination, Skeleton, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { Favorite, FavoriteBorder } from '@mui/icons-material';
 
 export default function ProductsList() {
   const [isProductLoading, setIsProductLoading] = useState(true);
   const [pagination, setPagination] = useState<PaginationDatum>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
+  const [isFavoriteChecked, setIsFavoriteChecked] = useState<boolean[]>([]);
+  const favoriteList = localStorage.getItem('favoriteList') ?? '';
+
+  const handleFavoriteChange = (index: number, id: string) => {
+    const favoriteListArray = favoriteList.split(', ');
+
+    // 根據 current checked 狀態判斷是否新增或刪除 id
+    const updatedList = isFavoriteChecked[index]
+      ? favoriteListArray.filter((item) => item !== id)
+      : [...favoriteListArray, id];
+
+    // 更新 localStorage
+    localStorage.setItem('favoriteList', updatedList.join(', '));
+
+    // 切換 checked 狀態
+    setIsFavoriteChecked((prevState) => {
+      const newState = [...prevState];
+      newState[index] = !newState[index];
+      return newState;
+    });
+  };
 
   /**
    * 處理分頁事件
@@ -34,6 +56,10 @@ export default function ProductsList() {
       .then(({ data: { pagination, products } }) => {
         setPagination(pagination);
         setProducts(products);
+        const checkedList: boolean[] = products.map((e: { id: string }) =>
+          checkFavoriteItem(e.id)
+        );
+        setIsFavoriteChecked(checkedList);
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -53,6 +79,10 @@ export default function ProductsList() {
       return '0';
     }
   }
+
+  const checkFavoriteItem = (productId: string): boolean => {
+    return favoriteList.split(', ').includes(productId);
+  };
 
   useEffect(() => {
     getProducts();
@@ -76,20 +106,35 @@ export default function ProductsList() {
               </div>
             </>
           ) : (
-            products.map((item) => {
+            products.map((item, index) => {
               return (
-                <div className='col col-12 col-lg-4'>
+                <div className='col col-12 col-lg-4' key={item.id}>
                   <Link to={`/product/${item.id}`}>
                     <img
                       src={item.imageUrl}
                       className='item-image'
                       alt={item.imageUrl}
                     ></img>
-                    <div>
-                      <h3>{item.title}</h3>
-                      <p>TWD {formatPrice(item.price)}</p>
-                    </div>
                   </Link>
+                  <div>
+                    <div className='d-flex justify-content-between align-items-center'>
+                      <h3>{item.title}</h3>
+                      <Checkbox
+                        checked={isFavoriteChecked[index] || false}
+                        icon={<FavoriteBorder />}
+                        checkedIcon={<Favorite />}
+                        onChange={() =>
+                          handleFavoriteChange(index, item.id ?? '')
+                        }
+                        sx={{
+                          '& .MuiSvgIcon-root': {
+                            color: 'gray',
+                          },
+                        }}
+                      />
+                    </div>
+                    <p>TWD {formatPrice(item.price)}</p>
+                  </div>
                 </div>
               );
             })
