@@ -340,6 +340,7 @@ export default function Week04() {
       .then(({ data: { message } }) => {
         getProducts();
         Swal.fire({
+          icon: "success",
           title: message,
         });
       })
@@ -366,6 +367,7 @@ export default function Week04() {
       .then(({ data: { message } }) => {
         getProducts();
         Swal.fire({
+          icon: "success",
           title: message,
         });
       })
@@ -387,6 +389,7 @@ export default function Week04() {
       .then(({ data: { message } }) => {
         getProducts();
         Swal.fire({
+          icon: "success",
           title: message,
         });
       })

@@ -3,6 +3,9 @@
   &.btn {
     @extend %btn-share;
     border: none;
+    &.small {
+      font-size: 16px;
+    }
   }
 
   &.btn-primary {

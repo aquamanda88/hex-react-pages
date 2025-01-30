@@ -1,16 +1,63 @@
 import { useEffect, useState } from 'react';
 import { Spinners } from '../components';
-import { CartDataDatum, CartsDatum } from '../core/models/cart.model';
+import {
+  CartDataDatum,
+  CartDataRequest,
+  CartsDatum,
+} from '../core/models/cart.model';
 import cartApiService from '../services/user/cart.service';
 import MenuBar from '../components/menuBar';
 import CloseIcon from '@mui/icons-material/Close';
-import { IconButton } from '@mui/material';
+import { Button, IconButton, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
 
 export default function Cart() {
   const [isProductLoading, setIsProductLoading] = useState(true);
   const [cart, setCart] = useState<CartDataDatum>();
   const [cartCount, setCartCount] = useState(0);
+
+  /**
+   * 處理開啟刪除商品 modal 事件
+   *
+   */
+  const handleDeleteOpen = () => {
+    Swal.fire({
+      title: "是否確定要清空購物車？",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: '我再想想',
+      confirmButtonColor: "#cc2e41",
+      cancelButtonColor: "grey",
+      confirmButtonText: "確認清除"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteCarts();
+      }
+    });
+  };
+
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, name, value } = e.target;
+    if (cart) {
+      const newCart = {
+        ...cart,
+        carts: cart.carts.map((item, index) =>
+          index === parseInt(name)
+            ? { ...item, qty: Math.max(1, parseInt(value) || 0) }
+            : item
+        ),
+      };
+      setCart(newCart);
+      editCart(id, parseInt(value));
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pasteData = e.clipboardData.getData('text');
+    if (!/^\d+$/.test(pasteData)) {
+      e.preventDefault();
+    }
+  };
 
   /**
    * 呼叫取得購物車資料 API
@@ -30,6 +77,33 @@ export default function Cart() {
   };
 
   /**
+   * 呼叫替換購物車指定產品數量 API
+   *
+   */
+  const editCart = async (id: string, qty: number) => {
+    const data: CartDataRequest = {
+      data: {
+        product_id: id,
+        qty: qty,
+      },
+    };
+
+    setIsProductLoading(true);
+    cartApiService
+      .editCart(id, data)
+      .then(({ data: { message } }) => {
+        Swal.fire({
+          icon: "success",
+          title: message,
+        });
+        getCart();
+      })
+      .finally(() => {
+        setIsProductLoading(false);
+      });
+  };
+
+  /**
    * 呼叫刪除單一購物車資料 API
    *
    */
@@ -40,6 +114,28 @@ export default function Cart() {
       .then(({ data: { message } }) => {
         getCart();
         Swal.fire({
+          icon: "success",
+          title: message,
+        });
+      })
+      .finally(() => {
+        setIsProductLoading(false);
+      });
+  };
+
+  /**
+   * 呼叫刪除購物車內所有產品 API
+   *
+   */
+  const deleteCarts = async () => {
+    setIsProductLoading(true);
+
+    cartApiService
+      .deleteCarts()
+      .then(({ data: { message } }) => {
+        getCart();
+        Swal.fire({
+          icon: "success",
           title: message,
         });
       })
@@ -55,7 +151,7 @@ export default function Cart() {
    * @returns 購物車內產品總數量
    */
   function calculateTotalQty(carts: CartsDatum[]): number {
-    return carts.reduce((sum, item) => sum + item.qty, 0);
+    return carts.length;
   }
 
   /**
@@ -87,20 +183,28 @@ export default function Cart() {
         <h2>購物車詳情頁</h2>
         {cart?.carts && cart?.carts.length > 0 ? (
           <>
-            <table className='cart-table table'>
+            <table className='cart-table table table-borderless'>
               <thead className='text-center'>
-                <tr>
-                  <th>移除</th>
+                <tr className='align-baseline'>
+                  <th>
+                    <Button
+                      className='btn btn-secondary small'
+                      variant='contained'
+                      onClick={handleDeleteOpen}
+                    >
+                      清空購物車
+                    </Button>
+                  </th>
                   <th colSpan={2}>作品資料</th>
+                  <th className='text-end'>單價</th>
                   <th>數量</th>
-                  <th>作品單價</th>
-                  <th>總價</th>
+                  <th className='text-end'>總計</th>
                 </tr>
               </thead>
               <tbody>
-                {cart?.carts.map((item) => (
+                {cart?.carts.map((item, index) => (
                   <tr key={item.id}>
-                    <td>
+                    <td className='col-md-1'>
                       <IconButton onClick={() => deleteCartItem(item.id)}>
                         <CloseIcon />
                       </IconButton>
@@ -112,13 +216,40 @@ export default function Cart() {
                         alt={item.product.content?.name}
                       />
                     </td>
-                    <td>
-                      <p>{item.product.title}</p>
-                      <p className='mb-0'>({item.product.content?.name})</p>
+                    <td className='text-start'>
+                      <p>
+                        <span>{item.product.title}</span>
+                        <br />
+                        <span>({item.product.content?.name})</span>
+                      </p>
+                      <p>
+                        <span>{item.product.content?.artists_zh_tw} </span>
+                        <span>({item.product.content?.artists})</span>
+                      </p>
                     </td>
-                    <td>{item.qty}</td>
-                    <td>{formatPrice(item.product.price)}</td>
-                    <td>{formatPrice(item.final_total)}</td>
+                    <td className='text-end col-md-2'>
+                      TWD {formatPrice(item.product.price)}
+                    </td>
+                    <td className='col-md-1'>
+                      <TextField
+                        id={item.id}
+                        name={index.toString()}
+                        type='number'
+                        slotProps={{
+                          input: {
+                            inputProps: {
+                              min: 1,
+                            },
+                          },
+                        }}
+                        onPaste={handlePaste}
+                        onChange={handleQuantityChange}
+                        value={item.qty}
+                      />
+                    </td>
+                    <td className='text-end col-md-2'>
+                      TWD {formatPrice(item.final_total)}
+                    </td>
                   </tr>
                 ))}
               </tbody>

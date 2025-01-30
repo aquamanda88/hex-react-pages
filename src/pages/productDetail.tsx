@@ -76,6 +76,7 @@ export default function ProductDetail() {
       .addCart(data)
       .then(({ data: { message } }) => {
         Swal.fire({
+          icon: "success",
           title: message,
         });
         getCart();
@@ -119,7 +120,7 @@ export default function ProductDetail() {
    * @returns 購物車內產品總數量
    */
   function calculateTotalQty(carts: CartsDatum[]): number {
-    return carts.reduce((sum, item) => sum + item.qty, 0);
+    return carts.length;
   }
 
   /**
