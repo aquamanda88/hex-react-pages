@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import { Navbar, Footer } from './components';
 import {
+  Cart,
+  Checkout,
   Home,
   ProductDetail,
   Week01,
@@ -12,7 +14,6 @@ import {
   Week07,
   Week08,
 } from './pages';
-import Cart from './pages/cart';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path='/week08' element={<Week08 />}></Route>
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
       <Footer></Footer>
     </>

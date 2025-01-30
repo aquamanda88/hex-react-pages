@@ -10,6 +10,7 @@ import MenuBar from '../components/menuBar';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, IconButton, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
 
 export default function Cart() {
   const [isProductLoading, setIsProductLoading] = useState(true);
@@ -22,13 +23,13 @@ export default function Cart() {
    */
   const handleDeleteOpen = () => {
     Swal.fire({
-      title: "是否確定要清空購物車？",
-      icon: "warning",
+      title: '是否確定要清空購物車？',
+      icon: 'warning',
       showCancelButton: true,
       cancelButtonText: '我再想想',
-      confirmButtonColor: "#cc2e41",
-      cancelButtonColor: "grey",
-      confirmButtonText: "確認清除"
+      confirmButtonColor: '#cc2e41',
+      cancelButtonColor: 'grey',
+      confirmButtonText: '確認清除',
     }).then((result) => {
       if (result.isConfirmed) {
         deleteCarts();
@@ -93,7 +94,7 @@ export default function Cart() {
       .editCart(id, data)
       .then(({ data: { message } }) => {
         Swal.fire({
-          icon: "success",
+          icon: 'success',
           title: message,
         });
         getCart();
@@ -114,7 +115,7 @@ export default function Cart() {
       .then(({ data: { message } }) => {
         getCart();
         Swal.fire({
-          icon: "success",
+          icon: 'success',
           title: message,
         });
       })
@@ -135,7 +136,7 @@ export default function Cart() {
       .then(({ data: { message } }) => {
         getCart();
         Swal.fire({
-          icon: "success",
+          icon: 'success',
           title: message,
         });
       })
@@ -257,8 +258,18 @@ export default function Cart() {
             <div className='row justify-content-end'>
               <div className='col-12 col-lg-6'>
                 <div className='d-flex justify-content-between'>
-                  <h4>總價</h4>
+                  <h4>總金額</h4>
                   <h3>TWD {formatPrice(cart?.final_total)}</h3>
+                </div>
+                <div className='d-flex justify-content-end'>
+                  <Link to='/checkout' className='w-100'>
+                    <Button
+                      className='btn btn-primary w-100'
+                      variant='contained'
+                    >
+                      去結帳
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -33,7 +33,7 @@ export default function MenuBar({ cartCount }: MenuBarProps) {
 
   return (
     <>
-      <nav className='navbar navbar-light bg-light'>
+      <nav className='navbar navbar-light bg-white'>
         <div className='container'>
           <div className='menu-bar'>
             <Link to='/cart'>

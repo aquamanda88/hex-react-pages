@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
 import productApiService from '../services/user/products.service';
 import { PaginationDatum, ProductFullDatum } from '../core/models/utils.model';
+import cartApiService from '../services/user/cart.service';
 import { Checkbox, Pagination, Skeleton, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Favorite, FavoriteBorder } from '@mui/icons-material';
+import MenuBar from '../components/menuBar';
+import { CartsDatum } from '../core/models/cart.model';
 
 export default function ProductsList() {
   const [isProductLoading, setIsProductLoading] = useState(true);
   const [pagination, setPagination] = useState<PaginationDatum>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
+  const [cartCount, setCartCount] = useState(0);
   const [isFavoriteChecked, setIsFavoriteChecked] = useState<boolean[]>([]);
   const favoriteList = localStorage.getItem('favoriteList') ?? '';
 
@@ -69,6 +73,22 @@ export default function ProductsList() {
   };
 
   /**
+   * 呼叫取得購物車資料 API
+   *
+   */
+  const getCart = async () => {
+    setIsProductLoading(true);
+    cartApiService
+      .getCart()
+      .then(({ data: { data } }) => {
+        setCartCount(calculateTotalQty(data.carts));
+      })
+      .finally(() => {
+        setIsProductLoading(false);
+      });
+  };
+
+  /**
    * 確認目前該產品是否已加入收藏清單
    *
    * @param productId - 產品 ID
@@ -77,6 +97,16 @@ export default function ProductsList() {
   const checkFavoriteItem = (productId: string): boolean => {
     return favoriteList.split(', ').includes(productId);
   };
+
+  /**
+   * 取得購物車總數量
+   *
+   * @param carts - 購物車資料
+   * @returns 購物車內產品總數量
+   */
+  function calculateTotalQty(carts: CartsDatum[]): number {
+    return carts.length;
+  }
 
   /**
    * 價格加上千分位
@@ -94,29 +124,35 @@ export default function ProductsList() {
 
   useEffect(() => {
     getProducts();
+    getCart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div className='container py-4'>
-      <div className='card mb-4'>
+    <>
+      <MenuBar cartCount={cartCount} />
+      <div className='container py-4'>
         <div className='row'>
           {isProductLoading ? (
             <>
-              <div className='col col-12 col-lg-4'>
-                <Skeleton variant='rectangular' height='350px'></Skeleton>
-              </div>
-              <div className='col col-12 col-lg-4'>
-                <Skeleton variant='rectangular' height='350px'></Skeleton>
-              </div>
-              <div className='col col-12 col-lg-4'>
-                <Skeleton variant='rectangular' height='350px'></Skeleton>
-              </div>
+              {[...Array(5)].map((_, index) => (
+                <div
+                  key={index}
+                  className='col col-12'
+                  style={{ width: '20%' }}
+                >
+                  <Skeleton variant='rectangular' height='350px' />
+                </div>
+              ))}
             </>
           ) : (
             products.map((item, index) => {
               return (
-                <div className='col col-12 col-lg-4' key={item.id}>
+                <div
+                  className='col col-12'
+                  key={item.id}
+                  style={{ width: '20%' }}
+                >
                   <Link to={`/product/${item.id}`}>
                     <img
                       src={item.imageUrl}
@@ -148,16 +184,16 @@ export default function ProductsList() {
             })
           )}
         </div>
+        <div className='d-flex justify-content-center'>
+          <Stack spacing={2}>
+            <Pagination
+              count={pagination.total_pages}
+              page={currentPage}
+              onChange={handlePageChange}
+            />
+          </Stack>
+        </div>
       </div>
-      <div className='d-flex justify-content-center'>
-        <Stack spacing={2}>
-          <Pagination
-            count={pagination.total_pages}
-            page={currentPage}
-            onChange={handlePageChange}
-          />
-        </Stack>
-      </div>
-    </div>
+    </>
   );
 }
