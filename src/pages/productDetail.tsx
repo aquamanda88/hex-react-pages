@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react';
 import productApiService from '../services/user/products.service';
 import { useParams } from 'react-router-dom';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import { ProductDatum } from '../core/models/utils.model';
 import { Spinners } from '../components';
-import { Button, IconButton } from '@mui/material';
+import { Button, Checkbox } from '@mui/material';
 import {
   CartDataDatum,
   CartDataRequest,
@@ -15,26 +13,31 @@ import {
 import cartApiService from '../services/user/cart.service';
 import Swal from 'sweetalert2';
 import MenuBar from '../components/menuBar';
+import { Favorite, FavoriteBorder } from '@mui/icons-material';
 
 export default function ProductDetail() {
   const [isProductLoading, setIsProductLoading] = useState(true);
   const [product, setProduct] = useState<ProductDatum>({});
   const [, setCart] = useState<CartDataDatum>();
   const [cartCount, setCartCount] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavoriteChecked, setIsFavoriteChecked] = useState<boolean>(false);
   const favoriteList = localStorage.getItem('favoriteList') ?? '';
   const { id } = useParams();
 
-  const handleFavoriteChange = () => {
-    setIsFavorite(!isFavorite);
+  /**
+   * 處理收藏清單事件
+   *
+   * @prop id - 產品 ID
+   */
+  const handleFavoriteChange = (id: string) => {
     const favoriteListArray = favoriteList.split(', ');
-    if (isFavorite && id) {
-      const newArr = favoriteListArray.filter((item) => item !== id);
-      localStorage.setItem('favoriteList', newArr.join(', '));
-    } else if (!isFavorite && id) {
-      favoriteListArray.push(id);
-      localStorage.setItem('favoriteList', favoriteListArray.join(', '));
-    }
+    const updatedList = isFavoriteChecked
+      ? favoriteListArray.filter((item) => item !== id)
+      : [...favoriteListArray, id];
+
+    localStorage.setItem('favoriteList', updatedList.join(', '));
+
+    setIsFavoriteChecked(updatedList.includes(id));
   };
 
   /**
@@ -49,6 +52,7 @@ export default function ProductDetail() {
       .getProductDetail(id)
       .then(({ data: { product } }) => {
         setProduct(product);
+        setIsFavoriteChecked(checkFavoriteItem(id));
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -98,10 +102,15 @@ export default function ProductDetail() {
       });
   };
 
-  function checkFavoriteItem(): void {
-    const isFavoriteItem = id ? favoriteList.split(', ').includes(id) : false;
-    setIsFavorite(isFavoriteItem);
-  }
+  /**
+   * 確認目前該產品是否已加入收藏清單
+   *
+   * @prop productId - 產品 ID
+   * @returns 該產品是否已加入收藏清單
+   */
+  const checkFavoriteItem = (productId: string): boolean => {
+    return favoriteList.split(', ').includes(productId);
+  };
 
   /**
    * 取得購物車總數量
@@ -129,7 +138,6 @@ export default function ProductDetail() {
 
   useEffect(() => {
     getProductDetail(id ?? '');
-    checkFavoriteItem();
     getCart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -155,9 +163,20 @@ export default function ProductDetail() {
               <h5 className='mb-0'>
                 {product.content?.artists_zh_tw} ({product.content?.artists})
               </h5>
-              <IconButton onClick={handleFavoriteChange}>
+              <Checkbox
+                checked={isFavoriteChecked}
+                icon={<FavoriteBorder />}
+                checkedIcon={<Favorite />}
+                onChange={() => handleFavoriteChange(id ?? '')}
+                sx={{
+                  '& .MuiSvgIcon-root': {
+                    color: 'gray',
+                  },
+                }}
+              />
+              {/* <IconButton onClick={handleFavoriteChange}>
                 {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-              </IconButton>
+              </IconButton> */}
             </div>
             <h2>{product.title}</h2>
             <h3>

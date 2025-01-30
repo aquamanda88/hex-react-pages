@@ -13,18 +13,20 @@ export default function ProductsList() {
   const [isFavoriteChecked, setIsFavoriteChecked] = useState<boolean[]>([]);
   const favoriteList = localStorage.getItem('favoriteList') ?? '';
 
+  /**
+   * 處理收藏清單事件
+   *
+   * @prop index - 產品陣列索引值
+   * @prop id - 產品 ID
+   */
   const handleFavoriteChange = (index: number, id: string) => {
     const favoriteListArray = favoriteList.split(', ');
-
-    // 根據 current checked 狀態判斷是否新增或刪除 id
     const updatedList = isFavoriteChecked[index]
       ? favoriteListArray.filter((item) => item !== id)
       : [...favoriteListArray, id];
 
-    // 更新 localStorage
     localStorage.setItem('favoriteList', updatedList.join(', '));
 
-    // 切換 checked 狀態
     setIsFavoriteChecked((prevState) => {
       const newState = [...prevState];
       newState[index] = !newState[index];
@@ -67,6 +69,16 @@ export default function ProductsList() {
   };
 
   /**
+   * 確認目前該產品是否已加入收藏清單
+   *
+   * @param productId - 產品 ID
+   * @returns 該產品是否已加入收藏清單
+   */
+  const checkFavoriteItem = (productId: string): boolean => {
+    return favoriteList.split(', ').includes(productId);
+  };
+
+  /**
    * 價格加上千分位
    *
    * @param price - 價格
@@ -79,10 +91,6 @@ export default function ProductsList() {
       return '0';
     }
   }
-
-  const checkFavoriteItem = (productId: string): boolean => {
-    return favoriteList.split(', ').includes(productId);
-  };
 
   useEffect(() => {
     getProducts();
