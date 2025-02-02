@@ -185,7 +185,7 @@ export default function Cart() {
         <h2 className='text-center mb-4'>購物車</h2>
         {cart?.carts && cart?.carts.length > 0 ? (
           <>
-            <div className='table-responsive-lg'>
+            <div className='table-responsive-lg mb-4'>
               <table className='cart-table table'>
                 <thead className='text-center table-light'>
                   <tr className='align-baseline'>
