@@ -1,5 +1,5 @@
 .layout {
-  height: 520px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -23,4 +23,20 @@
   -o-object-fit: cover;
   object-fit: cover;
   height: 350px;
+}
+
+.product-list-grid {
+  width: 20%;
+}
+
+@media (max-width: 1024px) {
+  .product-list-grid {
+    width: 50%;
+  }
+}
+
+@media (max-width: 575px) {
+  .product-list-grid {
+    width: 100%;
+  }
 }

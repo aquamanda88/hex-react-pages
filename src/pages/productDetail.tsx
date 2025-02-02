@@ -76,7 +76,7 @@ export default function ProductDetail() {
       .addCart(data)
       .then(({ data: { message } }) => {
         Swal.fire({
-          icon: "success",
+          icon: 'success',
           title: message,
         });
         getCart();
@@ -150,7 +150,6 @@ export default function ProductDetail() {
         <div className={`${isProductLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />
         </div>
-        <h2>商品詳情頁</h2>
         <div className='row'>
           <div className='col col-6'>
             {product.imageUrl ? (
@@ -190,10 +189,13 @@ export default function ProductDetail() {
               </span>
             </h5>
             <p>{product.description}</p>
-            <p>
-              <span className='me-2'>NTD {formatPrice(product.price)}</span>
-              <del>NTD {formatPrice(product.origin_price)}</del>
+            <p className='font-en-h2-medium mb-0'>
+              TWD {formatPrice(product.price)}
             </p>
+            <p className='text-secondary'>
+              <del>TWD {formatPrice(product.origin_price)}</del>
+            </p>
+
             <Button
               className='btn btn-primary w-100'
               component='label'

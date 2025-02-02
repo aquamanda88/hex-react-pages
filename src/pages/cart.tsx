@@ -9,6 +9,7 @@ import cartApiService from '../services/user/cart.service';
 import MenuBar from '../components/menuBar';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, IconButton, TextField } from '@mui/material';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 
@@ -181,80 +182,89 @@ export default function Cart() {
         <div className={`${isProductLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />
         </div>
-        <h2>購物車詳情頁</h2>
+        <h2 className='text-center mb-4'>購物車</h2>
         {cart?.carts && cart?.carts.length > 0 ? (
           <>
-            <table className='cart-table table table-borderless'>
-              <thead className='text-center'>
-                <tr className='align-baseline'>
-                  <th>
-                    <Button
-                      className='btn btn-secondary small'
-                      variant='contained'
-                      onClick={handleDeleteOpen}
-                    >
-                      清空購物車
-                    </Button>
-                  </th>
-                  <th colSpan={2}>作品資料</th>
-                  <th className='text-end'>單價</th>
-                  <th>數量</th>
-                  <th className='text-end'>總計</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cart?.carts.map((item, index) => (
-                  <tr key={item.id}>
-                    <td className='col-md-1'>
-                      <IconButton onClick={() => deleteCartItem(item.id)}>
-                        <CloseIcon />
-                      </IconButton>
-                    </td>
-                    <td>
-                      <img
-                        className='cart-image'
-                        src={item.product.imageUrl}
-                        alt={item.product.content?.name}
-                      />
-                    </td>
-                    <td className='text-start'>
-                      <p>
-                        <span>{item.product.title}</span>
-                        <br />
-                        <span>({item.product.content?.name})</span>
-                      </p>
-                      <p>
-                        <span>{item.product.content?.artists_zh_tw} </span>
-                        <span>({item.product.content?.artists})</span>
-                      </p>
-                    </td>
-                    <td className='text-end col-md-2'>
-                      TWD {formatPrice(item.product.price)}
-                    </td>
-                    <td className='col-md-1'>
-                      <TextField
-                        id={item.id}
-                        name={index.toString()}
-                        type='number'
-                        slotProps={{
-                          input: {
-                            inputProps: {
-                              min: 1,
-                            },
-                          },
-                        }}
-                        onPaste={handlePaste}
-                        onChange={handleQuantityChange}
-                        value={item.qty}
-                      />
-                    </td>
-                    <td className='text-end col-md-2'>
-                      TWD {formatPrice(item.final_total)}
-                    </td>
+            <div className='table-responsive-lg'>
+              <table className='cart-table table'>
+                <thead className='text-center table-light'>
+                  <tr className='align-baseline'>
+                    <th>操作</th>
+                    <th colSpan={2}>作品名稱</th>
+                    <th>作品資訊</th>
+                    <th className='text-end'>單價</th>
+                    <th>數量</th>
+                    <th className='text-end'>總計</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {cart?.carts.map((item, index) => (
+                    <tr key={item.id}>
+                      <td className='col-md-1'>
+                        <IconButton onClick={() => deleteCartItem(item.id)}>
+                          <CloseIcon />
+                        </IconButton>
+                      </td>
+                      <td>
+                        <img
+                          className='cart-image'
+                          src={item.product.imageUrl}
+                          alt={item.product.content?.name}
+                        />
+                      </td>
+                      <td className='text-start'>
+                        <p>{item.product.title}</p>
+                        <p>
+                          <small>({item.product.content?.name})</small>
+                        </p>
+                      </td>
+                      <td className='text-start'>
+                        <p>作者：{item.product.content?.artists_zh_tw}</p>
+                        <p>媒材：{item.product.category}</p>
+                      </td>
+                      <td className='text-end col-md-2'>
+                        <p className='font-en-p-medium'>
+                          TWD {formatPrice(item.product.price)}
+                        </p>
+                        <p className='text-secondary'>
+                          <del>TWD {formatPrice(item.product.origin_price)}</del>
+                        </p>
+                      </td>
+                      <td className='col-md-1'>
+                        <TextField
+                          id={item.id}
+                          name={index.toString()}
+                          type='number'
+                          slotProps={{
+                            input: {
+                              inputProps: {
+                                min: 1,
+                              },
+                            },
+                          }}
+                          onPaste={handlePaste}
+                          onChange={handleQuantityChange}
+                          value={item.qty}
+                        />
+                      </td>
+                      <td className='text-end col-md-2'>
+                        <p className='font-en-p-medium'>
+                          TWD {formatPrice(item.final_total)}
+                        </p>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <Button
+                className='btn btn-secondary small'
+                variant='contained'
+                onClick={handleDeleteOpen}
+              >
+                清空購物車
+              </Button>
+            </div>
+
             <div className='row justify-content-end'>
               <div className='col-12 col-lg-6'>
                 <div className='d-flex justify-content-between'>
@@ -275,7 +285,17 @@ export default function Cart() {
             </div>
           </>
         ) : (
-          <p>目前購物車為空</p>
+          <div className='layout'>
+            <div className='d-flex justify-content-center'>
+              <p>
+                您的購物車中沒有商品，
+                <Link to='/week05' className='text-color-main d-inline-flex'>
+                  <p className='btn-icon'>立即去選購</p>
+                  <KeyboardArrowRightIcon />
+                </Link>
+              </p>
+            </div>
+          </div>
         )}
       </div>
     </>

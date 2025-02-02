@@ -340,7 +340,7 @@ export default function Week04() {
       .then(({ data: { message } }) => {
         getProducts();
         Swal.fire({
-          icon: "success",
+          icon: 'success',
           title: message,
         });
       })
@@ -367,7 +367,7 @@ export default function Week04() {
       .then(({ data: { message } }) => {
         getProducts();
         Swal.fire({
-          icon: "success",
+          icon: 'success',
           title: message,
         });
       })
@@ -389,7 +389,7 @@ export default function Week04() {
       .then(({ data: { message } }) => {
         getProducts();
         Swal.fire({
-          icon: "success",
+          icon: 'success',
           title: message,
         });
       })
@@ -547,11 +547,13 @@ export default function Week04() {
                         <div style={{ paddingTop: '300px' }} />
                       </Skeleton>
                     ) : (
-                      <Table
-                        data={products}
-                        handleEditOpen={handleEditOpen}
-                        handleDeleteOpen={handleDeleteOpen}
-                      />
+                      <div className='table-responsive-lg'>
+                        <Table
+                          data={products}
+                          handleEditOpen={handleEditOpen}
+                          handleDeleteOpen={handleDeleteOpen}
+                        />
+                      </div>
                     )}
                     <div className='d-flex justify-content-center'>
                       <Stack spacing={2}>

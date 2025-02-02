@@ -10,7 +10,7 @@ import { useState } from 'react';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import Logout from '@mui/icons-material/Logout';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PersonIcon from '@mui/icons-material/Person';
 import { Link } from 'react-router-dom';
 
 /** 元件參數型別 */
@@ -44,7 +44,7 @@ export default function MenuBar({ cartCount }: MenuBarProps) {
               </IconButton>
             </Link>
             <IconButton id='basic-button' onClick={handleClick}>
-              <AccountCircleIcon />
+              <PersonIcon />
             </IconButton>
           </div>
           <Menu

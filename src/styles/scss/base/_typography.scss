@@ -21,7 +21,7 @@
 
 // 內文-medium
 .font-zh-p-medium {
-  @include font(16px, 0.02em, 150%);
+  @include font(18px, 0.02em, 150%);
 }
 
 // 內文-regular
@@ -49,10 +49,16 @@
 .font-en-h2 {
   @include font(24px, 0.005em);
 }
+.font-en-h2-medium {
+  @include font(24px, 0.005em, 150%, 600);
+}
 
 // h3
 .font-en-h3 {
   @include font(20px, 0.005em);
+}
+.font-en-h3-medium {
+  @include font(20px, 0.005em, 150%, 600);
 }
 
 // button
@@ -62,7 +68,7 @@
 
 // p/medium
 .font-en-p-medium {
-  @include font(16px, 0.005em, 150%);
+  @include font(18px, 0.005em, 150%, 600);
 }
 
 // p/regular

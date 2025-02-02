@@ -1,5 +1,12 @@
 .table {
   vertical-align: middle;
+  min-width: 100%;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  td p {
+    margin: 0;
+  }
 }
 
 .cart-table {

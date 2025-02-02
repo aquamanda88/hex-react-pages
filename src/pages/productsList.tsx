@@ -132,7 +132,7 @@ export default function ProductsList() {
     <>
       <MenuBar cartCount={cartCount} />
       <div className='container py-4'>
-        <div className='row'>
+        <div className='row mb-4'>
           {isProductLoading ? (
             <>
               {[...Array(5)].map((_, index) => (
@@ -149,20 +149,19 @@ export default function ProductsList() {
             products.map((item, index) => {
               return (
                 <div
-                  className='col col-12'
+                  className='product-list-grid'
                   key={item.id}
-                  style={{ width: '20%' }}
                 >
                   <Link to={`/product/${item.id}`}>
                     <img
                       src={item.imageUrl}
-                      className='item-image'
+                      className='item-image mb-2'
                       alt={item.imageUrl}
                     ></img>
                   </Link>
                   <div>
                     <div className='d-flex justify-content-between align-items-center'>
-                      <h3>{item.title}</h3>
+                      <h3 className='font-zh-h3'>{item.title}</h3>
                       <Checkbox
                         checked={isFavoriteChecked[index] || false}
                         icon={<FavoriteBorder />}
@@ -177,7 +176,8 @@ export default function ProductsList() {
                         }}
                       />
                     </div>
-                    <p>TWD {formatPrice(item.price)}</p>
+                    <p className='font-en-h2-medium mb-0'>TWD {formatPrice(item.price)}</p>
+                    <p className='text-secondary'><del>TWD {formatPrice(item.origin_price)}</del></p>
                   </div>
                 </div>
               );
