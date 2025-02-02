@@ -5,30 +5,26 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { ReactNode, forwardRef, useImperativeHandle, useState } from 'react';
 
-const steps = [
-  '填寫訂單資料',
-  '確認訂單內容並付款',
-  '完成結帳',
-];
+/** 元件參數型別 */
+interface StepperProps {
+  /** 步驟說明文字 */
+  steps: string[];
+  /** 子元件，可以是任何 React 元素 */
+  children: ReactNode[];
+}
 
-export default function Steppers() {
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [skipped, setSkipped] = React.useState(new Set<number>());
-
-  const isStepSkipped = (step: number) => {
-    return skipped.has(step);
-  };
+export const Steppers = forwardRef<{ nextStep: () => void }, StepperProps>(
+  ({ steps, children }, ref) => {
+  const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
+    setActiveStep((prevActiveStep) => {
+      const newStep = prevActiveStep + 1;
+      console.log('handleNext 被執行，當前步驟:', newStep);
+      return newStep;
+    });
   };
 
   const handleBack = () => {
@@ -38,6 +34,10 @@ export default function Steppers() {
   const handleReset = () => {
     setActiveStep(0);
   };
+
+  useImperativeHandle(ref, () => ({
+    nextStep: handleNext,
+  }));
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -66,7 +66,7 @@ export default function Steppers() {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+          <div className='container py-4'>{children[activeStep]}</div>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color='inherit'
@@ -85,4 +85,6 @@ export default function Steppers() {
       )}
     </Box>
   );
-}
+});
+
+export default Steppers;
