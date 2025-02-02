@@ -225,13 +225,12 @@ export default function Week04() {
       tempProduct?.title !== '' &&
       tempProduct?.category !== '' &&
       tempProduct?.unit !== '' &&
-      tempProduct?.origin_price !== 0 &&
-      tempProduct?.price !== 0
+      !isNaN(tempProduct?.origin_price ?? 0) && tempProduct?.origin_price !== 0 &&
+      !isNaN(tempProduct?.price ?? 0) && tempProduct?.price !== 0
     ) {
       const newTempProduct = { data: { ...tempProduct } };
       delete newTempProduct.data.id;
-
-      if (modalType === 'add') {
+      if (modalType === 'add') {       
         addProduct(newTempProduct);
       } else if (modalType === 'edit') {
         editProduct(tempProduct?.id ?? '', newTempProduct);
@@ -256,6 +255,18 @@ export default function Week04() {
         ...tempProduct,
         is_enabled: checked ? 1 : 0,
       });
+    }
+  };
+
+  /**
+   * 處理 input 複製貼上事件
+   *
+   * @prop e - ClipboardEvent
+   */
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pasteData = e.clipboardData.getData('text');
+    if (!/^\d+$/.test(pasteData)) {
+      e.preventDefault();
     }
   };
 
@@ -722,10 +733,11 @@ export default function Week04() {
                               slotProps={{
                                 input: {
                                   inputProps: {
-                                    min: 0,
+                                    min: 1,
                                   },
                                 },
                               }}
+                              onPaste={handlePaste}
                               onChange={handleInputChange}
                               onBlur={handleInputBlur}
                               value={tempProduct?.origin_price}
@@ -746,10 +758,11 @@ export default function Week04() {
                               slotProps={{
                                 input: {
                                   inputProps: {
-                                    min: 0,
+                                    min: 1,
                                   },
                                 },
                               }}
+                              onPaste={handlePaste}
                               onChange={handleInputChange}
                               onBlur={handleInputBlur}
                               value={tempProduct?.price}

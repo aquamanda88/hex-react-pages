@@ -38,6 +38,11 @@ export default function Cart() {
     });
   };
 
+  /**
+   * 處理變更數量事件
+   *
+   * @prop e - ChangeEvent
+   */
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, name, value } = e.target;
     if (cart) {
@@ -54,6 +59,11 @@ export default function Cart() {
     }
   };
 
+  /**
+   * 處理 input 複製貼上事件
+   *
+   * @prop e - ClipboardEvent
+   */
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     const pasteData = e.clipboardData.getData('text');
     if (!/^\d+$/.test(pasteData)) {
