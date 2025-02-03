@@ -200,7 +200,8 @@ export default function Cart() {
                 <thead className='text-center table-light'>
                   <tr className='align-baseline'>
                     <th>操作</th>
-                    <th colSpan={2}>作品名稱</th>
+                    <th>作品縮圖</th>
+                    <th>作品名稱</th>
                     <th>作品資訊</th>
                     <th className='text-end'>單價</th>
                     <th>數量</th>
@@ -237,7 +238,9 @@ export default function Cart() {
                           TWD {formatPrice(item.product.price)}
                         </p>
                         <p className='text-secondary'>
-                          <del>TWD {formatPrice(item.product.origin_price)}</del>
+                          <del>
+                            TWD {formatPrice(item.product.origin_price)}
+                          </del>
                         </p>
                       </td>
                       <td className='col-md-1'>
@@ -299,7 +302,7 @@ export default function Cart() {
             <div className='d-flex justify-content-center'>
               <p>
                 您的購物車中沒有商品，
-                <Link to='/week05' className='text-color-main d-inline-flex'>
+                <Link to='/products' className='text-color-main d-inline-flex'>
                   <p className='btn-icon'>立即去選購</p>
                   <KeyboardArrowRightIcon />
                 </Link>

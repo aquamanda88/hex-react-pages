@@ -89,6 +89,8 @@ export interface OrdersDatum {
   id?: string;
   /** 是否已付款 */
   is_paid?: boolean;
+  /** 付款時間 */
+  paid_date?: number;
   /** 數量 */
   num?: number;
   /** 會員留言備註內容 */

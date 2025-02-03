@@ -1,5 +1,6 @@
 import {
   Badge,
+  Button,
   IconButton,
   ListItemIcon,
   ListItemText,
@@ -9,8 +10,7 @@ import {
 import { useState } from 'react';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
-import Logout from '@mui/icons-material/Logout';
-import PersonIcon from '@mui/icons-material/Person';
+import Logout from '@mui/icons-material/Logout'
 import { Link } from 'react-router-dom';
 
 /** 元件參數型別 */
@@ -23,9 +23,9 @@ export default function MenuBar({ cartCount }: MenuBarProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -33,9 +33,12 @@ export default function MenuBar({ cartCount }: MenuBarProps) {
 
   return (
     <>
-      <nav className='navbar navbar-light bg-white'>
+      <nav className='menu-bar navbar navbar-light bg-white'>
         <div className='container'>
-          <div className='menu-bar'>
+          <div className='menu-bar-list'>
+            <Link to='/products'>
+              <Button className='btn btn-primary'>全部商品</Button>
+            </Link>
             <Link to='/cart'>
               <IconButton>
                 <Badge badgeContent={cartCount} color='primary'>
@@ -43,9 +46,9 @@ export default function MenuBar({ cartCount }: MenuBarProps) {
                 </Badge>
               </IconButton>
             </Link>
-            <IconButton id='basic-button' onClick={handleClick}>
+            {/* <IconButton id='basic-button' onClick={handleClick}>
               <PersonIcon />
-            </IconButton>
+            </IconButton> */}
           </div>
           <Menu
             id='basic-menu'

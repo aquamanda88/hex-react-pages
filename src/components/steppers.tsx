@@ -4,7 +4,6 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import { ReactNode, forwardRef, useImperativeHandle, useState } from 'react';
 
 /** 元件參數型別 */
@@ -29,13 +28,13 @@ export const Steppers = forwardRef<{ nextStep: () => void }, StepperProps>(
       });
     };
 
-    // const handleBack = () => {
-    //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    // };
-
-    const handleReset = () => {
-      setActiveStep(0);
+    const handleBack = () => {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
+
+    // const handleReset = () => {
+    //   setActiveStep(0);
+    // };
 
     useImperativeHandle(ref, () => ({
       nextStep: handleNext,
@@ -56,28 +55,28 @@ export const Steppers = forwardRef<{ nextStep: () => void }, StepperProps>(
             );
           })}
         </Stepper>
-        {activeStep === steps.length ? (
+        {activeStep === steps.length - 1 ? (
           <React.Fragment>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              All steps completed - you&apos;re finished
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <div className='container py-4'>{children[activeStep]}</div>
+            {/* <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Box sx={{ flex: '1 1 auto' }} />
               <Button onClick={handleReset}>Reset</Button>
-            </Box>
+            </Box> */}
           </React.Fragment>
         ) : (
           <React.Fragment>
             <div className='container py-4'>{children[activeStep]}</div>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              {/* <Button
-                color='inherit'
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                上一步
-              </Button> */}
+              {activeStep === 1 && (
+                <Button
+                  className='btn btn-primary'
+                  onClick={handleBack}
+                  sx={{ mr: 1 }}
+                >
+                  上一步
+                </Button>
+              )}
+
               {/* <Box sx={{ flex: '1 1 auto' }} />
               <Button onClick={handleNext}>
                 {activeStep === steps.length - 1 ? '完成' : '下一步'}

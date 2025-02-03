@@ -184,7 +184,7 @@ export default function ProductDetail() {
             </h3>
             <h4>{product.content?.year}</h4>
             <h5>
-              <span className='badge rounded-pill bg-primary'>
+              <span className='badge rounded-pill bg-secondary'>
                 {product.category}
               </span>
             </h5>

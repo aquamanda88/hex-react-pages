@@ -5,6 +5,7 @@ import {
   Checkout,
   Home,
   ProductDetail,
+  ProductsList,
   Week01,
   Week02,
   Week03,
@@ -29,10 +30,11 @@ function App() {
         <Route path='/week06' element={<Week06 />}></Route>
         <Route path='/week07' element={<Week07 />}></Route>
         <Route path='/week08' element={<Week08 />}></Route>
+        <Route path="/products" element={<ProductsList />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
-        <Route path="/checkout/:id" element={<Checkout activeStep={1} />} />
+        <Route path="/checkout/:id" element={<Checkout activeStep={2} />} />
       </Routes>
       <Footer></Footer>
     </>
