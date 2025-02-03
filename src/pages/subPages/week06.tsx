@@ -1,6 +1,6 @@
-import Header from "../components/header";
+import Header from "../../components/header";
 
-export default function Week07() {
+export default function Week06() {
   return (
     <>
       <Header title="..." />

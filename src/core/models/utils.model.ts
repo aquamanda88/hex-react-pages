@@ -74,6 +74,18 @@ export interface ContentDatum {
   year?: string;
 }
 
+/** 新增產品 request */
+export interface AddProductRequest {
+  /** 回傳格式 */
+  data: ProductDatum;
+}
+
+/** 編輯產品 request */
+export interface EditProductRequest {
+  /** 回傳格式 */
+  data: ProductDatum;
+}
+
 /** 商品類 API 新增/編輯 驗證欄位 */
 export interface ProductValidation {
   /** 標題 */

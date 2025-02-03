@@ -1,8 +1,8 @@
-import Header from '../components/header';
+import Header from '../../components/header';
 import { useEffect, useState } from 'react';
 import axios, { AxiosError } from 'axios';
-import { LoginReq } from '../core/models/admin/auth.model';
-import { ProductFullDatum } from '../core/models/utils.model';
+import { LoginReq } from '../../core/models/admin/auth.model';
+import { ProductFullDatum } from '../../core/models/utils.model';
 import Swal from 'sweetalert2';
 import Button from '@material-ui/core/Button';
 

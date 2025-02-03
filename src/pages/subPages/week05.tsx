@@ -1,4 +1,4 @@
-import ProductsList from './productsList';
+import ProductsList from '../productsList';
 
 export default function Week05() {
 

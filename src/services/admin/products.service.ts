@@ -1,4 +1,4 @@
-import { ProductDatum } from '../../core/models/utils.model';
+import { AddProductRequest, EditProductRequest } from '../../core/models/utils.model';
 import { basicConstant } from '../../core/constants/basic.constants';
 import axiosCustomer from '../../utils/api/axios-customization';
 
@@ -52,17 +52,17 @@ export class ProductApiService {
   /**
    * 新增產品資料
    *
-   * @param addProductData - 新增產品資料
+   * @param addProductRequest - 新增產品 request
    * @param temporaryToken - 未保持登入時 token
    * @returns API 回傳的資料
    */
-  addProduct(addProductData: { data: ProductDatum }) {
+  addProduct(addProductRequest: AddProductRequest) {
     /** 權限 token */
     const token = sessionStorage.getItem('token');
 
     return axiosCustomer.post(
       `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/product`,
-      addProductData,
+      addProductRequest,
       {
         headers: {
           Authorization: token,
@@ -75,17 +75,17 @@ export class ProductApiService {
    * 編輯產品資料
    *
    * @param id - 欲編輯產品 ID
-   * @param editProductData - 編輯產品資料
+   * @param editProductRequest - 編輯產品 request
    * @param temporaryToken - 未保持登入時 token
    * @returns API 回傳的資料
    */
-  editProduct(id: string, editProductData: { data: ProductDatum }) {
+  editProduct(id: string, editProductRequest: EditProductRequest) {
     /** 權限 token */
     const token = sessionStorage.getItem('token');
 
     return axiosCustomer.put(
       `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/product/${id}`,
-      editProductData,
+      editProductRequest,
       {
         headers: {
           Authorization: token,

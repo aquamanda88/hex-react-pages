@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Header from '../components/header';
-import { ProductFullDatum } from '../core/models/utils.model';
+import Header from '../../components/header';
+import { ProductFullDatum } from '../../core/models/utils.model';
 
 export default function Week01() {
   const [selectedProduct, setSelectedProduct] = useState<ProductFullDatum>();
