@@ -11,8 +11,6 @@ import {
 import cartApiService from '../services/user/cart.service';
 import Swal from 'sweetalert2';
 
-
-
 export default function Cart() {
   const [isProductLoading, setIsProductLoading] = useState(true);
   const [cart, setCart] = useState<CartDataDatum>();
@@ -76,12 +74,10 @@ export default function Cart() {
    */
   const handleChangeCart = () => {
     if (cart) {
-      setChangedCart(
-        cart.carts.map(({ id, qty }) => ({
-          data: { product_id: id, qty },
-        }))
-      );
-      editCart(changedCart);
+      const newCart = cart.carts.map(({ id, qty }) => ({
+        data: { product_id: id, qty },
+      }));
+      setChangedCart(newCart);
     }
   };
 
@@ -121,7 +117,6 @@ export default function Cart() {
    */
   const editCart = async (cartDataRequests: CartDataRequest[]) => {
     setIsProductLoading(true);
-
     try {
       const responses = await Promise.all(
         cartDataRequests.map((cartDataRequest) =>
@@ -218,9 +213,12 @@ export default function Cart() {
   }
 
   useEffect(() => {
+    if (changedCart.length > 0) {
+      editCart(changedCart);
+    }
     getCart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [changedCart]);
 
   return (
     <>
@@ -325,7 +323,7 @@ export default function Cart() {
                   <Button
                     className='btn btn-primary w-100'
                     variant='contained'
-                    onClick={() => handleChangeCart()}
+                    onClick={handleChangeCart}
                   >
                     去結帳
                   </Button>
