@@ -10,6 +10,7 @@ import {
 } from '../core/models/cart.model';
 import cartApiService from '../services/user/cart.service';
 import Swal from 'sweetalert2';
+import { AxiosError } from 'axios';
 
 export default function Cart() {
   const [isProductLoading, setIsProductLoading] = useState(true);
@@ -141,7 +142,17 @@ export default function Cart() {
         });
       }
     } catch (error) {
-      console.error('編輯購物車時發生錯誤', error);
+      if (error instanceof AxiosError) {
+        Swal.fire({
+          icon: 'error',
+          title: error.response?.data?.message,
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '發生無預期錯誤',
+        });
+      }
     } finally {
       setIsProductLoading(false);
     }

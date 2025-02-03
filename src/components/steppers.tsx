@@ -23,7 +23,6 @@ export const Steppers = forwardRef<{ nextStep: () => void }, StepperProps>(
     const handleNext = () => {
       setActiveStep((prevActiveStep) => {
         const newStep = prevActiveStep + 1;
-        console.log('handleNext 被執行，當前步驟:', newStep);
         return newStep;
       });
     };

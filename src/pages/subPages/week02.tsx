@@ -72,7 +72,10 @@ export default function Week02() {
       if (result.data.success) {
         getProducts();
       } else {
-        console.log(result.data.message);
+        Swal.fire({
+          icon: 'error',
+          title: result.data.message,
+        });
       }
     } catch (error) {
       if (error instanceof AxiosError) {
