@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Bookmark, Logout, ShoppingCart } from './icons';
 import {
   Badge,
   Button,
@@ -7,11 +10,6 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
-import { useState } from 'react';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import Logout from '@mui/icons-material/Logout'
-import { Link } from 'react-router-dom';
 
 /** 元件參數型別 */
 interface MenuBarProps {
@@ -42,7 +40,7 @@ export default function MenuBar({ cartCount }: MenuBarProps) {
             <Link to='/cart'>
               <IconButton>
                 <Badge badgeContent={cartCount} color='primary'>
-                  <ShoppingCartIcon />
+                  <ShoppingCart />
                 </Badge>
               </IconButton>
             </Link>
@@ -61,7 +59,7 @@ export default function MenuBar({ cartCount }: MenuBarProps) {
           >
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
-                <BookmarkIcon />
+                <Bookmark />
               </ListItemIcon>
               <ListItemText>我的收藏</ListItemText>
             </MenuItem>

@@ -9,10 +9,8 @@ import {
   OutlinedInput,
   TextField,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { Header } from '../components';
+import { Add, KeyboardArrowLeft, KeyboardArrowRight } from '../components/icons';
 
 export default function Home() {
   return (
@@ -99,25 +97,25 @@ export default function Home() {
                     <td>Icon + Normal</td>
                     <td>
                       <Button className='btn btn-primary' variant='contained'>
-                        <AddIcon />
+                        <Add />
                         <p className='btn-icon'>測試文字</p>
                       </Button>
                     </td>
                     <td>
                       <Button className='btn btn-secondary' variant='contained'>
-                        <AddIcon />
+                        <Add />
                         <p className='btn-icon'>測試文字</p>
                       </Button>
                     </td>
                     <td>
                       <Button className='btn btn-danger' variant='contained'>
-                        <AddIcon />
+                        <Add />
                         <p className='btn-icon'>測試文字</p>
                       </Button>
                     </td>
                     <td>
                       <Button className='btn' variant='contained' disabled>
-                        <AddIcon />
+                        <Add />
                         <p className='btn-icon'>測試文字</p>
                       </Button>
                     </td>
@@ -153,14 +151,14 @@ export default function Home() {
                     <td>Icon + Normal</td>
                     <td>
                       <Button className='btn btn-primary' variant='outlined'>
-                        <AddIcon />
+                        <Add />
                         <p className='btn-icon'>測試文字</p>
                       </Button>
                     </td>
                     <td>-</td>
                     <td>
                       <Button className='btn' variant='outlined' disabled>
-                        <AddIcon />
+                        <Add />
                         <p className='btn-icon'>測試文字</p>
                       </Button>
                     </td>
@@ -196,21 +194,21 @@ export default function Home() {
                     <td>Icon + Normal</td>
                     <td>
                       <Button className='btn btn-primary'>
-                        <AddIcon />
+                        <Add />
                         <p className='btn-icon'>測試文字</p>
                       </Button>
                     </td>
                     <td>
                       <Button className='btn btn-secondary'>
                         <p className='btn-icon'>測試文字</p>
-                        <KeyboardArrowRightIcon />
+                        <KeyboardArrowRight />
                       </Button>
                     </td>
                     <td>
                       <Button className='btn' disabled>
-                        <KeyboardArrowLeftIcon />
+                        <KeyboardArrowLeft />
                         <p className='btn-icon'>測試文字</p>
-                        <KeyboardArrowRightIcon />
+                        <KeyboardArrowRight />
                       </Button>
                     </td>
                   </tr>
@@ -231,13 +229,13 @@ export default function Home() {
                     <td>Normal</td>
                     <td>
                       <IconButton>
-                        <AddIcon />
+                        <Add />
                       </IconButton>
                     </td>
                     <td>-</td>
                     <td>
                       <IconButton disabled>
-                        <AddIcon />
+                        <Add />
                       </IconButton>
                     </td>
                   </tr>
@@ -245,13 +243,13 @@ export default function Home() {
                     <td>Small</td>
                     <td>
                       <IconButton size='small'>
-                        <AddIcon />
+                        <Add />
                       </IconButton>
                     </td>
                     <td>-</td>
                     <td>
                       <IconButton size='small' disabled>
-                        <AddIcon />
+                        <Add />
                       </IconButton>
                     </td>
                   </tr>
@@ -259,13 +257,13 @@ export default function Home() {
                     <td>Large</td>
                     <td>
                       <IconButton size='large'>
-                        <AddIcon />
+                        <Add />
                       </IconButton>
                     </td>
                     <td>-</td>
                     <td>
                       <IconButton size='large' disabled>
-                        <AddIcon />
+                        <Add />
                       </IconButton>
                     </td>
                   </tr>

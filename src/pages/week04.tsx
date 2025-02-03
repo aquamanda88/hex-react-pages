@@ -1,14 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Header, Modal, Spinners } from '../components';
-import { LoginReq } from '../core/models/admin/auth.model';
-import {
-  ContentDatum,
-  PaginationDatum,
-  ProductDatum,
-  ProductFullDatum,
-  ProductValidation,
-  ProductValidationMessage,
-} from '../core/models/utils.model';
 import {
   Button,
   TextField,
@@ -19,14 +9,22 @@ import {
   Pagination,
   styled,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import Swal from 'sweetalert2';
+import { Header, Modal, Spinners } from '../components';
+import { Add, CloudUpload, InsertPhoto } from '../components/icons';
+import { LoginReq } from '../core/models/admin/auth.model';
+import {
+  ContentDatum,
+  PaginationDatum,
+  ProductDatum,
+  ProductFullDatum,
+  ProductValidation,
+  ProductValidationMessage,
+} from '../core/models/utils.model';
 import authService from '../services/auth.service';
 import productApiService from '../services/admin/products.service';
 import Login from './login';
 import Table from '../components/table';
+import Swal from 'sweetalert2';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -548,7 +546,7 @@ export default function Week04() {
                         handleAddOpen();
                       }}
                     >
-                      <AddIcon />
+                      <Add />
                       <p className='btn-icon'>新增</p>
                     </Button>
                   </div>
@@ -607,7 +605,7 @@ export default function Week04() {
                         alt='主圖'
                       />
                     ) : (
-                      <InsertPhotoIcon
+                      <InsertPhoto
                         className='no-image-icon'
                         color='disabled'
                       />
@@ -798,7 +796,7 @@ export default function Week04() {
                               component='label'
                               variant='contained'
                             >
-                              <CloudUploadIcon />
+                              <CloudUpload />
                               <p className='btn-icon'>上傳圖片</p>
                               <VisuallyHiddenInput
                                 type='file'
@@ -814,7 +812,7 @@ export default function Week04() {
                                 alt='主圖'
                               />
                             ) : (
-                              <InsertPhotoIcon
+                              <InsertPhoto
                                 className='no-image-icon'
                                 color='disabled'
                               />

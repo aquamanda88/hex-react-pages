@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { Button, IconButton, Dialog, DialogActions } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import { ReactNode } from 'react';
+import { Button, IconButton, Dialog, DialogActions } from '@mui/material';
+import { Close } from './icons';
+import React from 'react';
 
 /** 元件參數型別 */
 interface ModalProps {
@@ -44,7 +44,7 @@ export default function Modal({
           <div className='modal-header bg-white sticky-top d-flex justify-content-end'>
             <DialogActions className='justify-content-center'>
               <IconButton onClick={handleClose}>
-                <CloseIcon />
+                <Close />
               </IconButton>
             </DialogActions>
           </div>

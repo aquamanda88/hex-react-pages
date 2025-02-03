@@ -13,9 +13,8 @@ import { format } from 'date-fns/fp/format';
 import cartApiService from '../services/user/cart.service';
 import orderApiService from '../services/user/order.service';
 import FormControl from '@mui/material/FormControl';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Swal from 'sweetalert2';
+import { CheckCircleOutline } from '../components/icons';
 
 const steps = ['填寫訂單資料', '確認訂單內容', '進行付款', '完成結帳'];
 
@@ -630,13 +629,14 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                   ) : (
                     <div className='layout'>
                       <div className='d-flex flex-column text-center'>
-                        <p>您目前沒有可供進行付款的訂單。</p>
+                        <h2 className='font-zh-h2'>
+                          您目前沒有可供進行付款的訂單。
+                        </h2>
                         <Link
                           to='/products'
                           className='text-color-main d-flex justify-content-center'
                         >
                           <p className='btn-icon'>立即去選購</p>
-                          <KeyboardArrowRightIcon />
                         </Link>
                       </div>
                     </div>
@@ -647,7 +647,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                   <div className='col-12 col-lg-6'>
                     <div className='d-flex flex-column align-items-center gap-4'>
                       <div>
-                        <CheckCircleOutlineIcon
+                        <CheckCircleOutline
                           className='mb-2'
                           style={{ fontSize: '80px' }}
                         />

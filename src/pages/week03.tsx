@@ -1,14 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Header, Modal, Spinners } from '../components';
-import { LoginReq, LoginValidation } from '../core/models/admin/auth.model';
-import {
-  ContentDatum,
-  PaginationDatum,
-  ProductDatum,
-  ProductFullDatum,
-  ProductValidation,
-  ProductValidationMessage,
-} from '../core/models/utils.model';
 import {
   Button,
   IconButton,
@@ -19,15 +9,20 @@ import {
   Stack,
   Pagination,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import AddIcon from '@mui/icons-material/Add';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
-import Swal from 'sweetalert2';
+import { Header, Modal, Spinners } from '../components';
+import { Add, Check, Close, Delete, Edit, InsertPhoto } from '../components/icons';
+import {
+  ContentDatum,
+  PaginationDatum,
+  ProductDatum,
+  ProductFullDatum,
+  ProductValidation,
+  ProductValidationMessage,
+} from '../core/models/utils.model';
+import { LoginReq, LoginValidation } from '../core/models/admin/auth.model';
 import authService from '../services/auth.service';
 import productApiService from '../services/admin/products.service';
+import Swal from 'sweetalert2';
 
 export default function Week03() {
   const [isAuth, setIsAuth] = useState(false);
@@ -552,7 +547,7 @@ export default function Week03() {
                         handleAddOpen();
                       }}
                     >
-                      <AddIcon />
+                      <Add />
                       <p className='btn-icon'>新增</p>
                     </Button>
                   </div>
@@ -593,9 +588,9 @@ export default function Week03() {
                                     className={`${item.is_enabled ? 'text-success' : 'text-danger'} text-center`}
                                   >
                                     {item.is_enabled ? (
-                                      <CheckIcon />
+                                      <Check />
                                     ) : (
-                                      <CloseIcon />
+                                      <Close />
                                     )}
                                   </td>
                                   <td className='text-center'>
@@ -604,14 +599,14 @@ export default function Week03() {
                                         handleEditOpen(item);
                                       }}
                                     >
-                                      <EditIcon />
+                                      <Edit />
                                     </IconButton>
                                     <IconButton
                                       onClick={() => {
                                         handleDeleteOpen(item);
                                       }}
                                     >
-                                      <DeleteIcon sx={{ color: '#dc3545' }} />
+                                      <Delete sx={{ color: '#dc3545' }} />
                                     </IconButton>
                                   </td>
                                 </tr>
@@ -666,7 +661,7 @@ export default function Week03() {
                         alt='主圖'
                       />
                     ) : (
-                      <InsertPhotoIcon
+                      <InsertPhoto
                         className='no-image-icon'
                         color='disabled'
                       />
@@ -868,7 +863,7 @@ export default function Week03() {
                                 alt='主圖'
                               />
                             ) : (
-                              <InsertPhotoIcon
+                              <InsertPhoto
                                 className='no-image-icon'
                                 color='disabled'
                               />

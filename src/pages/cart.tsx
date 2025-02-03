@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, IconButton, TextField } from '@mui/material';
 import { MenuBar, Spinners } from '../components';
+import { Close } from '../components/icons';
 import {
   CartDataDatum,
   CartDataRequest,
   CartsDatum,
 } from '../core/models/cart.model';
 import cartApiService from '../services/user/cart.service';
-import CloseIcon from '@mui/icons-material/Close';
 import Swal from 'sweetalert2';
+
 
 
 export default function Cart() {
@@ -249,7 +250,7 @@ export default function Cart() {
                     <tr key={item.id}>
                       <td className='col-md-1'>
                         <IconButton onClick={() => deleteCartItem(item.id)}>
-                          <CloseIcon />
+                          <Close />
                         </IconButton>
                       </td>
                       <td>

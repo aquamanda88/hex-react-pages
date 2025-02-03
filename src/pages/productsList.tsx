@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import productApiService from '../services/user/products.service';
-import { PaginationDatum, ProductFullDatum } from '../core/models/utils.model';
-import cartApiService from '../services/user/cart.service';
-import { Checkbox, Pagination, Skeleton, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { Favorite, FavoriteBorder } from '@mui/icons-material';
-import MenuBar from '../components/menuBar';
+import { Checkbox, Pagination, Skeleton, Stack } from '@mui/material';
+import { MenuBar } from '../components';
+import { Favorite, FavoriteBorder } from '../components/icons';
+import { PaginationDatum, ProductFullDatum } from '../core/models/utils.model';
 import { CartsDatum } from '../core/models/cart.model';
+import productApiService from '../services/user/products.service';
+import cartApiService from '../services/user/cart.service';
 
 export default function ProductsList() {
   const [isProductLoading, setIsProductLoading] = useState(true);

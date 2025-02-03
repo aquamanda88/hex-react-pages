@@ -1,19 +1,17 @@
 import { useEffect, useState } from 'react';
-import productApiService from '../services/user/products.service';
 import { useParams } from 'react-router-dom';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
-import { ProductDatum } from '../core/models/utils.model';
-import { Spinners } from '../components';
 import { Button, Checkbox } from '@mui/material';
+import { MenuBar, Spinners } from '../components';
+import { Favorite, FavoriteBorder, InsertPhoto } from '../components/icons';
+import { ProductDatum } from '../core/models/utils.model';
 import {
   CartDataDatum,
   CartDataRequest,
   CartsDatum,
 } from '../core/models/cart.model';
+import productApiService from '../services/user/products.service';
 import cartApiService from '../services/user/cart.service';
 import Swal from 'sweetalert2';
-import MenuBar from '../components/menuBar';
-import { Favorite, FavoriteBorder } from '@mui/icons-material';
 
 export default function ProductDetail() {
   const [isProductLoading, setIsProductLoading] = useState(true);
@@ -155,7 +153,7 @@ export default function ProductDetail() {
             {product.imageUrl ? (
               <img src={product.imageUrl} className='object-fit' alt='主圖' />
             ) : (
-              <InsertPhotoIcon className='no-image-icon' color='disabled' />
+              <InsertPhoto className='no-image-icon' color='disabled' />
             )}
           </div>
           <div className='detail-item col-12 col-lg-6'>

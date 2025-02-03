@@ -1,10 +1,7 @@
 import React from 'react';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
 import { ProductFullDatum } from '../core/models/utils.model';
+import { Check, Close, Delete, Edit } from './icons';
 
 type TableProps = {
   /** 資料 */
@@ -59,7 +56,7 @@ const Table: React.FC<TableProps> = ({
               <td
                 className={`${item.is_enabled ? 'text-success' : 'text-danger'} text-center`}
               >
-                {item.is_enabled ? <CheckIcon /> : <CloseIcon />}
+                {item.is_enabled ? <Check /> : <Close />}
               </td>
               <td className='text-center'>
                 <IconButton
@@ -67,14 +64,14 @@ const Table: React.FC<TableProps> = ({
                     handleEditOpen(item);
                   }}
                 >
-                  <EditIcon />
+                  <Edit />
                 </IconButton>
                 <IconButton
                   onClick={() => {
                     handleDeleteOpen(item);
                   }}
                 >
-                  <DeleteIcon sx={{ color: '#dc3545' }} />
+                  <Delete sx={{ color: '#dc3545' }} />
                 </IconButton>
               </td>
             </tr>
