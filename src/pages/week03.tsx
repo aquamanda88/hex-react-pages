@@ -562,7 +562,7 @@ export default function Week03() {
                         <div style={{ paddingTop: '300px' }} />
                       </Skeleton>
                     ) : (
-                      <div className='table-responsive-lg'>
+                      <div className='table-responsive'>
                         <table className='table table-striped table-bordered mb-0'>
                           <thead className='text-center'>
                             <tr>

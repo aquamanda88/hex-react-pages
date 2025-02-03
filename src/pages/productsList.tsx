@@ -148,19 +148,19 @@ export default function ProductsList() {
           ) : (
             products.map((item, index) => {
               return (
-                <div
-                  className='product-list-grid'
-                  key={item.id}
-                >
-                  <Link to={`/product/${item.id}`}>
+                <div className='product-list-grid' key={item.id}>
+                  <Link
+                    to={`/product/${item.id}`}
+                    className='product-image-item'
+                  >
                     <img
                       src={item.imageUrl}
-                      className='item-image mb-2'
+                      className='image-item'
                       alt={item.imageUrl}
                     ></img>
                   </Link>
-                  <div>
-                    <div className='d-flex justify-content-between align-items-center'>
+                  <div className='product-info-item'>
+                    <div className='item-title d-flex justify-content-between align-items-center'>
                       <h3 className='font-zh-h3'>{item.title}</h3>
                       <Checkbox
                         checked={isFavoriteChecked[index] || false}
@@ -176,8 +176,12 @@ export default function ProductsList() {
                         }}
                       />
                     </div>
-                    <p className='font-en-h2-medium mb-0'>TWD {formatPrice(item.price)}</p>
-                    <p className='text-secondary'><del>TWD {formatPrice(item.origin_price)}</del></p>
+                    <p className='font-en-h2-medium mb-0'>
+                      TWD {formatPrice(item.price)}
+                    </p>
+                    <p className='font-zh-p-regular text-secondary'>
+                      <del>TWD {formatPrice(item.origin_price)}</del>
+                    </p>
                   </div>
                 </div>
               );

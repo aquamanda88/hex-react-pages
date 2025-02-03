@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <>
-      <footer className='footer mt-auto py-3 bg-light'>
+      <footer className='footer mt-auto py-3'>
         <div className='container text-center'>
           <div className='row justify-content-center'>
             <div className='col-6'>

@@ -558,7 +558,7 @@ export default function Week04() {
                         <div style={{ paddingTop: '300px' }} />
                       </Skeleton>
                     ) : (
-                      <div className='table-responsive-lg'>
+                      <div className='table-responsive'>
                         <Table
                           data={products}
                           handleEditOpen={handleEditOpen}

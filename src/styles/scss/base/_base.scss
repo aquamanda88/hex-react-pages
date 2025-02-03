@@ -35,12 +35,14 @@ img {
 
 body {
   font-family: 'Poppins', 'Noto Sans TC', sans-serif, Helvetica, Arial;
-  background-color: #efefef;
-  // background-color: #edf2fc;
 }
 
 header {
   background-color: #ffffff;
+}
+
+footer {
+  background-color: #efefef;
 }
 
 main.container-fluid {
@@ -80,4 +82,8 @@ main.container-fluid {
 
 .my-swal-container {
   z-index: 9999 !important;
+}
+
+.css-1umw9bq-MuiSvgIcon-root.MuiSvgIcon-root {
+  font-size: 24px;
 }

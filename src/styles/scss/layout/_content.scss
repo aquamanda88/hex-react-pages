@@ -18,25 +18,3 @@
 .image-group {
   gap: 12px;
 }
-
-.item-image {
-  -o-object-fit: cover;
-  object-fit: cover;
-  height: 350px;
-}
-
-.product-list-grid {
-  width: 20%;
-}
-
-@media (max-width: 1024px) {
-  .product-list-grid {
-    width: 50%;
-  }
-}
-
-@media (max-width: 575px) {
-  .product-list-grid {
-    width: 100%;
-  }
-}

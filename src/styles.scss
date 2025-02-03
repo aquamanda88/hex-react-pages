@@ -1,5 +1,7 @@
 // bootstrap
 @import 'bootstrap/dist/css/bootstrap.min.css';
+// hover.css
+@import 'hover.css/css/hover-min.css';
 // helpers
 @import '/src/styles/scss/helpers/variables';
 @import '/src/styles/scss/helpers/mixins';
@@ -16,3 +18,5 @@
 @import '/src/styles/scss/components/spinners';
 @import '/src/styles/scss/components/table';
 @import '/src/styles/scss/components/form';
+// pages
+@import '/src/styles/scss/pages/productsList';
