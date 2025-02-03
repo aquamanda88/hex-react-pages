@@ -146,19 +146,19 @@ export default function ProductDetail() {
   return (
     <>
       <MenuBar cartCount={cartCount} />
-      <div className='container py-4'>
+      <div className='product-detail-container container'>
         <div className={`${isProductLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />
         </div>
         <div className='row'>
-          <div className='col col-6'>
+          <div className='product-image col-12 col-lg-6'>
             {product.imageUrl ? (
               <img src={product.imageUrl} className='object-fit' alt='主圖' />
             ) : (
               <InsertPhotoIcon className='no-image-icon' color='disabled' />
             )}
           </div>
-          <div className='col col-6'>
+          <div className='detail-item col-12 col-lg-6'>
             <div className='d-flex justify-content-between align-items-center'>
               <h5 className='mb-0'>
                 {product.content?.artists_zh_tw} ({product.content?.artists})
@@ -178,21 +178,21 @@ export default function ProductDetail() {
                 {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
               </IconButton> */}
             </div>
-            <h2>{product.title}</h2>
-            <h3>
+            <h2 className='font-zh-h4-medium'>{product.title}</h2>
+            <h3 className='font-zh-h5-medium'>
               <i>{product.content?.name}</i>
             </h3>
-            <h4>{product.content?.year}</h4>
+            <h4 className='font-zh-h4-medium'>{product.content?.year}</h4>
             <h5>
-              <span className='badge rounded-pill bg-secondary'>
+              <span className='badge rounded-pill bg-secondary font-zh-p-regular'>
                 {product.category}
               </span>
             </h5>
-            <p>{product.description}</p>
-            <p className='font-en-h2-medium mb-0'>
+            <p className='font-zh-p-medium'>{product.description}</p>
+            <p className='font-en-h4-medium mb-0'>
               TWD {formatPrice(product.price)}
             </p>
-            <p className='text-secondary'>
+            <p className='font-en-p-regular text-secondary'>
               <del>TWD {formatPrice(product.origin_price)}</del>
             </p>
 

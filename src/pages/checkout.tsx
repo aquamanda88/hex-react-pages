@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
-import { MenuBar, Spinners, Steppers } from '../components';
-import cartApiService from '../services/user/cart.service';
-import { CartDataDatum, CartsDatum } from '../core/models/cart.model';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Controller, useForm } from 'react-hook-form';
 import { Button, TextField } from '@mui/material';
+import { MenuBar, Spinners, Steppers } from '../components';
+import { CartDataDatum, CartsDatum } from '../core/models/cart.model';
 import {
   OrderDataRequest,
   OrderDatum,
   OrderFormData,
 } from '../core/models/order.model';
-import FormControl from '@mui/material/FormControl';
-import { Controller, useForm } from 'react-hook-form';
+import { format } from 'date-fns/fp/format';
+import cartApiService from '../services/user/cart.service';
 import orderApiService from '../services/user/order.service';
+import FormControl from '@mui/material/FormControl';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Swal from 'sweetalert2';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { format } from 'date-fns/fp/format';
 
 const steps = ['填寫訂單資料', '確認訂單內容', '進行付款', '完成結帳'];
 
@@ -678,7 +678,10 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                         </li>
                       </ul>
                       <Link to='/products' className='w-100'>
-                        <Button className='btn btn-primary w-100' variant='contained'>
+                        <Button
+                          className='btn btn-primary w-100'
+                          variant='contained'
+                        >
                           回商品頁
                         </Button>
                       </Link>
@@ -691,13 +694,12 @@ export default function Checkout({ activeStep }: CheckoutProps) {
         ) : (
           <div className='layout'>
             <div className='d-flex justify-content-center'>
-              <p>
+              <h2 className='font-zh-h2'>
                 您的購物車中沒有商品，
                 <Link to='/products' className='text-color-main d-inline-flex'>
                   <p className='btn-icon'>立即去選購</p>
-                  <KeyboardArrowRightIcon />
                 </Link>
-              </p>
+              </h2>
             </div>
           </div>
         )}

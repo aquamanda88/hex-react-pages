@@ -1,0 +1,22 @@
+.product-detail-container {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.detail-item {
+  padding: 24px;
+  background-color: #f5f5f5;
+}
+
+@media (max-width: 991px) {
+  .product-image {
+    padding: 0;
+  }
+}
+
+@media (max-width: 575px) {
+  .product-detail-container {
+    background-color: #f5f5f5;
+    padding-top: 0;
+  }
+}

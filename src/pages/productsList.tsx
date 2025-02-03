@@ -161,7 +161,7 @@ export default function ProductsList() {
                   </Link>
                   <div className='product-info-item'>
                     <div className='item-title d-flex justify-content-between align-items-center'>
-                      <h3 className='font-zh-h3'>{item.title}</h3>
+                      <h3 className='font-zh-h5'>{item.title}</h3>
                       <Checkbox
                         checked={isFavoriteChecked[index] || false}
                         icon={<FavoriteBorder />}
@@ -176,10 +176,10 @@ export default function ProductsList() {
                         }}
                       />
                     </div>
-                    <p className='font-en-h2-medium mb-0'>
+                    <p className='font-en-h4-medium mb-0'>
                       TWD {formatPrice(item.price)}
                     </p>
-                    <p className='font-zh-p-regular text-secondary'>
+                    <p className='font-en-p-regular text-secondary'>
                       <del>TWD {formatPrice(item.origin_price)}</del>
                     </p>
                   </div>

@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Spinners } from '../components';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button, IconButton, TextField } from '@mui/material';
+import { MenuBar, Spinners } from '../components';
 import {
   CartDataDatum,
   CartDataRequest,
   CartsDatum,
 } from '../core/models/cart.model';
 import cartApiService from '../services/user/cart.service';
-import MenuBar from '../components/menuBar';
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, IconButton, TextField } from '@mui/material';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Swal from 'sweetalert2';
-import { Link } from 'react-router-dom';
+
 
 export default function Cart() {
   const [isProductLoading, setIsProductLoading] = useState(true);
   const [cart, setCart] = useState<CartDataDatum>();
+  const [changedCart, setChangedCart] = useState<CartDataRequest[]>([]);
   const [cartCount, setCartCount] = useState(0);
+  const navigate = useNavigate();
 
   /**
    * 處理開啟刪除商品 modal 事件
@@ -44,18 +45,42 @@ export default function Cart() {
    * @prop e - ChangeEvent
    */
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, name, value } = e.target;
+    const { name, value } = e.target;
+
+    if (value === '') return;
+    if (!cart) return;
+
+    const qtyValue = Math.max(1, parseInt(value) || 0);
+    const nameIndex = parseInt(name);
+
+    const newCarts = cart.carts.map((item, index) =>
+      index === nameIndex
+        ? {
+            ...item,
+            qty: qtyValue,
+            total: item.product.price! * qtyValue,
+            final_total: item.product.price! * qtyValue,
+          }
+        : item
+    );
+
+    const total = newCarts.reduce((sum, item) => sum + item.total, 0);
+    setCart({ ...cart, carts: newCarts, total, final_total: total });
+  };
+
+  /**
+   * 處理變更購物車
+   *
+   * @prop e - ChangeEvent
+   */
+  const handleChangeCart = () => {
     if (cart) {
-      const newCart = {
-        ...cart,
-        carts: cart.carts.map((item, index) =>
-          index === parseInt(name)
-            ? { ...item, qty: Math.max(1, parseInt(value) || 0) }
-            : item
-        ),
-      };
-      setCart(newCart);
-      editCart(id, parseInt(value));
+      setChangedCart(
+        cart.carts.map(({ id, qty }) => ({
+          data: { product_id: id, qty },
+        }))
+      );
+      editCart(changedCart);
     }
   };
 
@@ -91,28 +116,39 @@ export default function Cart() {
   /**
    * 呼叫替換購物車指定產品數量 API
    *
+   * @prop cartDataRequests - 產品資料 request 陣列
    */
-  const editCart = async (id: string, qty: number) => {
-    const data: CartDataRequest = {
-      data: {
-        product_id: id,
-        qty: qty,
-      },
-    };
-
+  const editCart = async (cartDataRequests: CartDataRequest[]) => {
     setIsProductLoading(true);
-    cartApiService
-      .editCart(id, data)
-      .then(({ data: { message } }) => {
+
+    try {
+      const responses = await Promise.all(
+        cartDataRequests.map((cartDataRequest) =>
+          cartApiService.editCart(
+            cartDataRequest.data.product_id,
+            cartDataRequest
+          )
+        )
+      );
+
+      const lastMessage = responses[responses.length - 1]?.data?.message;
+
+      if (lastMessage) {
         Swal.fire({
           icon: 'success',
-          title: message,
+          title: lastMessage,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate('/checkout');
+            window.location.reload();
+          }
         });
-        getCart();
-      })
-      .finally(() => {
-        setIsProductLoading(false);
-      });
+      }
+    } catch (error) {
+      console.error('編輯購物車時發生錯誤', error);
+    } finally {
+      setIsProductLoading(false);
+    }
   };
 
   /**
@@ -285,14 +321,13 @@ export default function Cart() {
                   <h3>TWD {formatPrice(cart?.final_total)}</h3>
                 </div>
                 <div className='d-flex justify-content-end'>
-                  <Link to='/checkout' className='w-100'>
-                    <Button
-                      className='btn btn-primary w-100'
-                      variant='contained'
-                    >
-                      去結帳
-                    </Button>
-                  </Link>
+                  <Button
+                    className='btn btn-primary w-100'
+                    variant='contained'
+                    onClick={() => handleChangeCart()}
+                  >
+                    去結帳
+                  </Button>
                 </div>
               </div>
             </div>
@@ -300,13 +335,12 @@ export default function Cart() {
         ) : (
           <div className='layout'>
             <div className='d-flex justify-content-center'>
-              <p>
+              <h2 className='font-zh-h2'>
                 您的購物車中沒有商品，
                 <Link to='/products' className='text-color-main d-inline-flex'>
                   <p className='btn-icon'>立即去選購</p>
-                  <KeyboardArrowRightIcon />
                 </Link>
-              </p>
+              </h2>
             </div>
           </div>
         )}
