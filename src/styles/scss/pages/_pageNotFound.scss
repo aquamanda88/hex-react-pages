@@ -1,0 +1,61 @@
+.page-not-found-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  background-color: #464866;
+  color: #ffffff;
+}
+
+.notfound {
+  max-width: 520px;
+  width: 100%;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.notfound .notfound-404 {
+  position: relative;
+  height: 240px;
+}
+
+.notfound .notfound-404 {
+  h1 {
+    font-family: 'Montserrat', sans-serif;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 252px;
+    font-weight: 900;
+    margin: 0px;
+    text-transform: uppercase;
+    letter-spacing: -40px;
+    margin-left: -20px;
+  }
+}
+
+.notfound .notfound-404 h1 > span {
+  text-shadow: -8px 0px 0px #aaabb8;
+}
+
+.notfound .notfound-404 h3 {
+  position: relative;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0px;
+  letter-spacing: 3px;
+  padding-left: 6px;
+  color: #ffffff;
+}
+
+.notfound h2 {
+  font-size: 20px;
+  font-weight: 400;
+  text-transform: uppercase;
+  margin-top: 0px;
+  margin-bottom: 25px;
+  color: #ffffff;
+}

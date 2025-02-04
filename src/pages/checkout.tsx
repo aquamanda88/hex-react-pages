@@ -48,7 +48,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
   /**
    * 處理送出表單事件
    *
-   * @prop data - 訂單資料 formData
+   * @param data - 訂單資料 formData
    */
   const onSubmit = (data: OrderFormData) => {
     setOrderDataRequest({
@@ -70,7 +70,6 @@ export default function Checkout({ activeStep }: CheckoutProps) {
 
   /**
    * 處理開啟送出訂單 modal 事件
-   *
    */
   const handleSendOrderOpen = (orderData: OrderDataRequest | undefined) => {
     if (orderData) {
@@ -91,7 +90,6 @@ export default function Checkout({ activeStep }: CheckoutProps) {
 
   /**
    * 呼叫取得購物車資料 API
-   *
    */
   const getCart = async () => {
     setIsProductLoading(true);
@@ -108,7 +106,6 @@ export default function Checkout({ activeStep }: CheckoutProps) {
 
   /**
    * 呼叫送出訂單 API
-   *
    */
   const sendOrder = async (data: OrderDataRequest) => {
     setIsProductLoading(true);
@@ -132,7 +129,6 @@ export default function Checkout({ activeStep }: CheckoutProps) {
 
   /**
    * 呼叫特定訂單資料 API
-   *
    */
   const getOrderData = async (order_id: string) => {
     setIsProductLoading(true);
@@ -150,7 +146,6 @@ export default function Checkout({ activeStep }: CheckoutProps) {
 
   /**
    * 呼叫付款結帳 API
-   *
    */
   const payOrder = async (order_id: string) => {
     setIsProductLoading(true);
@@ -357,7 +352,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                 </div>
                 {/* Step 2 */}
                 <div>
-                  <div className='table-responsive-lg'>
+                  <div className='table-responsive-lg mb-2'>
                     <table className='cart-table table'>
                       <thead className='text-center table-light'>
                         <tr className='align-baseline'>
@@ -373,17 +368,24 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                         {cartData?.carts.map((item) => (
                           <tr key={item.id}>
                             <td>
-                              <img
-                                className='cart-image'
-                                src={item.product.imageUrl}
-                                alt={item.product.content?.name}
-                              />
+                              <Link to={`/product/${item.product.id}`}>
+                                <img
+                                  className='cart-image'
+                                  src={item.product.imageUrl}
+                                  alt={item.product.content?.name}
+                                />
+                              </Link>
                             </td>
                             <td className='text-start'>
-                              <p>{item.product.title}</p>
-                              <p>
-                                <small>({item.product.content?.name})</small>
-                              </p>
+                              <Link
+                                className='link-button'
+                                to={`/product/${item.product.id}`}
+                              >
+                                <p>{item.product.title}</p>
+                                <p>
+                                  <small>({item.product.content?.name})</small>
+                                </p>
+                              </Link>
                             </td>
                             <td className='text-start'>
                               <p>

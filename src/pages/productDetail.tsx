@@ -25,7 +25,7 @@ export default function ProductDetail() {
   /**
    * 處理收藏清單事件
    *
-   * @prop id - 產品 ID
+   * @param id - 產品 ID
    */
   const handleFavoriteChange = (id: string) => {
     const favoriteListArray = favoriteList.split(', ');
@@ -39,9 +39,32 @@ export default function ProductDetail() {
   };
 
   /**
+   * 處理開啟圖片事件
+   *
+   * @param name - 作品原文名稱
+   * @param imageUrl - 作品圖片網址
+   */
+  const handleImageClick = (name: string, imageUrl: string) => {
+    if (window.innerWidth < 992) {
+      return;
+    }
+
+    Swal.fire({
+      imageUrl: imageUrl,
+      imageAlt: name,
+      width: '70%',
+      showConfirmButton: false,
+      customClass: {
+        popup: 'my-swal-popup',
+        image: 'my-swal-image',
+      },
+    });
+  };
+
+  /**
    * 呼叫取得商品列表 API
    *
-   * @prop page - 選取頁數
+   * @param id - 商品 ID
    */
   const getProductDetail = async (id: string) => {
     setIsProductLoading(true);
@@ -59,7 +82,6 @@ export default function ProductDetail() {
 
   /**
    * 呼叫加入購物車 API
-   *
    */
   const addCart = async () => {
     const data: CartDataRequest = {
@@ -86,7 +108,6 @@ export default function ProductDetail() {
 
   /**
    * 呼叫取得購物車資料 API
-   *
    */
   const getCart = async () => {
     setIsProductLoading(true);
@@ -104,7 +125,7 @@ export default function ProductDetail() {
   /**
    * 確認目前該產品是否已加入收藏清單
    *
-   * @prop productId - 產品 ID
+   * @param productId - 商品 ID
    * @returns 該產品是否已加入收藏清單
    */
   const checkFavoriteItem = (productId: string): boolean => {
@@ -151,57 +172,66 @@ export default function ProductDetail() {
         <div className='row'>
           <div className='product-image col-12 col-lg-6'>
             {product.imageUrl ? (
-              <img src={product.imageUrl} className='object-fit' alt='主圖' />
+              <button
+                type='button'
+                onClick={() =>
+                  handleImageClick(product.content!.name!, product.imageUrl!)
+                }
+              >
+                <img src={product.imageUrl} className='object-fit' alt='主圖' />
+              </button>
             ) : (
               <InsertPhoto className='no-image-icon' color='disabled' />
             )}
           </div>
           <div className='detail-item col-12 col-lg-6'>
-            <div className='d-flex justify-content-between align-items-center'>
-              <h5 className='mb-0'>
-                {product.content?.artists_zh_tw} ({product.content?.artists})
-              </h5>
-              <Checkbox
-                checked={isFavoriteChecked}
-                icon={<FavoriteBorder />}
-                checkedIcon={<Favorite />}
-                onChange={() => handleFavoriteChange(id ?? '')}
-                sx={{
-                  '& .MuiSvgIcon-root': {
-                    color: 'gray',
-                  },
-                }}
-              />
-              {/* <IconButton onClick={handleFavoriteChange}>
-                {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-              </IconButton> */}
-            </div>
-            <h2 className='font-zh-h4-medium'>{product.title}</h2>
-            <h3 className='font-zh-h5-medium'>
-              <i>{product.content?.name}</i>
-            </h3>
-            <h4 className='font-zh-h4-medium'>{product.content?.year}</h4>
-            <h5>
-              <span className='badge rounded-pill bg-secondary font-zh-p-regular'>
-                {product.category}
-              </span>
-            </h5>
-            <p className='font-zh-p-medium'>{product.description}</p>
-            <p className='font-en-h4-medium mb-0'>
-              TWD {formatPrice(product.price)}
-            </p>
-            <p className='font-en-p-regular text-secondary'>
-              <del>TWD {formatPrice(product.origin_price)}</del>
-            </p>
+            {JSON.stringify(product) !== '{}' && (
+              <>
+                <div className='d-flex justify-content-between align-items-center'>
+                  <h5 className='mb-0'>
+                    {product.content?.artists_zh_tw} ({product.content?.artists}
+                    )
+                  </h5>
+                  <Checkbox
+                    checked={isFavoriteChecked}
+                    icon={<FavoriteBorder />}
+                    checkedIcon={<Favorite />}
+                    onChange={() => handleFavoriteChange(id ?? '')}
+                    sx={{
+                      '& .MuiSvgIcon-root': {
+                        color: 'gray',
+                      },
+                    }}
+                  />
+                </div>
+                <h2 className='font-zh-h4-medium'>{product.title}</h2>
+                <h3 className='font-zh-h5-medium'>
+                  <i>{product.content?.name}</i>
+                </h3>
+                <h4 className='font-zh-h4-medium'>{product.content?.year}</h4>
+                <h5>
+                  <span className='badge rounded-pill bg-secondary font-zh-p-regular'>
+                    {product.category}
+                  </span>
+                </h5>
+                <p className='font-zh-p-medium'>{product.description}</p>
+                <p className='font-en-h4-medium mb-0'>
+                  TWD {formatPrice(product.price)}
+                </p>
+                <p className='font-en-p-regular text-secondary'>
+                  <del>TWD {formatPrice(product.origin_price)}</del>
+                </p>
 
-            <Button
-              className='btn btn-primary w-100'
-              component='label'
-              variant='contained'
-              onClick={addCart}
-            >
-              加入購物車
-            </Button>
+                <Button
+                  className='btn btn-primary w-100'
+                  component='label'
+                  variant='contained'
+                  onClick={addCart}
+                >
+                  加入購物車
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

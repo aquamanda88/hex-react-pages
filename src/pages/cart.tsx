@@ -21,7 +21,6 @@ export default function Cart() {
 
   /**
    * 處理開啟刪除商品 modal 事件
-   *
    */
   const handleDeleteOpen = () => {
     Swal.fire({
@@ -42,7 +41,7 @@ export default function Cart() {
   /**
    * 處理變更數量事件
    *
-   * @prop e - ChangeEvent
+   * @param e - ChangeEvent
    */
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -71,7 +70,7 @@ export default function Cart() {
   /**
    * 處理變更購物車
    *
-   * @prop e - ChangeEvent
+   * @param e - ChangeEvent
    */
   const handleChangeCart = () => {
     if (cart) {
@@ -85,7 +84,7 @@ export default function Cart() {
   /**
    * 處理 input 複製貼上事件
    *
-   * @prop e - ClipboardEvent
+   * @param e - ClipboardEvent
    */
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     const pasteData = e.clipboardData.getData('text');
@@ -96,7 +95,6 @@ export default function Cart() {
 
   /**
    * 呼叫取得購物車資料 API
-   *
    */
   const getCart = async () => {
     setIsProductLoading(true);
@@ -114,7 +112,7 @@ export default function Cart() {
   /**
    * 呼叫替換購物車指定產品數量 API
    *
-   * @prop cartDataRequests - 產品資料 request 陣列
+   * @param cartDataRequests - 產品資料 request 陣列
    */
   const editCart = async (cartDataRequests: CartDataRequest[]) => {
     setIsProductLoading(true);
@@ -160,7 +158,6 @@ export default function Cart() {
 
   /**
    * 呼叫刪除單一購物車資料 API
-   *
    */
   const deleteCartItem = async (id: string) => {
     setIsProductLoading(true);
@@ -180,7 +177,6 @@ export default function Cart() {
 
   /**
    * 呼叫刪除購物車內所有產品 API
-   *
    */
   const deleteCarts = async () => {
     setIsProductLoading(true);
@@ -241,7 +237,7 @@ export default function Cart() {
         <h2 className='text-center mb-4'>購物車</h2>
         {cart?.carts && cart?.carts.length > 0 ? (
           <>
-            <div className='table-responsive-lg mb-4'>
+            <div className='table-responsive-lg mb-2'>
               <table className='cart-table table'>
                 <thead className='text-center table-light'>
                   <tr className='align-baseline'>
@@ -263,17 +259,24 @@ export default function Cart() {
                         </IconButton>
                       </td>
                       <td>
-                        <img
-                          className='cart-image'
-                          src={item.product.imageUrl}
-                          alt={item.product.content?.name}
-                        />
+                        <Link to={`/product/${item.product.id}`}>
+                          <img
+                            className='cart-image'
+                            src={item.product.imageUrl}
+                            alt={item.product.content?.name}
+                          />
+                        </Link>
                       </td>
                       <td className='text-start'>
-                        <p>{item.product.title}</p>
-                        <p>
-                          <small>({item.product.content?.name})</small>
-                        </p>
+                        <Link
+                          className='link-button'
+                          to={`/product/${item.product.id}`}
+                        >
+                          <p>{item.product.title}</p>
+                          <p>
+                            <small>({item.product.content?.name})</small>
+                          </p>
+                        </Link>
                       </td>
                       <td className='text-start'>
                         <p>作者：{item.product.content?.artists_zh_tw}</p>
@@ -315,14 +318,14 @@ export default function Cart() {
                   ))}
                 </tbody>
               </table>
-              <Button
-                className='btn btn-secondary small'
+            </div>
+            <Button
+                className='btn btn-secondary small mb-4'
                 variant='contained'
                 onClick={handleDeleteOpen}
               >
                 清空購物車
               </Button>
-            </div>
 
             <div className='row justify-content-end'>
               <div className='col-12 col-lg-6'>

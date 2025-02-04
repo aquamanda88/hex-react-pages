@@ -27,10 +27,14 @@
   .item-title {
     margin-bottom: 8px;
     .font-zh-h5 {
-      display: flex;
-      align-items: center;
       margin-bottom: 0;
-      height: 48px;
+      padding-top: 8px;
+      height: 56px;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      overflow: hidden;
     }
   }
   p {
@@ -38,9 +42,12 @@
   }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
   .product-list-grid {
     width: 50%;
+  }
+  .product-info-item .item-title .font-zh-h5 {
+    height: 32px;
   }
 }
 

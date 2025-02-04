@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 
 const axiosInstance = axios.create({
   baseURL: 'https://ec-course-api.hexschool.io/v2',
@@ -14,6 +14,10 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+const goToPage = (path: string) => {
+  window.location.href = path;
+};
+
 /**
  * 顯示 HTTP 錯誤訊息
  *
@@ -22,46 +26,36 @@ axiosInstance.interceptors.request.use(
  * @returns 無回傳值
  */
 function formatErrorMessage(message: string, status?: number) {
-  if (message === '驗證錯誤, 請重新登入' || message === '請重新登入') {
-    Swal.fire({
-      icon: 'error',
-      text: status ? `(${status}) ${message}` : message,
-      showCancelButton: false,
-      confirmButtonText: '回到登入頁',
-      customClass: {
-        container: 'my-swal-container',
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
+  const text = status ? `(${status}) ${message}` : message;
+  const options: SweetAlertOptions = {
+    icon: 'error',
+    text,
+    showCancelButton: false,
+    confirmButtonText: '確認',
+    allowOutsideClick: false,
+    customClass: { container: 'my-swal-container' },
+  };
+
+  Swal.fire(options).then((result) => {
+    if (!result.isConfirmed) return;
+
+    switch (message) {
+      case '驗證錯誤, 請重新登入':
+      case '請重新登入':
         sessionStorage.removeItem('token');
         window.location.reload();
-      }
-    });
-  } else if (message === '請重新登出') {
-    Swal.fire({
-      icon: 'error',
-      text: status ? `(${status}) ${message}` : message,
-      showCancelButton: false,
-      confirmButtonText: '確認',
-      customClass: {
-        container: 'my-swal-container',
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
+        break;
+      case '請重新登出':
         window.location.reload();
-      }
-    });
-  } else {
-    Swal.fire({
-      icon: 'error',
-      text: status ? `(${status}) ${message}` : message,
-      showCancelButton: false,
-      confirmButtonText: '確認',
-      customClass: {
-        container: 'my-swal-container',
-      },
-    });
-  }
+        break;
+    }
+
+    switch (status) {
+      case 404:
+        goToPage('/#/pageNotFound');
+        break;
+    }
+  });
 }
 
 axiosInstance.interceptors.response.use(

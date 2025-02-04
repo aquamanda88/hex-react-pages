@@ -10,6 +10,8 @@ import cartApiService from '../services/user/cart.service';
 
 export default function ProductsList() {
   const [isProductLoading, setIsProductLoading] = useState(true);
+  const [skeletonCount, setSkeletonCount] = useState(5);
+  const [skeletonWidth, setSkeletonWidth] = useState('');
   const [pagination, setPagination] = useState<PaginationDatum>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
@@ -20,8 +22,8 @@ export default function ProductsList() {
   /**
    * 處理收藏清單事件
    *
-   * @prop index - 產品陣列索引值
-   * @prop id - 產品 ID
+   * @param index - 產品陣列索引值
+   * @param id - 產品 ID
    */
   const handleFavoriteChange = (index: number, id: string) => {
     const favoriteListArray = favoriteList.split(', ');
@@ -41,8 +43,8 @@ export default function ProductsList() {
   /**
    * 處理分頁事件
    *
-   * @prop _ - ChangeEvent
-   * @prop page - 選取的頁數
+   * @param _ - ChangeEvent
+   * @param page - 選取的頁數
    */
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
@@ -52,7 +54,7 @@ export default function ProductsList() {
   /**
    * 呼叫取得商品列表 API
    *
-   * @prop page - 選取頁數
+   * @param page - 選取頁數
    */
   const getProducts = async (page?: number) => {
     setIsProductLoading(true);
@@ -74,7 +76,6 @@ export default function ProductsList() {
 
   /**
    * 呼叫取得購物車資料 API
-   *
    */
   const getCart = async () => {
     setIsProductLoading(true);
@@ -122,9 +123,26 @@ export default function ProductsList() {
     }
   }
 
+  function updateSkeletonCount(): void {
+    const width = window.innerWidth;
+      if (width > 1024) {
+        setSkeletonCount(5);
+        setSkeletonWidth('20%');
+      } else if (width > 575) {
+        setSkeletonCount(2);
+        setSkeletonWidth('50%');
+      } else {
+        setSkeletonCount(1);
+        setSkeletonWidth('100%');
+      }
+  }
+
   useEffect(() => {
+    updateSkeletonCount();
     getProducts();
     getCart();
+    window.addEventListener('resize', updateSkeletonCount); // 監聽視窗大小變化
+    return () => window.removeEventListener('resize', updateSkeletonCount); // 移除監聽
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -135,11 +153,11 @@ export default function ProductsList() {
         <div className='row mb-4'>
           {isProductLoading ? (
             <>
-              {[...Array(5)].map((_, index) => (
+              {[...Array(skeletonCount)].map((_, index) => (
                 <div
                   key={index}
                   className='col col-12'
-                  style={{ width: '20%' }}
+                  style={{ width: skeletonWidth }}
                 >
                   <Skeleton variant='rectangular' height='350px' />
                 </div>
@@ -160,7 +178,7 @@ export default function ProductsList() {
                     ></img>
                   </Link>
                   <div className='product-info-item'>
-                    <div className='item-title d-flex justify-content-between align-items-center'>
+                    <div className='item-title d-flex justify-content-between align-items-start'>
                       <h3 className='font-zh-h5'>{item.title}</h3>
                       <Checkbox
                         checked={isFavoriteChecked[index] || false}

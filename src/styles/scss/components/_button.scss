@@ -69,6 +69,12 @@
     }
   }
 }
+.link-button {
+  transition: all 0.4s;
+  &:hover {
+    @include text-color(#1583b1);
+  }
+}
 /** icon 型按鈕 */
 .btn {
   .MuiSvgIcon-fontSizeMedium {

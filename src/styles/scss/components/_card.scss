@@ -1,3 +1,9 @@
 .card {
   @include card-style(24px, 24px);
 }
+
+@media (max-width: 575px) {
+  .card.login-card {
+    box-shadow: none;
+  }
+}

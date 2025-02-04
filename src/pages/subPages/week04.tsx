@@ -62,8 +62,8 @@ export default function Week04() {
   /**
    * 處理分頁事件
    *
-   * @prop _ - ChangeEvent
-   * @prop page - 選取的頁數
+   * @param _ - ChangeEvent
+   * @param page - 選取的頁數
    */
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
@@ -73,7 +73,7 @@ export default function Week04() {
   /**
    * 處理登入頁 input 內容變更事件
    *
-   * @prop e - ChangeEvent
+   * @param e - ChangeEvent
    */
   const handleLoginInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -87,7 +87,7 @@ export default function Week04() {
   /**
    * 處理商品 input 內容變更事件
    *
-   * @prop e - ChangeEvent
+   * @param e - ChangeEvent
    */
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -134,7 +134,7 @@ export default function Week04() {
   /**
    * 處理 input 模糊事件
    *
-   * @prop e - ChangeEvent
+   * @param e - ChangeEvent
    */
   const handleInputBlur = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -153,7 +153,6 @@ export default function Week04() {
 
   /**
    * 處理開啟新增商品 modal 事件
-   *
    */
   const handleAddOpen = () => {
     setTempProduct({
@@ -174,7 +173,7 @@ export default function Week04() {
   /**
    * 處理開啟編輯商品 modal 事件
    *
-   * @prop editItem - 欲編輯的商品資料
+   * @param editItem - 欲編輯的商品資料
    */
   const handleEditOpen = (editItem?: ProductFullDatum) => {
     clearProductsValidation();
@@ -206,7 +205,7 @@ export default function Week04() {
   /**
    * 處理開啟刪除商品 modal 事件
    *
-   * @prop deleteItem - 欲刪除的商品資料
+   * @param deleteItem - 欲刪除的商品資料
    */
   const handleDeleteOpen = (deleteItem: ProductFullDatum) => {
     setDeleteItem(deleteItem);
@@ -215,7 +214,6 @@ export default function Week04() {
 
   /**
    * 處理新增商品事件
-   *
    */
   const handleSave = () => {
     doProductsValidation();
@@ -240,8 +238,8 @@ export default function Week04() {
   /**
    * 處理 checkbox 變更事件
    *
-   * @prop e - ChangeEvent
-   * @prop checkFn - 傳入的 useState
+   * @param e - ChangeEvent
+   * @param checkFn - 傳入的 useState
    */
   const handleCheckboxChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -260,7 +258,7 @@ export default function Week04() {
   /**
    * 處理 input 複製貼上事件
    *
-   * @prop e - ClipboardEvent
+   * @param e - ClipboardEvent
    */
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     const pasteData = e.clipboardData.getData('text');
@@ -272,7 +270,7 @@ export default function Week04() {
   /**
    * 呼叫登入驗證 API
    *
-   * @prop token - token
+   * @param token - token
    */
   const checkLogin = async (token: string) => {
     const result = await authService.checkLogin(token);
@@ -282,7 +280,7 @@ export default function Week04() {
   /**
    * 呼叫登出 API
    *
-   * @prop token - token
+   * @param token - token
    */
   const logout = async (token: string) => {
     authService.logout(token).then(() => {
@@ -294,7 +292,7 @@ export default function Week04() {
   /**
    * 呼叫圖片上傳 API
    *
-   * @prop e - ChangeEvent
+   * @param e - ChangeEvent
    */
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsLoginLoading(true);
@@ -320,7 +318,7 @@ export default function Week04() {
   /**
    * 呼叫取得商品列表 API
    *
-   * @prop page - 選取頁數
+   * @param page - 選取頁數
    */
   const getProducts = async (page?: number) => {
     setIsProductLoading(true);
@@ -339,7 +337,7 @@ export default function Week04() {
   /**
    * 呼叫新增商品列表 API
    *
-   * @prop addProductRequest - 新增產品 request
+   * @param addProductRequest - 新增產品 request
    */
   const addProduct = async (addProductRequest: AddProductRequest) => {
     setAddOpen(false);
@@ -362,8 +360,8 @@ export default function Week04() {
   /**
    * 呼叫編輯商品列表 API
    *
-   * @prop id - 商品 ID
-   * @prop editProductRequest - 編輯產品 request
+   * @param id - 商品 ID
+   * @param editProductRequest - 編輯產品 request
    */
   const editProduct = async (
     id: string,
@@ -388,7 +386,6 @@ export default function Week04() {
 
   /**
    * 呼叫刪除商品列表 API
-   *
    */
   const deleteProduct = async () => {
     setDeleteOpen(false);

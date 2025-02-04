@@ -8,6 +8,27 @@
   background-color: #f5f5f5;
 }
 
+.product-image {
+  display: flex;
+  justify-content: center;
+  button {
+    display: inline-flex;
+    padding: 0;
+    border: none;
+    background: none;
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
+  }
+}
+
+.my-swal-image {
+  margin: 0;
+}
+.my-swal-popup {
+  padding: 0;
+}
+
 @media (max-width: 991px) {
   .product-image {
     padding: 0;

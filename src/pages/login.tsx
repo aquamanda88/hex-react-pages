@@ -20,7 +20,7 @@ export default function Login({ formData, handleInputChange }: LoginProps) {
   /**
    * 處理 input 模糊事件
    *
-   * @prop e - ChangeEvent
+   * @param e - ChangeEvent
    */
   const handleInputBlur = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -49,7 +49,7 @@ export default function Login({ formData, handleInputChange }: LoginProps) {
   /**
    * 處理送出表單事件
    *
-   * @prop e - FormEvent
+   * @param e - FormEvent
    */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -78,7 +78,6 @@ export default function Login({ formData, handleInputChange }: LoginProps) {
 
   /**
    * 呼叫登入 API
-   *
    */
   const login = async () => {
     setIsLoginLoading(true);
@@ -127,9 +126,9 @@ export default function Login({ formData, handleInputChange }: LoginProps) {
       <div className={`${isLoginLoading ? 'd-flex' : 'd-none'} loading`}>
         <Spinners />
       </div>
-      <div className='container layout'>
+      <div className='container'>
         <div className='row justify-content-center mb-3'>
-          <div className='card col-4 col-md-6'>
+          <div className='login-card card col-12 col-md-6'>
             <h2 className='h2 mb-3 font-weight-normal text-center'>登入</h2>
             <form id='form' className='form-signin' onSubmit={handleSubmit}>
               <div className='form-input-group'>
