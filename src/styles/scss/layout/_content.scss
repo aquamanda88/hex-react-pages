@@ -16,5 +16,12 @@
 }
 
 .image-group {
+  display: grid;
   gap: 12px;
+  width: 100%;
+}
+
+.image-list {
+  flex-wrap: wrap;
+  gap: 24px 0;
 }

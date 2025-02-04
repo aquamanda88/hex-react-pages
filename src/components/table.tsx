@@ -50,7 +50,7 @@ const Table: React.FC<TableProps> = ({
             <tr key={item.id}>
               <td>{item.title}</td>
               <td>{item.content?.name ?? 'Untitled'}</td>
-              <td>{item.content?.artists_zh_tw ?? '未知的作者'}</td>
+              <td>{item.content?.artists_zh_tw  ?? '佚名'}</td>
               <td className='text-end'>{formatPrice(item.origin_price)}</td>
               <td className='text-end'>{formatPrice(item.price)}</td>
               <td

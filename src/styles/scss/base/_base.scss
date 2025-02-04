@@ -61,6 +61,11 @@ main.container-fluid {
   @include text-color($gray-500);
 }
 
+.row > * {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
 .w-8 {
   width: 8%;
 }

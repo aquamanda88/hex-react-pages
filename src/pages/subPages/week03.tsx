@@ -574,7 +574,7 @@ export default function Week03() {
                                   <td>{item.content?.name ?? 'Untitled'}</td>
                                   <td>
                                     {item.content?.artists_zh_tw ??
-                                      '未知的作者'}
+                                      '佚名'}
                                   </td>
                                   <td className='text-end'>
                                     {item.origin_price}
@@ -643,7 +643,7 @@ export default function Week03() {
                     </h5>
                     <p>
                       <span>
-                        {deleteItem?.content?.artists_zh_tw ?? '未知的作者'}{' '}
+                        {deleteItem?.content?.artists_zh_tw ?? '佚名'}{' '}
                       </span>
                       <span>
                         ({deleteItem?.content?.artists ?? 'Unknown'}),{' '}

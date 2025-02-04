@@ -58,6 +58,10 @@ export default function Week04() {
   const [deleteItem, setDeleteItem] = useState<ProductFullDatum>();
   const [tempProduct, setTempProduct] = useState<ProductFullDatum | null>(null);
   const [isEnabledChecked, setIsEnabledChecked] = useState(false);
+  const [subImagesMap, setSubImagesMap] = useState<{ [key: string]: string[] }>(
+    {}
+  );
+  const subImagesUrl = subImagesMap[tempProduct?.id ?? ''] || [];
 
   /**
    * 處理分頁事件
@@ -218,16 +222,36 @@ export default function Week04() {
   const handleSave = () => {
     doProductsValidation();
 
+    const keys: (keyof ContentDatum)[] = [
+      'artists',
+      'artists_zh_tw',
+      'name',
+      'year',
+      'content',
+    ];
+
+    keys.forEach((key) => {
+      if (tempProduct?.content?.[key] === '') {
+        delete tempProduct?.content[key];
+      }
+    });
+
+    if (tempProduct?.description === '') {
+      delete tempProduct?.description;
+    }
+
     if (
       tempProduct?.title !== '' &&
       tempProduct?.category !== '' &&
       tempProduct?.unit !== '' &&
-      !isNaN(tempProduct?.origin_price ?? 0) && tempProduct?.origin_price !== 0 &&
-      !isNaN(tempProduct?.price ?? 0) && tempProduct?.price !== 0
+      !isNaN(tempProduct?.origin_price ?? 0) &&
+      tempProduct?.origin_price !== 0 &&
+      !isNaN(tempProduct?.price ?? 0) &&
+      tempProduct?.price !== 0
     ) {
       const newTempProduct = { data: { ...tempProduct } };
       delete newTempProduct.data.id;
-      if (modalType === 'add') {       
+      if (modalType === 'add') {
         addProduct(newTempProduct);
       } else if (modalType === 'edit') {
         editProduct(tempProduct?.id ?? '', newTempProduct);
@@ -294,7 +318,10 @@ export default function Week04() {
    *
    * @param e - ChangeEvent
    */
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    type: string,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setIsLoginLoading(true);
     if (e.target.files !== null) {
       const file = e.target.files[0];
@@ -304,10 +331,25 @@ export default function Week04() {
       productApiService
         .uploadImage(formData)
         .then(({ data: { imageUrl } }) => {
-          setTempProduct({
-            ...tempProduct,
-            imageUrl: imageUrl,
-          });
+          if (type === 'sub' && tempProduct?.id) {
+            setSubImagesMap((prev) => ({
+              ...prev,
+              [tempProduct.id ?? '']: [
+                ...(prev[tempProduct.id ?? ''] || []),
+                imageUrl,
+              ],
+            }));
+
+            setTempProduct((prev) => ({
+              ...prev,
+              imagesUrl: [...(prev?.imagesUrl || []), imageUrl],
+            }));
+          } else {
+            setTempProduct({
+              ...tempProduct,
+              imageUrl: imageUrl,
+            });
+          }
         })
         .finally(() => {
           setIsLoginLoading(false);
@@ -504,13 +546,19 @@ export default function Week04() {
           getProducts().finally(() => {
             setIsLoginLoading(false);
           });
+          if (tempProduct?.id) {
+            setSubImagesMap((prev) => ({
+              ...prev,
+              [tempProduct?.id ?? '']: tempProduct.imagesUrl || [],
+            }));
+          }
         } else {
           setIsLoginLoading(false);
         }
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [tempProduct?.id]);
 
   return (
     <>
@@ -589,7 +637,7 @@ export default function Week04() {
                     </h5>
                     <p>
                       <span>
-                        {deleteItem?.content?.artists_zh_tw ?? '未知的作者'}{' '}
+                        {deleteItem?.content?.artists_zh_tw ?? '佚名'}{' '}
                       </span>
                       <span>
                         ({deleteItem?.content?.artists ?? 'Unknown'}),{' '}
@@ -603,10 +651,7 @@ export default function Week04() {
                         alt='主圖'
                       />
                     ) : (
-                      <InsertPhoto
-                        className='no-image-icon'
-                        color='disabled'
-                      />
+                      <InsertPhoto className='no-image-icon' color='disabled' />
                     )}
                   </div>
                 </div>
@@ -788,33 +833,78 @@ export default function Week04() {
                       </div>
                       <div className='col-md-6'>
                         <div className='d-grid'>
-                          <div className='image-group d-flex flex-column align-items-center'>
-                            <Button
-                              className='btn btn-primary w-100'
-                              component='label'
-                              variant='contained'
-                            >
-                              <CloudUpload />
-                              <p className='btn-icon'>上傳圖片</p>
-                              <VisuallyHiddenInput
-                                type='file'
-                                accept='.jpg,.jpeg,.png'
-                                onChange={handleImageUpload}
-                                multiple
-                              />
-                            </Button>
-                            {tempProduct?.imageUrl ? (
-                              <img
-                                src={tempProduct?.imageUrl}
-                                className='object-fit rounded'
-                                alt='主圖'
-                              />
-                            ) : (
-                              <InsertPhoto
-                                className='no-image-icon'
-                                color='disabled'
-                              />
-                            )}
+                          <div className='d-flex flex-column align-items-center'>
+                            <div className='image-group mb-4'>
+                              <Button
+                                className='btn btn-primary w-100'
+                                component='label'
+                                variant='contained'
+                              >
+                                <CloudUpload />
+                                <p className='btn-icon'>上傳主圖</p>
+                                <VisuallyHiddenInput
+                                  type='file'
+                                  accept='.jpg,.jpeg,.png'
+                                  onChange={(e) =>
+                                    handleImageUpload('major', e)
+                                  }
+                                  multiple
+                                />
+                              </Button>
+                              <div className='d-flex justify-content-center'>
+                                {tempProduct?.imageUrl ? (
+                                  <img
+                                    src={tempProduct?.imageUrl}
+                                    className='object-fit rounded'
+                                    alt='主圖'
+                                  />
+                                ) : (
+                                  <InsertPhoto
+                                    className='no-image-icon'
+                                    color='disabled'
+                                  />
+                                )}
+                              </div>
+                            </div>
+                            <div className='image-group'>
+                              <Button
+                                className='btn btn-primary w-100'
+                                component='label'
+                                variant='contained'
+                                disabled={
+                                  6 <=
+                                  (tempProduct?.imagesUrl?.length ??
+                                    subImagesUrl.length)
+                                }
+                              >
+                                <CloudUpload />
+                                <p className='btn-icon'>
+                                  {(tempProduct?.imagesUrl?.length ??
+                                    subImagesUrl.length) >= 6
+                                    ? `已達到張數上限`
+                                    : `上傳副圖（還可上傳 ${6 - ((tempProduct?.imagesUrl?.length ?? subImagesUrl.length) || 0)} 張）`}
+                                </p>
+                                <VisuallyHiddenInput
+                                  type='file'
+                                  accept='.jpg,.jpeg,.png'
+                                  onChange={(e) => handleImageUpload('sub', e)}
+                                  multiple
+                                />
+                              </Button>
+                              <ul className='image-list row'>
+                                {(tempProduct?.imagesUrl || subImagesUrl).map(
+                                  (item, index) => (
+                                    <li key={index} className='col-4'>
+                                      <img
+                                        className='sub-images rounded'
+                                        src={item}
+                                        alt={item}
+                                      />
+                                    </li>
+                                  )
+                                )}
+                              </ul>
+                            </div>
                           </div>
                         </div>
                       </div>

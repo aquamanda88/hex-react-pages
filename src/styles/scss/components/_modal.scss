@@ -13,6 +13,13 @@
   height: 300px;
 }
 
+.sub-images {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
 .no-image-icon.MuiSvgIcon-colorDisabled {
   font-size: 300px;
 }
