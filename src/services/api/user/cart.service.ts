@@ -1,6 +1,6 @@
-import axiosCustomer from '../../utils/api/axios-customization';
-import { basicConstant } from '../../core/constants/basic.constants';
-import { CartDataRequest } from '../../core/models/cart.model';
+import axiosCustomer from '../../../utils/api/axios-customization';
+import { basicConstant } from '../../../core/constants/basic.constants';
+import { CartDataRequest } from '../../../core/models/cart.model';
 
 /** 購物車 API 服務 */
 export class CartApiService {

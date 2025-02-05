@@ -9,8 +9,9 @@ import {
   CartDataRequest,
   CartsDatum,
 } from '../core/models/cart.model';
-import productApiService from '../services/user/products.service';
-import cartApiService from '../services/user/cart.service';
+import formatValueService from '../services/formatValue.service';
+import productApiService from '../services/api/user/products.service';
+import cartApiService from '../services/api/user/cart.service';
 import Swal from 'sweetalert2';
 
 export default function ProductDetail() {
@@ -142,20 +143,6 @@ export default function ProductDetail() {
     return carts.length;
   }
 
-  /**
-   * 價格加上千分位
-   *
-   * @param price - 價格
-   * @returns 加上千分位之價格
-   */
-  function formatPrice(price: number | undefined): string {
-    if (price) {
-      return new Intl.NumberFormat().format(price);
-    } else {
-      return '0';
-    }
-  }
-
   useEffect(() => {
     getProductDetail(id ?? '');
     getCart();
@@ -216,10 +203,12 @@ export default function ProductDetail() {
                 </h5>
                 <p className='font-zh-p-medium'>{product.description}</p>
                 <p className='font-en-h4-medium mb-0'>
-                  TWD {formatPrice(product.price)}
+                  TWD {formatValueService.formatPrice(product.price)}
                 </p>
                 <p className='font-en-p-regular text-secondary'>
-                  <del>TWD {formatPrice(product.origin_price)}</del>
+                  <del>
+                    TWD {formatValueService.formatPrice(product.origin_price)}
+                  </del>
                 </p>
 
                 <Button

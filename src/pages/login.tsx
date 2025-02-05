@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { LoginReq, LoginValidation } from '../core/models/admin/auth.model';
 import { Button, TextField } from '@mui/material';
-import authService from '../services/auth.service';
+import authService from '../services/api/auth.service';
 import { Spinners } from '../components';
 
 /** 元件參數型別 */

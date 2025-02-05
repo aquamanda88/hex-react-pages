@@ -1,5 +1,5 @@
-import axiosCustomer from '../../utils/api/axios-customization';
-import { basicConstant } from '../../core/constants/basic.constants';
+import axiosCustomer from '../../../utils/api/axios-customization';
+import { basicConstant } from '../../../core/constants/basic.constants';
 /** 產品 API 服務 */
 export class ProductApiService {
   /**

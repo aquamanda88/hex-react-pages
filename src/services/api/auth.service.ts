@@ -1,6 +1,6 @@
-import { LoginReq } from '../core/models/admin/auth.model';
-import { basicConstant } from '../core/constants/basic.constants';
-import axiosCustomer from '../utils/api/axios-customization';
+import { LoginReq } from '../../core/models/admin/auth.model';
+import { basicConstant } from '../../core/constants/basic.constants';
+import axiosCustomer from '../../utils/api/axios-customization';
 
 /** 登入 API 服務 */
 export class AuthService {

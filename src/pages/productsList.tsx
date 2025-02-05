@@ -5,8 +5,9 @@ import { MenuBar } from '../components';
 import { Favorite, FavoriteBorder } from '../components/icons';
 import { PaginationDatum, ProductFullDatum } from '../core/models/utils.model';
 import { CartsDatum } from '../core/models/cart.model';
-import productApiService from '../services/user/products.service';
-import cartApiService from '../services/user/cart.service';
+import formatValueService from '../services/formatValue.service';
+import productApiService from '../services/api/user/products.service';
+import cartApiService from '../services/api/user/cart.service';
 
 export default function ProductsList() {
   const [isProductLoading, setIsProductLoading] = useState(true);
@@ -109,32 +110,18 @@ export default function ProductsList() {
     return carts.length;
   }
 
-  /**
-   * 價格加上千分位
-   *
-   * @param price - 價格
-   * @returns 加上千分位之價格
-   */
-  function formatPrice(price: number | undefined): string {
-    if (price) {
-      return new Intl.NumberFormat().format(price);
-    } else {
-      return '0';
-    }
-  }
-
   function updateSkeletonCount(): void {
     const width = window.innerWidth;
-      if (width > 1024) {
-        setSkeletonCount(5);
-        setSkeletonWidth('20%');
-      } else if (width > 575) {
-        setSkeletonCount(2);
-        setSkeletonWidth('50%');
-      } else {
-        setSkeletonCount(1);
-        setSkeletonWidth('100%');
-      }
+    if (width > 1024) {
+      setSkeletonCount(5);
+      setSkeletonWidth('20%');
+    } else if (width > 575) {
+      setSkeletonCount(2);
+      setSkeletonWidth('50%');
+    } else {
+      setSkeletonCount(1);
+      setSkeletonWidth('100%');
+    }
   }
 
   useEffect(() => {
@@ -195,10 +182,12 @@ export default function ProductsList() {
                       />
                     </div>
                     <p className='font-en-h4-medium mb-0'>
-                      TWD {formatPrice(item.price)}
+                      TWD {formatValueService.formatPrice(item.price)}
                     </p>
                     <p className='font-en-p-regular text-secondary'>
-                      <del>TWD {formatPrice(item.origin_price)}</del>
+                      <del>
+                        TWD {formatValueService.formatPrice(item.origin_price)}
+                      </del>
                     </p>
                   </div>
                 </div>

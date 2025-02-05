@@ -8,7 +8,8 @@ import {
   CartDataRequest,
   CartsDatum,
 } from '../core/models/cart.model';
-import cartApiService from '../services/user/cart.service';
+import formatValueService from '../services/formatValue.service';
+import cartApiService from '../services/api/user/cart.service';
 import Swal from 'sweetalert2';
 import { AxiosError } from 'axios';
 
@@ -205,20 +206,6 @@ export default function Cart() {
     return carts.length;
   }
 
-  /**
-   * 價格加上千分位
-   *
-   * @param price - 價格
-   * @returns 加上千分位之價格
-   */
-  function formatPrice(price: number | undefined): string {
-    if (price) {
-      return new Intl.NumberFormat().format(price);
-    } else {
-      return '0';
-    }
-  }
-
   useEffect(() => {
     if (changedCart.length > 0) {
       editCart(changedCart);
@@ -284,11 +271,15 @@ export default function Cart() {
                       </td>
                       <td className='text-end col-md-2'>
                         <p className='font-en-p-medium'>
-                          TWD {formatPrice(item.product.price)}
+                          TWD{' '}
+                          {formatValueService.formatPrice(item.product.price)}
                         </p>
                         <p className='text-secondary'>
                           <del>
-                            TWD {formatPrice(item.product.origin_price)}
+                            TWD{' '}
+                            {formatValueService.formatPrice(
+                              item.product.origin_price
+                            )}
                           </del>
                         </p>
                       </td>
@@ -311,7 +302,7 @@ export default function Cart() {
                       </td>
                       <td className='text-end col-md-2'>
                         <p className='font-en-p-medium'>
-                          TWD {formatPrice(item.final_total)}
+                          TWD {formatValueService.formatPrice(item.final_total)}
                         </p>
                       </td>
                     </tr>
@@ -320,18 +311,20 @@ export default function Cart() {
               </table>
             </div>
             <Button
-                className='btn btn-secondary small mb-4'
-                variant='contained'
-                onClick={handleDeleteOpen}
-              >
-                清空購物車
-              </Button>
+              className='btn btn-secondary small mb-4'
+              variant='contained'
+              onClick={handleDeleteOpen}
+            >
+              清空購物車
+            </Button>
 
             <div className='row justify-content-end'>
               <div className='col-12 col-lg-6'>
                 <div className='d-flex justify-content-between'>
                   <h4>總金額</h4>
-                  <h3>TWD {formatPrice(cart?.final_total)}</h3>
+                  <h3>
+                    TWD {formatValueService.formatPrice(cart?.final_total)}
+                  </h3>
                 </div>
                 <div className='d-flex justify-content-end'>
                   <Button

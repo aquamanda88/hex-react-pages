@@ -21,8 +21,8 @@ import {
   ProductValidationMessage,
 } from '../../core/models/utils.model';
 import { LoginReq, LoginValidation } from '../../core/models/admin/auth.model';
-import authService from '../../services/auth.service';
-import productApiService from '../../services/admin/products.service';
+import authService from '../../services/api/auth.service';
+import productApiService from '../../services/api/admin/products.service';
 import Swal from 'sweetalert2';
 
 export default function Week03() {
@@ -784,7 +784,7 @@ export default function Week03() {
                               slotProps={{
                                 input: {
                                   inputProps: {
-                                    min: 0,
+                                    min: 1,
                                   },
                                 },
                               }}
@@ -808,7 +808,7 @@ export default function Week03() {
                               slotProps={{
                                 input: {
                                   inputProps: {
-                                    min: 0,
+                                    min: 1,
                                   },
                                 },
                               }}

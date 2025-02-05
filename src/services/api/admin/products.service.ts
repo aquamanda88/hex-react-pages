@@ -1,6 +1,6 @@
-import { AddProductRequest, EditProductRequest } from '../../core/models/utils.model';
-import { basicConstant } from '../../core/constants/basic.constants';
-import axiosCustomer from '../../utils/api/axios-customization';
+import { AddProductRequest, EditProductRequest } from '../../../core/models/utils.model';
+import { basicConstant } from '../../../core/constants/basic.constants';
+import axiosCustomer from '../../../utils/api/axios-customization';
 
 /** 產品 API 服務 */
 export class ProductApiService {

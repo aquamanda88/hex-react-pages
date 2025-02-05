@@ -21,8 +21,8 @@ import {
   ProductValidation,
   ProductValidationMessage,
 } from '../../core/models/utils.model';
-import authService from '../../services/auth.service';
-import productApiService from '../../services/admin/products.service';
+import authService from '../../services/api/auth.service';
+import productApiService from '../../services/api/admin/products.service';
 import Login from '../login';
 import Table from '../../components/table';
 import Swal from 'sweetalert2';

@@ -2,6 +2,7 @@ import React from 'react';
 import { IconButton } from '@mui/material';
 import { ProductFullDatum } from '../core/models/utils.model';
 import { Check, Close, Delete, Edit } from './icons';
+import formatValueService from '../services/formatValue.service';
 
 type TableProps = {
   /** 資料 */
@@ -17,20 +18,6 @@ const Table: React.FC<TableProps> = ({
   handleEditOpen,
   handleDeleteOpen,
 }) => {
-  /**
-   * 價格加上千分位
-   *
-   * @param price - 價格
-   * @returns 加上千分位之價格
-   */
-  function formatPrice(price: number | undefined): string {
-    if (price) {
-      return new Intl.NumberFormat().format(price);
-    } else {
-      return '0';
-    }
-  }
-
   return (
     <table className='table table-striped table-bordered mb-0'>
       <thead className='text-center'>
@@ -50,9 +37,13 @@ const Table: React.FC<TableProps> = ({
             <tr key={item.id}>
               <td>{item.title}</td>
               <td>{item.content?.name ?? 'Untitled'}</td>
-              <td>{item.content?.artists_zh_tw  ?? '佚名'}</td>
-              <td className='text-end'>{formatPrice(item.origin_price)}</td>
-              <td className='text-end'>{formatPrice(item.price)}</td>
+              <td>{item.content?.artists_zh_tw ?? '佚名'}</td>
+              <td className='text-end'>
+                {formatValueService.formatPrice(item.origin_price)}
+              </td>
+              <td className='text-end'>
+                {formatValueService.formatPrice(item.price)}
+              </td>
               <td
                 className={`${item.is_enabled ? 'text-success' : 'text-danger'} text-center`}
               >

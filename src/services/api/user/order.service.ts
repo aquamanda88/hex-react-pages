@@ -1,6 +1,6 @@
-import axiosCustomer from '../../utils/api/axios-customization';
-import { basicConstant } from '../../core/constants/basic.constants';
-import { OrderDataRequest } from '../../core/models/order.model';
+import axiosCustomer from '../../../utils/api/axios-customization';
+import { basicConstant } from '../../../core/constants/basic.constants';
+import { OrderDataRequest } from '../../../core/models/order.model';
 
 /** 訂單結帳 API 服務 */
 export class OrderApiService {

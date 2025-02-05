@@ -9,12 +9,14 @@ import {
   OrderDatum,
   OrderFormData,
 } from '../core/models/order.model';
-import { format } from 'date-fns/fp/format';
-import cartApiService from '../services/user/cart.service';
-import orderApiService from '../services/user/order.service';
+import checkPattenService from '../services/checkPatten.service';
+import formatValueService from '../services/formatValue.service';
+import cartApiService from '../services/api/user/cart.service';
+import orderApiService from '../services/api/user/order.service';
 import FormControl from '@mui/material/FormControl';
 import Swal from 'sweetalert2';
 import { CheckCircleOutline } from '../components/icons';
+import { regexConstant } from '../core/constants/regex.constant';
 
 const steps = ['填寫訂單資料', '確認訂單內容', '進行付款', '完成結帳'];
 
@@ -180,32 +182,6 @@ export default function Checkout({ activeStep }: CheckoutProps) {
     return carts.length;
   }
 
-  /**
-   * 價格加上千分位
-   *
-   * @param price - 價格
-   * @returns 加上千分位之價格
-   */
-  function formatPrice(price: number | undefined): string {
-    if (price) {
-      return new Intl.NumberFormat().format(price);
-    } else {
-      return '0';
-    }
-  }
-
-  /**
-   * 取得轉換後的日期
-   *
-   * @param secondsValue - 秒數
-   * @returns 轉換後的日期
-   */
-  function getDate(secondsValue: number): string {
-    const dateValue = new Date(secondsValue * 1000);
-    const formattedDate = format('yyyy/MM/dd HH:mm:ss')(dateValue);
-    return formattedDate;
-  }
-
   useEffect(() => {
     getCart();
     if (id) {
@@ -246,7 +222,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                             rules={{
                               required: '請輸入電子信箱',
                               pattern: {
-                                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                value: regexConstant.email,
                                 message: '請輸入有效的電子信箱',
                               },
                             }}
@@ -259,6 +235,15 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                                 helperText={
                                   errors.email ? errors.email.message : ' '
                                 }
+                                onChange={(e) => {
+                                  if (
+                                    checkPattenService.checkPatten(
+                                      '^[0-9a-zA-Z.@%_-]*$',
+                                      e
+                                    )
+                                  )
+                                    field.onChange(e.target.value);
+                                }}
                               />
                             )}
                           />
@@ -301,6 +286,15 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                                 helperText={
                                   errors.tel ? errors.tel.message : ' '
                                 }
+                                onChange={(e) => {
+                                  if (
+                                    checkPattenService.checkPatten(
+                                      '^\\d{0,10}$',
+                                      e
+                                    )
+                                  )
+                                    field.onChange(e.target.value);
+                                }}
                               />
                             )}
                           />
@@ -399,13 +393,19 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                             </td>
                             <td className='text-end col-md-2'>
                               <p className='font-en-p-medium'>
-                                TWD {formatPrice(item.product.price)}
+                                TWD{' '}
+                                {formatValueService.formatPrice(
+                                  item.product.price
+                                )}
                               </p>
                             </td>
                             <td className='col-md-1'>{item.qty}</td>
                             <td className='text-end col-md-2'>
                               <p className='font-en-p-medium'>
-                                TWD {formatPrice(item.final_total)}
+                                TWD{' '}
+                                {formatValueService.formatPrice(
+                                  item.final_total
+                                )}
                               </p>
                             </td>
                           </tr>
@@ -443,7 +443,9 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                     <div className='col-12 col-lg-6'>
                       <div className='d-flex justify-content-between'>
                         <h4>總金額</h4>
-                        <h3>TWD {formatPrice(cartData?.total)}</h3>
+                        <h3>
+                          TWD {formatValueService.formatPrice(cartData?.total)}
+                        </h3>
                       </div>
                       <div className='row'>
                         <div className='col-6'>
@@ -541,7 +543,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                                   <td className='text-end col-md-2'>
                                     <p className='font-en-p-medium'>
                                       TWD{' '}
-                                      {formatPrice(
+                                      {formatValueService.formatPrice(
                                         selectedOrderData.products[res].product
                                           .price
                                       )}
@@ -553,7 +555,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                                   <td className='text-end col-md-2'>
                                     <p className='font-en-p-medium'>
                                       TWD{' '}
-                                      {formatPrice(
+                                      {formatValueService.formatPrice(
                                         selectedOrderData.products[res]
                                           .final_total
                                       )}
@@ -588,7 +590,9 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                             </li>
                             <li>
                               訂單成立時間：
-                              {getDate(selectedOrderData?.create_at ?? 0)}
+                              {formatValueService.formatDate(
+                                selectedOrderData?.create_at ?? 0
+                              )}
                             </li>
                             <li>
                               訂單付款狀態：
@@ -599,7 +603,12 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                         <div className='col-12 col-lg-6'>
                           <div className='d-flex justify-content-between'>
                             <h4>總金額</h4>
-                            <h3>TWD {formatPrice(selectedOrderData?.total)}</h3>
+                            <h3>
+                              TWD{' '}
+                              {formatValueService.formatPrice(
+                                selectedOrderData?.total
+                              )}
+                            </h3>
                           </div>
                           <div className='row'>
                             <div className='col-6'>
@@ -662,11 +671,20 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                         </li>
                         <li className='d-flex justify-content-between'>
                           <p>訂單總金額</p>
-                          <p>TWD {formatPrice(selectedOrderData?.total)}</p>
+                          <p>
+                            TWD{' '}
+                            {formatValueService.formatPrice(
+                              selectedOrderData?.total
+                            )}
+                          </p>
                         </li>
                         <li className='d-flex justify-content-between'>
                           <p>訂單成立時間</p>
-                          <p>{getDate(selectedOrderData?.create_at ?? 0)}</p>
+                          <p>
+                            {formatValueService.formatDate(
+                              selectedOrderData?.create_at ?? 0
+                            )}
+                          </p>
                         </li>
                         <li className='d-flex justify-content-between'>
                           <p>付款狀態</p>
@@ -676,7 +694,11 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                         </li>
                         <li className='d-flex justify-content-between'>
                           <p>付款時間</p>
-                          <p>{getDate(selectedOrderData?.paid_date ?? 0)}</p>
+                          <p>
+                            {formatValueService.formatDate(
+                              selectedOrderData?.paid_date ?? 0
+                            )}
+                          </p>
                         </li>
                       </ul>
                       <Link to='/products' className='w-100'>
