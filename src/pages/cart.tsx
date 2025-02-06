@@ -159,6 +159,8 @@ export default function Cart() {
 
   /**
    * 呼叫刪除單一購物車資料 API
+   * 
+   * @param id - 購物車 ID
    */
   const deleteCartItem = async (id: string) => {
     setIsProductLoading(true);

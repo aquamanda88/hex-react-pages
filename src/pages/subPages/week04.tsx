@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import { Header, Modal, Spinners } from '../../components';
 import { Add, CloudUpload, InsertPhoto } from '../../components/icons';
-import { LoginReq } from '../../core/models/admin/auth.model';
 import {
   AddProductRequest,
   ContentDatum,
@@ -21,7 +20,7 @@ import {
   ProductValidation,
   ProductValidationMessage,
 } from '../../core/models/utils.model';
-import authService from '../../services/api/auth.service';
+import authService from '../../services/api/admin/auth.service';
 import productApiService from '../../services/api/admin/products.service';
 import Login from '../login';
 import Table from '../../components/table';
@@ -41,8 +40,6 @@ const VisuallyHiddenInput = styled('input')({
 
 export default function Week04() {
   const token = sessionStorage.getItem('token');
-
-  const [formData, setFormData] = useState<LoginReq>({});
   const [productErrors, setProductErrors] = useState<ProductValidation>({});
   const [productErrorsMessage, setProductErrorsMessage] =
     useState<ProductValidationMessage>({});
@@ -72,20 +69,6 @@ export default function Week04() {
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
     getProducts(page);
-  };
-
-  /**
-   * 處理登入頁 input 內容變更事件
-   *
-   * @param e - ChangeEvent
-   */
-  const handleLoginInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
   };
 
   /**
@@ -252,9 +235,9 @@ export default function Week04() {
       const newTempProduct = { data: { ...tempProduct } };
       delete newTempProduct.data.id;
       if (modalType === 'add') {
-        addProduct(newTempProduct);
+        addProductItem(newTempProduct);
       } else if (modalType === 'edit') {
-        editProduct(tempProduct?.id ?? '', newTempProduct);
+        editProductItem(tempProduct?.id ?? '', newTempProduct);
       }
     }
   };
@@ -386,7 +369,7 @@ export default function Week04() {
     setIsProductLoading(true);
 
     productApiService
-      .addProduct(addProductRequest)
+      .addProductItem(addProductRequest)
       .then(({ data: { message } }) => {
         getProducts();
         Swal.fire({
@@ -413,7 +396,7 @@ export default function Week04() {
     setIsProductLoading(true);
 
     productApiService
-      .editProduct(id, editProductRequest)
+      .editProductItem(id, editProductRequest)
       .then(({ data: { message } }) => {
         getProducts();
         Swal.fire({
@@ -434,7 +417,7 @@ export default function Week04() {
     setIsProductLoading(true);
 
     productApiService
-      .deleteProduct(deleteItem?.id ?? '')
+      .deleteProductItem(deleteItem?.id ?? '')
       .then(({ data: { message } }) => {
         getProducts();
         Swal.fire({
@@ -916,7 +899,7 @@ export default function Week04() {
           </div>
         </>
       ) : (
-        <Login formData={formData} handleInputChange={handleLoginInputChange} />
+        <Login />
       )}
     </>
   );

@@ -56,7 +56,7 @@ export class ProductApiService {
    * @param temporaryToken - 未保持登入時 token
    * @returns API 回傳的資料
    */
-  addProduct(addProductRequest: AddProductRequest) {
+  addProductItem(addProductRequest: AddProductRequest) {
     /** 權限 token */
     const token = sessionStorage.getItem('token');
 
@@ -79,7 +79,7 @@ export class ProductApiService {
    * @param temporaryToken - 未保持登入時 token
    * @returns API 回傳的資料
    */
-  editProduct(id: string, editProductRequest: EditProductRequest) {
+  editProductItem(id: string, editProductRequest: EditProductRequest) {
     /** 權限 token */
     const token = sessionStorage.getItem('token');
 
@@ -101,7 +101,7 @@ export class ProductApiService {
    * @param temporaryToken - 未保持登入時 token
    * @returns API 回傳的資料
    */
-  deleteProduct(id: string) {
+  deleteProductItem(id: string) {
     /** 權限 token */
     const token = sessionStorage.getItem('token');
 

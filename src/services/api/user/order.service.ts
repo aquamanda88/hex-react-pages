@@ -10,7 +10,7 @@ export class OrderApiService {
    * @param data - 欲送出訂單資料
    * @returns API 回傳的資料
    */
-  sendOrder(data: OrderDataRequest) {
+  sendOrderItem(data: OrderDataRequest) {
     return axiosCustomer.post(
       `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/order`,
       data
@@ -34,7 +34,7 @@ export class OrderApiService {
    * @param order_id - 訂單 ID
    * @returns API 回傳的資料
    */
-  getOrderData(order_id: string) {
+  getOrderItem(order_id: string) {
     return axiosCustomer.get(
       `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/order/${order_id}`
     );
@@ -46,7 +46,7 @@ export class OrderApiService {
    * @param order_id - 訂單 ID
    * @returns API 回傳的資料
    */
-  payOrder(order_id: string) {
+  sendPayment(order_id: string) {
     return axiosCustomer.post(
       `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/pay/${order_id}`
     );

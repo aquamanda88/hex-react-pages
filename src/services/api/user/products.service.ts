@@ -22,7 +22,7 @@ export class ProductApiService {
    * @param id - ID
    * @returns API 回傳的資料
    */
-  getProductDetail(id: string) {
+  getProductItem(id: string) {
     return axiosCustomer.get(
       `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/product/${id}`
     );

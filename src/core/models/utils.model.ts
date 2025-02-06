@@ -32,7 +32,7 @@ export interface PaginationDatum {
 export interface ProductDatum {
   /** 是否啟用 */
   is_enabled?: number;
-  /** 數量 */
+  /** 排序 */
   num?: number;
   /** 標題 */
   title?: string;

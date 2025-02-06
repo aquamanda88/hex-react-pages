@@ -67,11 +67,11 @@ export default function ProductDetail() {
    *
    * @param id - 商品 ID
    */
-  const getProductDetail = async (id: string) => {
+  const getProductItem = async (id: string) => {
     setIsProductLoading(true);
 
     productApiService
-      .getProductDetail(id)
+      .getProductItem(id)
       .then(({ data: { product } }) => {
         setProduct(product);
         setIsFavoriteChecked(checkFavoriteItem(id));
@@ -144,7 +144,7 @@ export default function ProductDetail() {
   }
 
   useEffect(() => {
-    getProductDetail(id ?? '');
+    getProductItem(id ?? '');
     getCarts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

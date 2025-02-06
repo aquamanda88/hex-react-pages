@@ -21,7 +21,7 @@ import {
   ProductValidationMessage,
 } from '../../core/models/utils.model';
 import { LoginReq, LoginValidation } from '../../core/models/admin/auth.model';
-import authService from '../../services/api/auth.service';
+import authService from '../../services/api/admin/auth.service';
 import productApiService from '../../services/api/admin/products.service';
 import Swal from 'sweetalert2';
 
@@ -233,9 +233,9 @@ export default function Week03() {
       delete newTempProduct.data.id;
 
       if (modalType === 'add') {
-        addProduct(newTempProduct);
+        addProductItem(newTempProduct);
       } else if (modalType === 'edit') {
-        editProduct(tempProduct!.id!, newTempProduct);
+        editProductItem(tempProduct!.id!, newTempProduct);
       }
     }
   };
@@ -343,7 +343,7 @@ export default function Week03() {
     setIsProductLoading(true);
 
     productApiService
-      .addProduct(addProductRequest)
+      .addProductItem(addProductRequest)
       .then(({ data: { message } }) => {
         getProducts();
         Swal.fire({
@@ -369,7 +369,7 @@ export default function Week03() {
     setIsProductLoading(true);
 
     productApiService
-      .editProduct(id, editProductRequest)
+      .editProductItem(id, editProductRequest)
       .then(({ data: { message } }) => {
         getProducts();
         Swal.fire({
@@ -389,7 +389,7 @@ export default function Week03() {
     setIsProductLoading(true);
 
     productApiService
-      .deleteProduct(deleteItem?.id ?? '')
+      .deleteProductItem(deleteItem?.id ?? '')
       .then(({ data: { message } }) => {
         getProducts();
         Swal.fire({

@@ -83,7 +83,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
         confirmButtonText: '確認送出',
       }).then((result) => {
         if (result.isConfirmed) {
-          sendOrder(orderData);
+          sendOrderItem(orderData);
         }
       });
     }
@@ -108,10 +108,10 @@ export default function Checkout({ activeStep }: CheckoutProps) {
   /**
    * 呼叫送出訂單 API
    */
-  const sendOrder = async (data: OrderDataRequest) => {
+  const sendOrderItem = async (data: OrderDataRequest) => {
     setIsProductLoading(true);
     orderApiService
-      .sendOrder(data)
+      .sendOrderItem(data)
       .then(({ data }) => {
         Swal.fire({
           icon: 'success',
@@ -131,10 +131,10 @@ export default function Checkout({ activeStep }: CheckoutProps) {
   /**
    * 呼叫特定訂單資料 API
    */
-  const getOrderData = async (order_id: string) => {
+  const getOrderItem = async (order_id: string) => {
     setIsProductLoading(true);
     orderApiService
-      .getOrderData(order_id)
+      .getOrderItem(order_id)
       .then(({ data: { order } }) => {
         setSelectedOrderData(order);
         const keys: string[] = Object.keys(order.products);
@@ -148,10 +148,10 @@ export default function Checkout({ activeStep }: CheckoutProps) {
   /**
    * 呼叫付款結帳 API
    */
-  const payOrder = async (order_id: string) => {
+  const sendPayment = async (order_id: string) => {
     setIsProductLoading(true);
     orderApiService
-      .payOrder(order_id)
+      .sendPayment(order_id)
       .then(({ data: { message } }) => {
         getCarts();
         Swal.fire({
@@ -161,7 +161,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
           if (result.isConfirmed && stepperRef.current) {
             stepperRef.current.nextStep();
             if (id) {
-              getOrderData(id);
+              getOrderItem(id);
             }
           }
         });
@@ -184,7 +184,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
   useEffect(() => {
     getCarts();
     if (id) {
-      getOrderData(id);
+      getOrderItem(id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -605,7 +605,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                                 className='btn btn-primary w-100'
                                 variant='contained'
                                 disabled={selectedOrderData?.is_paid}
-                                onClick={() => id && payOrder(id)}
+                                onClick={() => id && sendPayment(id)}
                               >
                                 {selectedOrderData?.is_paid
                                   ? '已付款'

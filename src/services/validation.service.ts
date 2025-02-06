@@ -6,6 +6,8 @@ export const errorMessages = {
   // Email
   emailRequire: '請輸入電子信箱',
   emailInvalid: '請輸入有效的電子信箱',
+  // 密碼
+  whisperRequire: '請輸入密碼',
   // 姓名
   nameRequire: '請輸入姓名',
   // 聯絡電話
@@ -29,6 +31,17 @@ export class ValidationService {
         value: regexConstant.email,
         message: errorMessages.emailInvalid,
       },
+    };
+  }
+
+  /**
+   * 取得密碼驗證規則
+   *
+   * @returns rules
+   */
+  static passwordValidator() {
+    return {
+      required: errorMessages.whisperRequire,
     };
   }
 

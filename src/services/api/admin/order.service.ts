@@ -22,7 +22,7 @@ export class OrderApiService {
    * @param data - 欲修改的訂單資料
    * @returns API 回傳的資料
    */
-  editOrder(id: string, data: CartDataRequest) {
+  editOrderItem(id: string, data: CartDataRequest) {
     return axiosCustomer.put(
       `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/order/${id}`,
       data

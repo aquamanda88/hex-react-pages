@@ -49,7 +49,7 @@ export interface OrderDataResponse {
   message?: string | string[];
   /** 訂單總價 */
   total?: number;
-  /** 訂單送出時間 */
+  /** 訂單送出時間 - 單位 (秒) */
   create_at?: number;
   /** 訂單 ID */
   orderId?: string;
@@ -83,13 +83,13 @@ export interface OrderDatum extends OrdersDatum {
 
 /** 訂單資料 */
 export interface OrdersDatum {
-  /** 訂單送出時間 */
+  /** 訂單送出時間 - 單位 (秒) */
   create_at?: number;
   /** 訂單 ID */
   id?: string;
   /** 是否已付款 */
   is_paid?: boolean;
-  /** 付款時間 */
+  /** 付款時間 - 單位 (秒) */
   paid_date?: number;
   /** 數量 */
   num?: number;
