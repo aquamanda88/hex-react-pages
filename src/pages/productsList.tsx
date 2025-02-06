@@ -78,10 +78,10 @@ export default function ProductsList() {
   /**
    * 呼叫取得購物車資料 API
    */
-  const getCart = async () => {
+  const getCarts = async () => {
     setIsProductLoading(true);
     cartApiService
-      .getCart()
+      .getCarts()
       .then(({ data: { data } }) => {
         setCartCount(calculateTotalQty(data.carts));
       })
@@ -127,7 +127,7 @@ export default function ProductsList() {
   useEffect(() => {
     updateSkeletonCount();
     getProducts();
-    getCart();
+    getCarts();
     window.addEventListener('resize', updateSkeletonCount); // 監聽視窗大小變化
     return () => window.removeEventListener('resize', updateSkeletonCount); // 移除監聽
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -153,10 +153,10 @@ export default function ProductsList() {
           ) : (
             products.map((item, index) => {
               return (
-                <div className='product-list-grid' key={item.id}>
+                <div className='product-list-grid position-relative' key={item.id}>
                   <Link
                     to={`/product/${item.id}`}
-                    className='product-image-item'
+                    className='product-image-item stretched-link'
                   >
                     <img
                       src={item.imageUrl}

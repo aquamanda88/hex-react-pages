@@ -97,10 +97,10 @@ export default function Cart() {
   /**
    * 呼叫取得購物車資料 API
    */
-  const getCart = async () => {
+  const getCarts = async () => {
     setIsProductLoading(true);
     cartApiService
-      .getCart()
+      .getCarts()
       .then(({ data: { data } }) => {
         setCart(data);
         setCartCount(calculateTotalQty(data.carts));
@@ -115,12 +115,12 @@ export default function Cart() {
    *
    * @param cartDataRequests - 產品資料 request 陣列
    */
-  const editCart = async (cartDataRequests: CartDataRequest[]) => {
+  const editCartItem = async (cartDataRequests: CartDataRequest[]) => {
     setIsProductLoading(true);
     try {
       const responses = await Promise.all(
         cartDataRequests.map((cartDataRequest) =>
-          cartApiService.editCart(
+          cartApiService.editCartItem(
             cartDataRequest.data.product_id,
             cartDataRequest
           )
@@ -165,7 +165,7 @@ export default function Cart() {
     cartApiService
       .deleteCartItem(id)
       .then(({ data: { message } }) => {
-        getCart();
+        getCarts();
         Swal.fire({
           icon: 'success',
           title: message,
@@ -185,7 +185,7 @@ export default function Cart() {
     cartApiService
       .deleteCarts()
       .then(({ data: { message } }) => {
-        getCart();
+        getCarts();
         Swal.fire({
           icon: 'success',
           title: message,
@@ -208,9 +208,9 @@ export default function Cart() {
 
   useEffect(() => {
     if (changedCart.length > 0) {
-      editCart(changedCart);
+      editCartItem(changedCart);
     }
-    getCart();
+    getCarts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changedCart]);
 

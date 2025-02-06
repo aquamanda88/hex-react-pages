@@ -10,7 +10,7 @@ export class CartApiService {
    * @param data - 加入購物車之產品資料
    * @returns API 回傳的資料
    */
-  addCart(data: CartDataRequest) {
+  addCartItem(data: CartDataRequest) {
     return axiosCustomer.post(
       `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/cart`,
       data
@@ -22,7 +22,7 @@ export class CartApiService {
    *
    * @returns API 回傳的資料
    */
-  getCart() {
+  getCarts() {
     return axiosCustomer.get(
       `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/cart`
     );
@@ -35,7 +35,7 @@ export class CartApiService {
    * @param data - 加入購物車之產品資料
    * @returns API 回傳的資料
    */
-  editCart(id: string, data: CartDataRequest) {
+  editCartItem(id: string, data: CartDataRequest) {
     return axiosCustomer.put(
       `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/cart/${id}`,
       data

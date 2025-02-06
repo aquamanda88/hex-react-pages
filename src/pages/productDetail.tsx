@@ -84,7 +84,7 @@ export default function ProductDetail() {
   /**
    * 呼叫加入購物車 API
    */
-  const addCart = async () => {
+  const addCartItem = async () => {
     const data: CartDataRequest = {
       data: {
         product_id: id ?? '',
@@ -94,13 +94,13 @@ export default function ProductDetail() {
 
     setIsProductLoading(true);
     cartApiService
-      .addCart(data)
+      .addCartItem(data)
       .then(({ data: { message } }) => {
         Swal.fire({
           icon: 'success',
           title: message,
         });
-        getCart();
+        getCarts();
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -110,10 +110,10 @@ export default function ProductDetail() {
   /**
    * 呼叫取得購物車資料 API
    */
-  const getCart = async () => {
+  const getCarts = async () => {
     setIsProductLoading(true);
     cartApiService
-      .getCart()
+      .getCarts()
       .then(({ data: { data } }) => {
         setCart(data);
         setCartCount(calculateTotalQty(data.carts));
@@ -145,7 +145,7 @@ export default function ProductDetail() {
 
   useEffect(() => {
     getProductDetail(id ?? '');
-    getCart();
+    getCarts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -160,15 +160,43 @@ export default function ProductDetail() {
           <div className='product-image col-12 col-lg-6'>
             {product.imageUrl ? (
               <button
+              className='hvr-glow'
                 type='button'
                 onClick={() =>
-                  handleImageClick(product.content!.name!, product.imageUrl!)
+                  handleImageClick(
+                    product.content?.name ?? 'Unknown',
+                    product.imageUrl ?? 'noImage'
+                  )
                 }
               >
-                <img src={product.imageUrl} className='object-fit' alt='主圖' />
+                <img
+                  src={product.imageUrl}
+                  className='object-fit'
+                  alt={product.content?.name ?? 'Unknown'}
+                />
               </button>
             ) : (
               <InsertPhoto className='no-image-icon' color='disabled' />
+            )}
+            {product.imagesUrl && (
+              <ul className='image-list row pt-4'>
+                {product.imagesUrl.map((item, index) => (
+                  <li key={index} className='col-2'>
+                    <button
+                      className='hvr-grow-shadow'
+                      type='button'
+                      onClick={() =>
+                        handleImageClick(
+                          product.content?.name ?? 'Unknown',
+                          item
+                        )
+                      }
+                    >
+                      <img className='sub-images' src={item} alt={item} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
             )}
           </div>
           <div className='detail-item col-12 col-lg-6'>
@@ -176,8 +204,8 @@ export default function ProductDetail() {
               <>
                 <div className='d-flex justify-content-between align-items-center'>
                   <h5 className='mb-0'>
-                    {product.content?.artists_zh_tw} ({product.content?.artists}
-                    )
+                    {product.content?.artists_zh_tw ?? '佚名'} (
+                    {product.content?.artists ?? 'Unknown'})
                   </h5>
                   <Checkbox
                     checked={isFavoriteChecked}
@@ -193,9 +221,11 @@ export default function ProductDetail() {
                 </div>
                 <h2 className='font-zh-h4-medium'>{product.title}</h2>
                 <h3 className='font-zh-h5-medium'>
-                  <i>{product.content?.name}</i>
+                  <i>{product.content?.name ?? 'Untitled'}</i>
                 </h3>
-                <h4 className='font-zh-h4-medium'>{product.content?.year}</h4>
+                <h4 className='font-zh-h4-medium'>
+                  {product.content?.year ?? 'Unknown'}
+                </h4>
                 <h5>
                   <span className='badge rounded-pill bg-secondary font-zh-p-regular'>
                     {product.category}
@@ -215,7 +245,7 @@ export default function ProductDetail() {
                   className='btn btn-primary w-100'
                   component='label'
                   variant='contained'
-                  onClick={addCart}
+                  onClick={addCartItem}
                 >
                   加入購物車
                 </Button>

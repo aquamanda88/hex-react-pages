@@ -9,14 +9,13 @@ import {
   OrderDatum,
   OrderFormData,
 } from '../core/models/order.model';
-import checkPattenService from '../services/checkPatten.service';
+import validationService from '../services/validation.service';
 import formatValueService from '../services/formatValue.service';
 import cartApiService from '../services/api/user/cart.service';
 import orderApiService from '../services/api/user/order.service';
 import FormControl from '@mui/material/FormControl';
 import Swal from 'sweetalert2';
 import { CheckCircleOutline } from '../components/icons';
-import { regexConstant } from '../core/constants/regex.constant';
 
 const steps = ['填寫訂單資料', '確認訂單內容', '進行付款', '完成結帳'];
 
@@ -93,10 +92,10 @@ export default function Checkout({ activeStep }: CheckoutProps) {
   /**
    * 呼叫取得購物車資料 API
    */
-  const getCart = async () => {
+  const getCarts = async () => {
     setIsProductLoading(true);
     cartApiService
-      .getCart()
+      .getCarts()
       .then(({ data: { data } }) => {
         setCartCount(calculateTotalQty(data.carts));
         setCartData(data);
@@ -154,7 +153,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
     orderApiService
       .payOrder(order_id)
       .then(({ data: { message } }) => {
-        getCart();
+        getCarts();
         Swal.fire({
           icon: 'success',
           title: message,
@@ -183,7 +182,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
   }
 
   useEffect(() => {
-    getCart();
+    getCarts();
     if (id) {
       getOrderData(id);
     }
@@ -219,30 +218,20 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                           <Controller
                             name='email'
                             control={control}
-                            rules={{
-                              required: '請輸入電子信箱',
-                              pattern: {
-                                value: regexConstant.email,
-                                message: '請輸入有效的電子信箱',
-                              },
-                            }}
+                            rules={validationService.emailValidator()}
                             render={({ field }) => (
                               <TextField
                                 {...field}
                                 label='電子信箱'
                                 type='email'
                                 error={!!errors.email}
-                                helperText={
-                                  errors.email ? errors.email.message : ' '
-                                }
+                                helperText={validationService.getHelperText(
+                                  errors.email
+                                )}
                                 onChange={(e) => {
-                                  if (
-                                    checkPattenService.checkPatten(
-                                      '^[0-9a-zA-Z.@%_-]*$',
-                                      e
-                                    )
-                                  )
+                                  if (validationService.isValidInput(e)) {
                                     field.onChange(e.target.value);
+                                  }
                                 }}
                               />
                             )}
@@ -252,16 +241,16 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                           <Controller
                             name='name'
                             control={control}
-                            rules={{ required: '姓名為必填' }}
+                            rules={validationService.nameValidator()}
                             render={({ field }) => (
                               <TextField
                                 {...field}
                                 label='訂購人姓名'
                                 type='text'
                                 error={!!errors.name}
-                                helperText={
-                                  errors.name ? errors.name.message : ' '
-                                }
+                                helperText={validationService.getHelperText(
+                                  errors.name
+                                )}
                               />
                             )}
                           />
@@ -270,30 +259,20 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                           <Controller
                             name='tel'
                             control={control}
-                            rules={{
-                              required: '聯絡電話為必填',
-                              minLength: {
-                                value: 8,
-                                message: '聯絡電話必須至少有 8 個字元',
-                              },
-                            }}
+                            rules={validationService.telValidator()}
                             render={({ field }) => (
                               <TextField
                                 {...field}
                                 label='聯絡電話'
                                 type='tel'
                                 error={!!errors.tel}
-                                helperText={
-                                  errors.tel ? errors.tel.message : ' '
-                                }
+                                helperText={validationService.getHelperText(
+                                  errors.tel
+                                )}
                                 onChange={(e) => {
-                                  if (
-                                    checkPattenService.checkPatten(
-                                      '^\\d{0,10}$',
-                                      e
-                                    )
-                                  )
+                                  if (validationService.isValidInput(e)) {
                                     field.onChange(e.target.value);
+                                  }
                                 }}
                               />
                             )}
@@ -303,16 +282,16 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                           <Controller
                             name='address'
                             control={control}
-                            rules={{ required: '收件地址為必填' }}
+                            rules={validationService.addressValidator()}
                             render={({ field }) => (
                               <TextField
                                 {...field}
                                 label='收件地址'
                                 type='text'
                                 error={!!errors.address}
-                                helperText={
-                                  errors.address ? errors.address.message : ' '
-                                }
+                                helperText={validationService.getHelperText(
+                                  errors.address
+                                )}
                               />
                             )}
                           />
