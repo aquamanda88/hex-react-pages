@@ -338,7 +338,7 @@ export default function Week03() {
    *
    * @param addProductRequest - 新增產品 request
    */
-  const addProduct = async (addProductRequest: AddProductRequest) => {
+  const addProductItem = async (addProductRequest: AddProductRequest) => {
     setAddOpen(false);
     setIsProductLoading(true);
 
@@ -361,7 +361,7 @@ export default function Week03() {
    * @param id - 商品 ID
    * @param editProductRequest - 編輯產品 request
    */
-  const editProduct = async (
+  const editProductItem = async (
     id: string,
     editProductRequest: EditProductRequest
   ) => {
