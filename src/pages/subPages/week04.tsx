@@ -59,6 +59,7 @@ export default function Week04() {
     {}
   );
   const subImagesUrl = subImagesMap[tempProduct?.id ?? ''] || [];
+  const [newSubImagesUrl, setNewSubImagesUrl] = useState<string[]>([]);
 
   /**
    * 處理分頁事件
@@ -151,6 +152,7 @@ export default function Week04() {
       origin_price: 0,
       price: 0,
     });
+    setNewSubImagesUrl([]);
     clearProductsValidation();
     setIsEnabledChecked(false);
     setModalType('add');
@@ -203,8 +205,7 @@ export default function Week04() {
    * 處理新增商品事件
    */
   const handleSave = () => {
-    doProductsValidation();
-
+    doProductsValidation();    
     const keys: (keyof ContentDatum)[] = [
       'artists',
       'artists_zh_tw',
@@ -234,7 +235,7 @@ export default function Week04() {
     ) {
       const newTempProduct = { data: { ...tempProduct } };
       delete newTempProduct.data.id;
-      if (modalType === 'add') {
+      if (modalType === 'add') {        
         addProductItem(newTempProduct);
       } else if (modalType === 'edit') {
         editProductItem(tempProduct?.id ?? '', newTempProduct);
@@ -314,19 +315,27 @@ export default function Week04() {
       productApiService
         .uploadImage(formData)
         .then(({ data: { imageUrl } }) => {
-          if (type === 'sub' && tempProduct?.id) {
-            setSubImagesMap((prev) => ({
-              ...prev,
-              [tempProduct.id ?? '']: [
-                ...(prev[tempProduct.id ?? ''] || []),
-                imageUrl,
-              ],
-            }));
-
+          if (type === 'sub') {
+            setNewSubImagesUrl((prev) => {
+              return [...prev, imageUrl];
+            });
             setTempProduct((prev) => ({
-              ...prev,
-              imagesUrl: [...(prev?.imagesUrl || []), imageUrl],
-            }));
+                ...prev,
+                imagesUrl: [...newSubImagesUrl, imageUrl],
+              }));
+            if (tempProduct?.id) {
+              setSubImagesMap((prev) => ({
+                ...prev,
+                [tempProduct.id ?? '']: [
+                  ...(prev[tempProduct.id ?? ''] || []),
+                  imageUrl,
+                ],
+              }));
+              setTempProduct((prev) => ({
+                ...prev,
+                imagesUrl: [...(prev?.imagesUrl || []), imageUrl],
+              }));
+            }
           } else {
             setTempProduct({
               ...tempProduct,
@@ -865,7 +874,7 @@ export default function Week04() {
                                   {(tempProduct?.imagesUrl?.length ??
                                     subImagesUrl.length) >= 6
                                     ? `已達到張數上限`
-                                    : `上傳副圖（還可上傳 ${6 - ((tempProduct?.imagesUrl?.length ?? subImagesUrl.length) || 0)} 張）`}
+                                    : `上傳副圖（還可上傳 ${6 - ((tempProduct?.imagesUrl?.length ?? newSubImagesUrl.length) || 0)} 張）`}
                                 </p>
                                 <VisuallyHiddenInput
                                   type='file'
@@ -875,8 +884,8 @@ export default function Week04() {
                                 />
                               </Button>
                               <ul className='image-list row'>
-                                {(tempProduct?.imagesUrl || subImagesUrl).map(
-                                  (item, index) => (
+                                {tempProduct?.imagesUrl &&
+                                  tempProduct?.imagesUrl.map((item, index) => (
                                     <li key={index} className='col-4'>
                                       <img
                                         className='sub-images rounded'
@@ -884,8 +893,18 @@ export default function Week04() {
                                         alt={item}
                                       />
                                     </li>
-                                  )
-                                )}
+                                  ))}
+                                {!tempProduct?.imagesUrl &&
+                                  newSubImagesUrl &&
+                                  newSubImagesUrl.map((item, index) => (
+                                    <li key={index} className='col-4'>
+                                      <img
+                                        className='sub-images rounded'
+                                        src={item}
+                                        alt={item}
+                                      />
+                                    </li>
+                                  ))}
                               </ul>
                             </div>
                           </div>

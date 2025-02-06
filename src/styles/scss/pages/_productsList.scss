@@ -6,6 +6,7 @@
 .product-image-item {
   overflow: hidden;
   height: 350px;
+  box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.12);
   .image-item {
     transition: transform 0.4s ease-in-out;
     will-change: transform;
@@ -47,6 +48,9 @@
   }
   .product-info-item .item-title .font-zh-h5 {
     height: 32px;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
