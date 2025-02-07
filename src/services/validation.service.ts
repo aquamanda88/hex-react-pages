@@ -8,6 +8,18 @@ export const errorMessages = {
   emailInvalid: '請輸入有效的電子信箱',
   // 密碼
   whisperRequire: '請輸入密碼',
+  // 作品名稱
+  titleRequire: '請輸入作品名稱',
+  // 分類
+  categoryRequire: '請輸入分類',
+  // 單位
+  unitRequire: '請輸入單位',
+  // 原價
+  originPriceRequire: '請輸入原價',
+  originPriceInvalid: '原價不可為 0',
+  // 售價
+  priceRequire: '請輸入售價',
+  priceInvalid: '售價不可為 0',
   // 姓名
   nameRequire: '請輸入姓名',
   // 聯絡電話
@@ -43,6 +55,67 @@ export class ValidationService {
     return {
       required: errorMessages.whisperRequire,
     };
+  }
+
+  /**
+   * 取得作品名稱驗證規則
+   *
+   * @returns rules
+   */
+  static titleValidator() {
+    return {
+      required: errorMessages.titleRequire,
+    };
+  }
+
+  /**
+   * 取得分類驗證規則
+   *
+   * @returns rules
+   */
+  static categoryValidator() {
+    return {
+      required: errorMessages.categoryRequire,
+    };
+  }
+
+  /**
+   * 取得單位驗證規則
+   *
+   * @returns rules
+   */
+  static unitValidator() {
+    return {
+      required: errorMessages.unitRequire,
+    };
+  }
+
+  /**
+   * 取得價格驗證規則
+   *
+   * @returns rules
+   */
+  static priceValidator(name: string) {
+    switch (name) {
+      case 'origin_price':
+        return {
+          required: errorMessages.originPriceRequire,
+          min: {
+            value: 1,
+            message: errorMessages.originPriceInvalid,
+          },
+        };
+      case 'price':
+        return {
+          required: errorMessages.priceRequire,
+          min: {
+            value: 1,
+            message: errorMessages.priceInvalid,
+          },
+        };
+      default:
+        break;
+    }
   }
 
   /**
@@ -112,6 +185,10 @@ export class ValidationService {
         return /^[0-9a-zA-Z.@%_-]*$/.test(value);
       case 'tel':
         return /^\d{0,10}$/.test(value);
+      case 'origin_price':
+        return /^\d/.test(value);
+      case 'price':
+        return /^\d/.test(value);
       default:
         return true;
     }

@@ -10,15 +10,20 @@ import {
   Pagination,
 } from '@mui/material';
 import { Header, Modal, Spinners } from '../../components';
-import { Add, Check, Close, Delete, Edit, InsertPhoto } from '../../components/icons';
+import {
+  Add,
+  Check,
+  Close,
+  Delete,
+  Edit,
+  InsertPhoto,
+} from '../../components/icons';
 import {
   AddProductRequest,
   ContentDatum,
   EditProductRequest,
   PaginationDatum,
   ProductFullDatum,
-  ProductValidation,
-  ProductValidationMessage,
 } from '../../core/models/utils.model';
 import { LoginReq, LoginValidation } from '../../core/models/admin/auth.model';
 import authService from '../../services/api/admin/auth.service';
@@ -30,9 +35,6 @@ export default function Week03() {
   const [formData, setFormData] = useState<LoginReq>({});
   const [loginErrors, setLoginErrors] = useState<LoginValidation>({});
   const [loginErrorsMessage, setLoginErrorsMessage] = useState<LoginReq>({});
-  const [productErrors, setProductErrors] = useState<ProductValidation>({});
-  const [productErrorsMessage, setProductErrorsMessage] =
-    useState<ProductValidationMessage>({});
   const [isLoginLoading, setIsLoginLoading] = useState(true);
   const [isProductLoading, setIsProductLoading] = useState(true);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
@@ -136,23 +138,6 @@ export default function Week03() {
           ? true
           : false,
     });
-    setProductErrors({
-      ...productErrors,
-      [name]: value === '' ? true : false,
-    });
-    setLoginErrorsMessage({
-      ...loginErrorsMessage,
-      [name]:
-        value === ''
-          ? getErrorMessageForField(name)
-          : !emailPattern.test(formData.username ?? '')
-            ? '請輸入有效的 Email'
-            : '',
-    });
-    setProductErrorsMessage({
-      ...productErrorsMessage,
-      [name]: value === '' ? getErrorMessageForField(name) : '',
-    });
   };
 
   /**
@@ -168,7 +153,6 @@ export default function Week03() {
       origin_price: 0,
       price: 0,
     });
-    clearProductsValidation();
     setIsEnabledChecked(false);
     setModalType('add');
     setAddOpen(true);
@@ -180,7 +164,6 @@ export default function Week03() {
    * @param editItem - 欲編輯的商品資料
    */
   const handleEditOpen = (editItem?: ProductFullDatum) => {
-    clearProductsValidation();
     setTempProduct({
       is_enabled: editItem?.is_enabled ?? 0,
       num: editItem?.num ?? 0,
@@ -220,8 +203,6 @@ export default function Week03() {
    * 處理新增商品事件
    */
   const handleSave = () => {
-    doProductsValidation();
-
     if (
       tempProduct?.title !== '' &&
       tempProduct?.category !== '' &&
@@ -401,101 +382,6 @@ export default function Week03() {
       });
   };
 
-  /**
-   * 初始化商品表單驗證
-   *
-   * @returns 無回傳值
-   */
-  function clearProductsValidation(): void {
-    setProductErrors({
-      title: false,
-      category: false,
-      unit: false,
-      origin_price: false,
-      price: false,
-    });
-    setProductErrorsMessage({
-      title: '',
-      category: '',
-      unit: '',
-      origin_price: '',
-      price: '',
-    });
-  }
-
-  /**
-   * 取得錯誤訊息
-   *
-   * @param inputName - input 欄位 name 屬性值
-   *
-   * @returns 相對應欄位之錯誤訊息
-   */
-  function getErrorMessageForField(inputName: string): string {
-    switch (inputName) {
-      case 'username':
-        return '請輸入帳號';
-      case 'password':
-        return '請輸入密碼';
-      case 'title':
-        return '請輸入作品名稱';
-      case 'category':
-        return '請輸入類型';
-      case 'unit':
-        return '請輸入單位';
-      case 'origin_price':
-        return '請輸入原價';
-      case 'price':
-        return '請輸入售價';
-      default:
-        return '';
-    }
-  }
-
-  /**
-   * 取得價格驗證錯誤訊息
-   *
-   * @param type - 價格類型
-   * @param price - 價格數值
-   *
-   * @returns 相對應欄位之錯誤訊息
-   */
-  function doPriceValidation(type: string, price: number): string {
-    if (price === 0) {
-      return `${type}不可為 0 元`;
-    } else if (isNaN(price) || Object.is(price, null)) {
-      return `請輸入${type}`;
-    } else if (price < 0) {
-      return `${type}不可為負數`;
-    } else {
-      return '';
-    }
-  }
-
-  /**
-   * 驗證商品表單
-   *
-   * @returns 無回傳值
-   */
-  function doProductsValidation(): void {
-    const errorMessage = {
-      title: tempProduct?.title === '' ? '請輸入作品名稱' : '',
-      category: tempProduct?.category === '' ? '請輸入分類' : '',
-      unit: tempProduct?.unit === '' ? '請輸入單位' : '',
-      origin_price: doPriceValidation('原價', tempProduct?.origin_price ?? 0),
-      price: doPriceValidation('售價', tempProduct?.price ?? 0),
-    };
-
-    setProductErrors({
-      title: tempProduct?.title === '',
-      category: tempProduct?.category === '',
-      unit: tempProduct?.unit === '',
-      origin_price:
-        doPriceValidation('原價', tempProduct?.origin_price ?? 0) !== '',
-      price: doPriceValidation('售價', tempProduct?.price ?? 0) !== '',
-    });
-    setProductErrorsMessage(errorMessage);
-  }
-
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     setLoginErrors({
@@ -573,8 +459,7 @@ export default function Week03() {
                                   <td>{item.title}</td>
                                   <td>{item.content?.name ?? 'Untitled'}</td>
                                   <td>
-                                    {item.content?.artists_zh_tw ??
-                                      '佚名'}
+                                    {item.content?.artists_zh_tw ?? '佚名'}
                                   </td>
                                   <td className='text-end'>
                                     {item.origin_price}
@@ -583,11 +468,7 @@ export default function Week03() {
                                   <td
                                     className={`${item.is_enabled ? 'text-success' : 'text-danger'} text-center`}
                                   >
-                                    {item.is_enabled ? (
-                                      <Check />
-                                    ) : (
-                                      <Close />
-                                    )}
+                                    {item.is_enabled ? <Check /> : <Close />}
                                   </td>
                                   <td className='text-center'>
                                     <IconButton
@@ -657,10 +538,7 @@ export default function Week03() {
                         alt='主圖'
                       />
                     ) : (
-                      <InsertPhoto
-                        className='no-image-icon'
-                        color='disabled'
-                      />
+                      <InsertPhoto className='no-image-icon' color='disabled' />
                     )}
                   </div>
                 </div>
@@ -683,13 +561,6 @@ export default function Week03() {
                             value={tempProduct?.title}
                             onChange={handleInputChange}
                             onBlur={handleInputBlur}
-                            error={productErrors.title}
-                            helperText={
-                              productErrorsMessage.title
-                                ? productErrorsMessage.title
-                                : ' '
-                            }
-                            required
                           />
                           <TextField
                             id='name'
@@ -748,13 +619,6 @@ export default function Week03() {
                               onChange={handleInputChange}
                               onBlur={handleInputBlur}
                               value={tempProduct?.category}
-                              error={productErrors.category}
-                              helperText={
-                                productErrorsMessage.category
-                                  ? productErrorsMessage.category
-                                  : ' '
-                              }
-                              required
                             />
                             <TextField
                               className='w-100'
@@ -765,13 +629,6 @@ export default function Week03() {
                               onChange={handleInputChange}
                               onBlur={handleInputBlur}
                               value={tempProduct?.unit}
-                              error={productErrors.unit}
-                              helperText={
-                                productErrorsMessage.unit
-                                  ? productErrorsMessage.unit
-                                  : ' '
-                              }
-                              required
                             />
                           </div>
                           <div className='d-flex gap-3'>
@@ -791,13 +648,6 @@ export default function Week03() {
                               onChange={handleInputChange}
                               onBlur={handleInputBlur}
                               value={tempProduct?.origin_price}
-                              error={productErrors.origin_price}
-                              helperText={
-                                productErrorsMessage.origin_price
-                                  ? productErrorsMessage.origin_price
-                                  : ' '
-                              }
-                              required
                             />
                             <TextField
                               className='w-100'
@@ -815,13 +665,6 @@ export default function Week03() {
                               onChange={handleInputChange}
                               onBlur={handleInputBlur}
                               value={tempProduct?.price}
-                              error={productErrors.price}
-                              helperText={
-                                productErrorsMessage.price
-                                  ? productErrorsMessage.price
-                                  : ' '
-                              }
-                              required
                             />
                           </div>
                         </div>

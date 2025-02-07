@@ -16,7 +16,7 @@ interface ModalProps {
   /** 確認按鈕的顯示文字 */
   confirmBtnText?: string;
   /** 確認按鈕的處理函式 */
-  handleConfirm: () => void;
+  handleConfirm?: () => void;
 }
 
 export default function Modal({
@@ -61,6 +61,8 @@ export default function Modal({
               <Button
                 className={`${confirmBtnText ? 'btn-danger' : 'btn-primary'} btn`}
                 variant='contained'
+                type='submit'
+                form='form'
                 onClick={handleConfirm}
               >
                 {confirmBtnText ? confirmBtnText : '儲存'}

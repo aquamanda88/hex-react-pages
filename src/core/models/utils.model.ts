@@ -60,6 +60,28 @@ export interface ProductFullDatum extends ProductDatum {
   id?: string;
 }
 
+/** 新增產品 request */
+export interface AddProductRequest {
+  /** 回傳格式 */
+  data: ProductDatum;
+}
+
+/** 編輯產品 request */
+export interface EditProductRequest {
+  /** 回傳格式 */
+  data: ProductDatum;
+}
+
+/** 擴充欄位 */
+export interface ProductItemDatum {
+  /** 描述 */
+  description?: string;
+  /** 主圖網址 */
+  imageUrl?: string;
+  /** 圖片網址陣列 */
+  imagesUrl?: string[];
+}
+
 /** 內容擴充欄位 */
 export interface ContentDatum {
   /** 內容 */
@@ -74,42 +96,36 @@ export interface ContentDatum {
   year?: string;
 }
 
-/** 新增產品 request */
-export interface AddProductRequest {
-  /** 回傳格式 */
-  data: ProductDatum;
-}
-
-/** 編輯產品 request */
-export interface EditProductRequest {
-  /** 回傳格式 */
-  data: ProductDatum;
-}
-
-/** 商品類 API 新增/編輯 驗證欄位 */
-export interface ProductValidation {
-  /** 標題 */
-  title?: boolean;
-  /** 分類 */
-  category?: boolean;
-  /** 單位 */
-  unit?: boolean;
-  /** 原價 */
-  origin_price?: boolean;
-  /** 售價 */
-  price?: boolean;
-}
-
-/** 商品類 API 新增/編輯 錯誤訊息欄位 */
-export interface ProductValidationMessage {
+/** 商品表單欄位 */
+export interface ProductForm {
+  /** 是否啟用 */
+  is_enabled?: number;
+  /** 排序 */
+  num?: number;
   /** 標題 */
   title?: string;
+  /** 描述 */
+  description?: string;
+  /** 內容 */
+  content?: string;
+  /** 作品名稱 */
+  name?: string;
+  /** 作者名稱 */
+  artists?: string;
+  /** 作者華文名稱 */
+  artists_zh_tw?: string;
+  /** 作品年份 */
+  year?: string;
   /** 分類 */
   category?: string;
   /** 單位 */
   unit?: string;
   /** 原價 */
-  origin_price?: string;
+  origin_price?: number;
   /** 售價 */
-  price?: string;
+  price?: number;
+  /** 主圖網址 */
+  imageUrl?: string;
+  /** 圖片網址陣列 */
+  imagesUrl?: string[];
 }

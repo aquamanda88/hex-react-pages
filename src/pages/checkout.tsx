@@ -296,7 +296,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                             )}
                           />
                         </FormControl>
-                        <FormControl error={!!errors.tel}>
+                        <FormControl>
                           <Controller
                             name='message'
                             control={control}
