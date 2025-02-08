@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 import { Button, IconButton, TextField } from '@mui/material';
 import { Spinners } from '../components';
-import { Close } from '../components/icons';
+import { Close, InsertPhoto } from '../components/icons';
 import { CartDataDatum, CartDataRequest } from '../core/models/cart.model';
 import {
   formatPrice,
@@ -235,11 +235,18 @@ export default function Cart() {
                       </td>
                       <td>
                         <NavLink to={`/product/${item.product.id}`}>
-                          <img
-                            className='cart-image'
-                            src={item.product.imageUrl}
-                            alt={item.product.content?.name}
-                          />
+                          {item.product.imageUrl ? (
+                            <img
+                              className='cart-image'
+                              src={item.product.imageUrl}
+                              alt={item.product.content?.name}
+                            />
+                          ) : (
+                            <InsertPhoto
+                              className='no-image-icon'
+                              color='disabled'
+                            />
+                          )}
                         </NavLink>
                       </td>
                       <td className='text-start'>

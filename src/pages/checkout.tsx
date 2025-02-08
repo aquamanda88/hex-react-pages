@@ -9,13 +9,17 @@ import {
   OrderDatum,
   OrderFormData,
 } from '../core/models/order.model';
-import { formatPrice, formatDate } from '../services/formatValue.service';
+import {
+  formatPrice,
+  formatDate,
+  formatUnknownText,
+} from '../services/formatValue.service';
 import validationService from '../services/validation.service';
 import cartApiService from '../services/api/user/cart.service';
 import orderApiService from '../services/api/user/order.service';
 import FormControl from '@mui/material/FormControl';
 import Swal from 'sweetalert2';
-import { CheckCircleOutline } from '../components/icons';
+import { CheckCircleOutline, InsertPhoto } from '../components/icons';
 
 const steps = ['填寫訂單資料', '確認訂單內容', '進行付款', '完成結帳'];
 
@@ -341,11 +345,18 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                           <tr key={item.id}>
                             <td>
                               <NavLink to={`/product/${item.product.id}`}>
-                                <img
-                                  className='cart-image'
-                                  src={item.product.imageUrl}
-                                  alt={item.product.content?.name}
-                                />
+                                {item.product.imageUrl ? (
+                                  <img
+                                    className='cart-image'
+                                    src={item.product.imageUrl}
+                                    alt={item.product.content?.name}
+                                  />
+                                ) : (
+                                  <InsertPhoto
+                                    className='no-image-icon'
+                                    color='disabled'
+                                  />
+                                )}
                               </NavLink>
                             </td>
                             <td className='text-start'>
@@ -355,14 +366,24 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                               >
                                 <p>{item.product.title}</p>
                                 <p>
-                                  <small>({item.product.content?.name})</small>
+                                  <small>
+                                    (
+                                    {formatUnknownText(
+                                      'name',
+                                      item.product.content?.name
+                                    )}
+                                    )
+                                  </small>
                                 </p>
                               </NavLink>
                             </td>
                             <td className='text-start'>
                               <p>
                                 作者：
-                                {item.product.content?.artists_zh_tw}
+                                {formatUnknownText(
+                                  'artists_zh_tw',
+                                  item.product.content?.artists_zh_tw
+                                )}
                               </p>
                               <p>
                                 媒材：
