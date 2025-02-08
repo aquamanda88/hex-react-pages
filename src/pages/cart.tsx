@@ -205,7 +205,7 @@ export default function Cart() {
 
   return (
     <>
-      <div className='container py-4'>
+      <div className='content-layout container'>
         <div className={`${isProductLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />
         </div>

@@ -16,7 +16,10 @@ axiosInstance.interceptors.request.use(
 );
 
 const goToPage = (path: string) => {
-  window.location.href = path;
+  const env = process.env.NODE_ENV;
+  const url =
+    env === 'production' ? `/hex-react-pages/#/${path}` : `/#/${path}`;
+  window.location.href = url;
 };
 
 /**
@@ -51,13 +54,13 @@ function formatErrorMessage(message: string, status?: number) {
         window.location.reload();
         break;
       case '禁止使用, 請確認 api_path 是否為本人使用。':
-        goToPage('/#/products');
+        goToPage('products');
         break;
     }
 
     switch (status) {
       case 404:
-        goToPage('/#/pageNotFound');
+        goToPage('pageNotFound');
         break;
     }
   });

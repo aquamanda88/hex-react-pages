@@ -8,7 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import authService from '../services/api/admin/auth.service';
 import Spinners from './spinners';
-import { Source, Drafts } from './icons';
+import { Source } from './icons';
 
 export default function MenuList() {
   const token = sessionStorage.getItem('token') ?? '';
@@ -51,7 +51,7 @@ export default function MenuList() {
           <h2 className='font-en-h3'>Olive Branch</h2>
           <Divider className='bg-white' />
           <List component='nav' aria-label='main mailbox folders'>
-            <NavLink to='/dashboard/products'>
+            <NavLink to='/admin/products'>
               <ListItemButton
                 className='list-item'
                 selected={selectedIndex === 0}
@@ -61,7 +61,7 @@ export default function MenuList() {
                 <ListItemText primary='商品總覽' />
               </ListItemButton>
             </NavLink>
-            <NavLink to='/dashboard/orders'>
+            {/* <NavLink to='/admin/orders'>
               <ListItemButton
                 className='list-item'
                 selected={selectedIndex === 1}
@@ -70,7 +70,7 @@ export default function MenuList() {
                 <Drafts />
                 <ListItemText primary='管理訂單' />
               </ListItemButton>
-            </NavLink>
+            </NavLink> */}
           </List>
         </div>
         <div className='list-footer'>

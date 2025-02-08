@@ -1,4 +1,4 @@
-import axiosCustomer from '../../../utils/api/axios-customization';
+import axiosInstance from '../../../utils/axiosInstance';
 import { CartDataRequest } from '../../../core/models/cart.model';
 const { VITE_API, VITE_API_PATH } = import.meta.env;
 
@@ -11,7 +11,7 @@ export class CartApiService {
    * @returns API 回傳的資料
    */
   addCartItem(data: CartDataRequest) {
-    return axiosCustomer.post(
+    return axiosInstance.post(
       `${VITE_API}/api/${VITE_API_PATH}/cart`,
       data
     );
@@ -23,7 +23,7 @@ export class CartApiService {
    * @returns API 回傳的資料
    */
   getCarts() {
-    return axiosCustomer.get(
+    return axiosInstance.get(
       `${VITE_API}/api/${VITE_API_PATH}/cart`
     );
   }
@@ -36,7 +36,7 @@ export class CartApiService {
    * @returns API 回傳的資料
    */
   editCartItem(id: string, data: CartDataRequest) {
-    return axiosCustomer.put(
+    return axiosInstance.put(
       `${VITE_API}/api/${VITE_API_PATH}/cart/${id}`,
       data
     );
@@ -49,7 +49,7 @@ export class CartApiService {
    * @returns API 回傳的資料
    */
   deleteCartItem(id: string) {
-    return axiosCustomer.delete(
+    return axiosInstance.delete(
       `${VITE_API}/api/${VITE_API_PATH}/cart/${id}`
     );
   }
@@ -60,7 +60,7 @@ export class CartApiService {
    * @returns API 回傳的資料
    */
   deleteCarts() {
-    return axiosCustomer.delete(
+    return axiosInstance.delete(
       `${VITE_API}/api/${VITE_API_PATH}/carts`
     );
   }

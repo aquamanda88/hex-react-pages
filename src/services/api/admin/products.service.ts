@@ -1,5 +1,5 @@
 import { AddProductRequest, EditProductRequest } from '../../../core/models/utils.model';
-import axiosCustomer from '../../../utils/api/axios-customization';
+import axiosInstance from '../../../utils/axiosInstance';
 const { VITE_API, VITE_API_PATH } = import.meta.env;
 
 /** 產品 API 服務 */
@@ -15,7 +15,7 @@ export class ProductApiService {
     /** 權限 token */
     const token = sessionStorage.getItem('token');
 
-    return axiosCustomer.post(
+    return axiosInstance.post(
       `${VITE_API}/api/${VITE_API_PATH}/admin/upload`,
       imageData,
       {
@@ -39,7 +39,7 @@ export class ProductApiService {
     /** API 網址 */
     const URL_PATH = page ? `products?page=${page}` : 'products';
 
-    return axiosCustomer.get(
+    return axiosInstance.get(
       `${VITE_API}/api/${VITE_API_PATH}/admin/${URL_PATH}`,
       {
         headers: {
@@ -60,7 +60,7 @@ export class ProductApiService {
     /** 權限 token */
     const token = sessionStorage.getItem('token');
 
-    return axiosCustomer.post(
+    return axiosInstance.post(
       `${VITE_API}/api/${VITE_API_PATH}/admin/product`,
       addProductRequest,
       {
@@ -83,7 +83,7 @@ export class ProductApiService {
     /** 權限 token */
     const token = sessionStorage.getItem('token');
 
-    return axiosCustomer.put(
+    return axiosInstance.put(
       `${VITE_API}/api/${VITE_API_PATH}/admin/product/${id}`,
       editProductRequest,
       {
@@ -105,7 +105,7 @@ export class ProductApiService {
     /** 權限 token */
     const token = sessionStorage.getItem('token');
 
-    return axiosCustomer.delete(
+    return axiosInstance.delete(
       `${VITE_API}/api/${VITE_API_PATH}/admin/product/${id}`,
       {
         headers: {

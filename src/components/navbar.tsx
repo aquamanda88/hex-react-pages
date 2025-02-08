@@ -60,9 +60,14 @@ export default function NavBar({ cartCount }: NavBarProps) {
       <nav className='menu-bar navbar navbar-light bg-white'>
         <div className='container'>
           <div className='menu-bar-list'>
-            <NavLink to='/products'>
-              <Button className='btn btn-primary'>全部商品</Button>
-            </NavLink>
+            <div className='d-flex'>
+              <NavLink to='/products'>
+                <Button className='btn btn-secondary'>全部商品</Button>
+              </NavLink>
+              <NavLink to='/admin'>
+                <Button className='btn btn-secondary'>後台</Button>
+              </NavLink>
+            </div>
             <div className='page-bar'>
               <NavLink to='/cart'>
                 <IconButton>

@@ -51,7 +51,7 @@ const routes = [
     ],
   },
   {
-    path: '/dashboard',
+    path: '/admin',
     element: <AdminLayout />,
     children: [
       {

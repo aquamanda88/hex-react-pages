@@ -105,7 +105,7 @@ export default function ProductsList() {
 
   return (
     <>
-      <div className='container py-4'>
+      <div className='content-layout container'>
         <div className='row mb-4'>
           {isProductLoading ? (
             <>
