@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import { Bookmark, Logout, ShoppingCart } from './icons';
 import {
   Badge,
@@ -34,16 +34,16 @@ export default function MenuBar({ cartCount }: MenuBarProps) {
       <nav className='menu-bar navbar navbar-light bg-white'>
         <div className='container'>
           <div className='menu-bar-list'>
-            <Link to='/products'>
+            <NavLink to='/products'>
               <Button className='btn btn-primary'>全部商品</Button>
-            </Link>
-            <Link to='/cart'>
+            </NavLink>
+            <NavLink to='/cart'>
               <IconButton>
                 <Badge badgeContent={cartCount} color='primary'>
                   <ShoppingCart />
                 </Badge>
               </IconButton>
-            </Link>
+            </NavLink>
             {/* <IconButton id='basic-button' onClick={handleClick}>
               <PersonIcon />
             </IconButton> */}

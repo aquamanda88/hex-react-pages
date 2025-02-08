@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import { Checkbox, Pagination, Skeleton, Stack } from '@mui/material';
 import { MenuBar } from '../components';
 import { Favorite, FavoriteBorder } from '../components/icons';
@@ -154,7 +154,7 @@ export default function ProductsList() {
             products.map((item, index) => {
               return (
                 <div className='product-list-grid position-relative' key={item.id}>
-                  <Link
+                  <NavLink
                     to={`/product/${item.id}`}
                     className='product-image-item stretched-link'
                   >
@@ -163,7 +163,7 @@ export default function ProductsList() {
                       className='image-item'
                       alt={item.imageUrl}
                     ></img>
-                  </Link>
+                  </NavLink>
                   <div className='product-info-item'>
                     <div className='item-title d-flex justify-content-between align-items-start'>
                       <h3 className='font-zh-h5'>{item.title}</h3>

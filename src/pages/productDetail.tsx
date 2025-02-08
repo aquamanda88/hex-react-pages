@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Button, Checkbox } from '@mui/material';
 import { MenuBar, Spinners } from '../components';
 import { Favorite, FavoriteBorder, InsertPhoto } from '../components/icons';

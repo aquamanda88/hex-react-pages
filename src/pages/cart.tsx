@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router';
 import { Button, IconButton, TextField } from '@mui/material';
 import { MenuBar, Spinners } from '../components';
 import { Close } from '../components/icons';
@@ -248,16 +248,16 @@ export default function Cart() {
                         </IconButton>
                       </td>
                       <td>
-                        <Link to={`/product/${item.product.id}`}>
+                        <NavLink to={`/product/${item.product.id}`}>
                           <img
                             className='cart-image'
                             src={item.product.imageUrl}
                             alt={item.product.content?.name}
                           />
-                        </Link>
+                        </NavLink>
                       </td>
                       <td className='text-start'>
-                        <Link
+                        <NavLink
                           className='link-button'
                           to={`/product/${item.product.id}`}
                         >
@@ -265,7 +265,7 @@ export default function Cart() {
                           <p>
                             <small>({item.product.content?.name})</small>
                           </p>
-                        </Link>
+                        </NavLink>
                       </td>
                       <td className='text-start'>
                         <p>作者：{item.product.content?.artists_zh_tw}</p>
@@ -345,9 +345,9 @@ export default function Cart() {
             <div className='d-flex justify-content-center'>
               <h2 className='font-zh-h2'>
                 您的購物車中沒有商品，
-                <Link to='/products' className='text-color-main d-inline-flex'>
+                <NavLink to='/products' className='text-color-main d-inline-flex'>
                   <p className='btn-icon'>立即去選購</p>
-                </Link>
+                </NavLink>
               </h2>
             </div>
           </div>
