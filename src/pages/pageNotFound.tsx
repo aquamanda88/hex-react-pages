@@ -15,7 +15,7 @@ export default function PageNotFound() {
             </h1>
           </div>
           <h2>we are sorry, but the page you requested was not found</h2>
-          <NavLink to='/products' className='d-flex justify-content-center'>
+          <NavLink to='/products' className='d-inline-block'>
             <Button
               className='btn btn-secondary small mb-4'
               variant='contained'
