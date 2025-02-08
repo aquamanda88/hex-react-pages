@@ -1,6 +1,6 @@
 import axiosCustomer from '../../../utils/api/axios-customization';
-import { basicConstant } from '../../../core/constants/basic.constants';
 import { OrderDataRequest } from '../../../core/models/order.model';
+const { VITE_API, VITE_API_PATH } = import.meta.env;
 
 /** 訂單結帳 API 服務 */
 export class OrderApiService {
@@ -12,7 +12,7 @@ export class OrderApiService {
    */
   sendOrderItem(data: OrderDataRequest) {
     return axiosCustomer.post(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/order`,
+      `${VITE_API}/api/${VITE_API_PATH}/order`,
       data
     );
   }
@@ -24,7 +24,7 @@ export class OrderApiService {
    */
   getOrders() {
     return axiosCustomer.get(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/orders`
+      `${VITE_API}/api/${VITE_API_PATH}/orders`
     );
   }
 
@@ -36,7 +36,7 @@ export class OrderApiService {
    */
   getOrderItem(order_id: string) {
     return axiosCustomer.get(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/order/${order_id}`
+      `${VITE_API}/api/${VITE_API_PATH}/order/${order_id}`
     );
   }
 
@@ -48,7 +48,7 @@ export class OrderApiService {
    */
   sendPayment(order_id: string) {
     return axiosCustomer.post(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/pay/${order_id}`
+      `${VITE_API}/api/${VITE_API_PATH}/pay/${order_id}`
     );
   }
 }

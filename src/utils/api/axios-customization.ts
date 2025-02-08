@@ -1,8 +1,9 @@
 import axios from 'axios';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
+const { VITE_API } = import.meta.env;
 
 const axiosInstance = axios.create({
-  baseURL: 'https://ec-course-api.hexschool.io/v2',
+  baseURL: VITE_API,
 });
 
 axiosInstance.interceptors.request.use(

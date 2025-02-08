@@ -1,6 +1,6 @@
 import axiosCustomer from '../../../utils/api/axios-customization';
-import { basicConstant } from '../../../core/constants/basic.constants';
 import { CartDataRequest } from '../../../core/models/cart.model';
+const { VITE_API, VITE_API_PATH } = import.meta.env;
 
 /** 訂單結帳 API 服務 */
 export class OrderApiService {
@@ -11,7 +11,7 @@ export class OrderApiService {
    */
   getOrders() {
     return axiosCustomer.get(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/orders`
+      `${VITE_API}/api/${VITE_API_PATH}/admin/orders`
     );
   }
 
@@ -24,7 +24,7 @@ export class OrderApiService {
    */
   editOrderItem(id: string, data: CartDataRequest) {
     return axiosCustomer.put(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/order/${id}`,
+      `${VITE_API}/api/${VITE_API_PATH}/admin/order/${id}`,
       data
     );
   }
@@ -37,7 +37,7 @@ export class OrderApiService {
    */
   deleteOrderItem(id: string) {
     return axiosCustomer.delete(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/order/${id}`
+      `${VITE_API}/api/${VITE_API_PATH}/admin/order/${id}`
     );
   }
 
@@ -48,7 +48,7 @@ export class OrderApiService {
    */
   deleteOrders() {
     return axiosCustomer.delete(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/orders/all`
+      `${VITE_API}/api/${VITE_API_PATH}/admin/orders/all`
     );
   }
 }

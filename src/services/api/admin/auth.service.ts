@@ -1,5 +1,5 @@
 import { LoginReq } from '../../../core/models/admin/auth.model';
-import { basicConstant } from '../../../core/constants/basic.constants';
+const { VITE_API } = import.meta.env;
 import axiosCustomer from '../../../utils/api/axios-customization';
 
 /** 登入 API 服務 */
@@ -11,7 +11,7 @@ export class AuthService {
    * @returns API 回傳的資料
    */
   login(formData: LoginReq) {
-    return axiosCustomer.post(`${basicConstant.API_BASE}/admin/signin`, formData, {});
+    return axiosCustomer.post(`${VITE_API}/admin/signin`, formData, {});
   }
 
   /**
@@ -22,7 +22,7 @@ export class AuthService {
    */
   checkLogin(token: string) {
     return axiosCustomer.post(
-      `${basicConstant.API_BASE}/api/user/check`,
+      `${VITE_API}/api/user/check`,
       {},
       {
         headers: {
@@ -40,7 +40,7 @@ export class AuthService {
    */
   logout(token: string) {
     return axiosCustomer.post(
-      `${basicConstant.API_BASE}/logout`,
+      `${VITE_API}/logout`,
       {},
       {
         headers: {

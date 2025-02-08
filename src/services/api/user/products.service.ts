@@ -1,5 +1,6 @@
 import axiosCustomer from '../../../utils/api/axios-customization';
-import { basicConstant } from '../../../core/constants/basic.constants';
+const { VITE_API, VITE_API_PATH } = import.meta.env;
+
 /** 產品 API 服務 */
 export class ProductApiService {
   /**
@@ -12,7 +13,7 @@ export class ProductApiService {
     /** API 網址 */
     const URL_PATH = page ? `products?page=${page}` : 'products';
     return axiosCustomer.get(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/${URL_PATH}`
+      `${VITE_API}/api/${VITE_API_PATH}/${URL_PATH}`
     );
   }
 
@@ -24,7 +25,7 @@ export class ProductApiService {
    */
   getProductItem(id: string) {
     return axiosCustomer.get(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/product/${id}`
+      `${VITE_API}/api/${VITE_API_PATH}/product/${id}`
     );
   }
 }

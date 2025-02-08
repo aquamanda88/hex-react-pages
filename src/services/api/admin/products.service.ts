@@ -1,6 +1,6 @@
 import { AddProductRequest, EditProductRequest } from '../../../core/models/utils.model';
-import { basicConstant } from '../../../core/constants/basic.constants';
 import axiosCustomer from '../../../utils/api/axios-customization';
+const { VITE_API, VITE_API_PATH } = import.meta.env;
 
 /** 產品 API 服務 */
 export class ProductApiService {
@@ -16,7 +16,7 @@ export class ProductApiService {
     const token = sessionStorage.getItem('token');
 
     return axiosCustomer.post(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/upload`,
+      `${VITE_API}/api/${VITE_API_PATH}/admin/upload`,
       imageData,
       {
         headers: {
@@ -40,7 +40,7 @@ export class ProductApiService {
     const URL_PATH = page ? `products?page=${page}` : 'products';
 
     return axiosCustomer.get(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/${URL_PATH}`,
+      `${VITE_API}/api/${VITE_API_PATH}/admin/${URL_PATH}`,
       {
         headers: {
           Authorization: token,
@@ -61,7 +61,7 @@ export class ProductApiService {
     const token = sessionStorage.getItem('token');
 
     return axiosCustomer.post(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/product`,
+      `${VITE_API}/api/${VITE_API_PATH}/admin/product`,
       addProductRequest,
       {
         headers: {
@@ -84,7 +84,7 @@ export class ProductApiService {
     const token = sessionStorage.getItem('token');
 
     return axiosCustomer.put(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/product/${id}`,
+      `${VITE_API}/api/${VITE_API_PATH}/admin/product/${id}`,
       editProductRequest,
       {
         headers: {
@@ -106,7 +106,7 @@ export class ProductApiService {
     const token = sessionStorage.getItem('token');
 
     return axiosCustomer.delete(
-      `${basicConstant.API_BASE}/api/${basicConstant.API_PATH}/admin/product/${id}`,
+      `${VITE_API}/api/${VITE_API_PATH}/admin/product/${id}`,
       {
         headers: {
           Authorization: token,
