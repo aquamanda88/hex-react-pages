@@ -1,5 +1,7 @@
 import { Navigate } from 'react-router';
 import Layout from '../layouts/layout';
+import AdminLayout from '../layouts/adminLayout';
+import Home from '../pages/home';
 import {
   AdminProductsList,
   Cart,
@@ -15,7 +17,7 @@ import {
   Week05,
   Week06,
 } from '../pages';
-import Home from '../pages/home';
+import AdminOrdersList from '../pages/admin/ordersList';
 
 const routes = [
   {
@@ -24,7 +26,7 @@ const routes = [
     children: [
       {
         index: true,
-        element: <Navigate to="products" replace />,
+        element: <Navigate to='products' replace />,
       },
       {
         path: 'products',
@@ -50,7 +52,21 @@ const routes = [
   },
   {
     path: '/dashboard',
-    element: <AdminProductsList />,
+    element: <AdminLayout />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to='products' replace />,
+      },
+      {
+        path: 'products',
+        element: <AdminProductsList />,
+      },
+      {
+        path: 'orders',
+        element: <AdminOrdersList />,
+      },
+    ],
   },
   {
     path: '/login',

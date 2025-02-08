@@ -16,4 +16,6 @@ export {
   FavoriteBorder,
   InsertPhoto,
   CloudUpload,
+  Source,
+  Drafts,
 } from '@mui/icons-material';

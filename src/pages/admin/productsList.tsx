@@ -280,18 +280,6 @@ export default function AdminProductsList() {
   };
 
   /**
-   * 呼叫登出 API
-   *
-   * @param token - token
-   */
-  const logout = async (token: string) => {
-    authService.logout(token).then(() => {
-      sessionStorage.removeItem('token');
-      window.location.reload();
-    });
-  };
-
-  /**
    * 呼叫圖片上傳 API
    *
    * @param e - ChangeEvent
@@ -459,55 +447,42 @@ export default function AdminProductsList() {
           <Spinners />
         </div>
         <div className='row flex-column justify-content-center align-items-center'>
-          <div>
-            <div className='d-flex justify-content-center mb-4'>
+          <div className='mb-4'>
+            <div className='d-flex justify-content-between mb-4'>
+              <h2>所有商品</h2>
               <Button
-                variant='outlined'
-                className='btn btn-primary'
+                variant='contained'
+                className='btn btn-secondary'
                 onClick={() => {
-                  logout(token);
+                  handleAddOpen();
                 }}
               >
-                登出
+                <Add />
+                <p className='btn-icon'>新增</p>
               </Button>
             </div>
-            <div className='card mb-4'>
-              <div className='d-flex justify-content-between mb-4'>
-                <h2>所有商品</h2>
-                <Button
-                  variant='contained'
-                  className='btn btn-secondary'
-                  onClick={() => {
-                    handleAddOpen();
-                  }}
-                >
-                  <Add />
-                  <p className='btn-icon'>新增</p>
-                </Button>
-              </div>
-              <div className='products-table'>
-                {isProductLoading ? (
-                  <Skeleton variant='rectangular' width='100%'>
-                    <div style={{ paddingTop: '300px' }} />
-                  </Skeleton>
-                ) : (
-                  <div className='table-responsive'>
-                    <Table
-                      data={products}
-                      handleEditOpen={handleEditOpen}
-                      handleDeleteOpen={handleDeleteOpen}
-                    />
-                  </div>
-                )}
-                <div className='d-flex justify-content-center'>
-                  <Stack spacing={2}>
-                    <Pagination
-                      count={pagination.total_pages}
-                      page={currentPage}
-                      onChange={handlePageChange}
-                    />
-                  </Stack>
+            <div className='products-table'>
+              {isProductLoading ? (
+                <Skeleton variant='rectangular' width='100%'>
+                  <div style={{ paddingTop: '300px' }} />
+                </Skeleton>
+              ) : (
+                <div className='table-responsive'>
+                  <Table
+                    data={products}
+                    handleEditOpen={handleEditOpen}
+                    handleDeleteOpen={handleDeleteOpen}
+                  />
                 </div>
+              )}
+              <div className='d-flex justify-content-center'>
+                <Stack spacing={2}>
+                  <Pagination
+                    count={pagination.total_pages}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                  />
+                </Stack>
               </div>
             </div>
           </div>

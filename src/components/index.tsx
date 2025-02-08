@@ -5,3 +5,4 @@ export { default as Modal } from './modal';
 export { default as Spinners } from './spinners';
 export { default as Steppers } from './steppers';
 export { default as Table } from './table';
+export { default as MenuList } from './menuList';

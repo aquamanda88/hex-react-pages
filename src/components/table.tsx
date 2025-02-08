@@ -22,7 +22,7 @@ const Table: React.FC<TableProps> = ({
   handleDeleteOpen,
 }) => {
   return (
-    <table className='table table-striped table-bordered mb-0'>
+    <table className='table table-striped table-bordered table-sm mb-0'>
       <thead className='text-center'>
         <tr>
           <th>作品名稱</th>
