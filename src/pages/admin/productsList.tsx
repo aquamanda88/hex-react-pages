@@ -59,7 +59,7 @@ const defaultValues: ProductFullDatum = {
   },
 };
 
-export default function DashboardProductsList() {
+export default function AdminProductsList() {
   const token = sessionStorage.getItem('token');
   const [isLoginLoading, setIsLoginLoading] = useState(true);
   const [isProductLoading, setIsProductLoading] = useState(true);

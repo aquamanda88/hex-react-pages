@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 import { Button, IconButton, TextField } from '@mui/material';
-import { MenuBar, Spinners } from '../components';
+import { Spinners } from '../components';
 import { Close } from '../components/icons';
 import {
   CartDataDatum,
   CartDataRequest,
-  CartsDatum,
 } from '../core/models/cart.model';
 import formatValueService from '../services/formatValue.service';
 import cartApiService from '../services/api/user/cart.service';
@@ -17,7 +16,6 @@ export default function Cart() {
   const [isProductLoading, setIsProductLoading] = useState(true);
   const [cart, setCart] = useState<CartDataDatum>();
   const [changedCart, setChangedCart] = useState<CartDataRequest[]>([]);
-  const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
 
   /**
@@ -103,7 +101,6 @@ export default function Cart() {
       .getCarts()
       .then(({ data: { data } }) => {
         setCart(data);
-        setCartCount(calculateTotalQty(data.carts));
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -198,16 +195,6 @@ export default function Cart() {
       });
   };
 
-  /**
-   * 取得購物車總數量
-   *
-   * @param carts - 購物車資料
-   * @returns 購物車內產品總數量
-   */
-  function calculateTotalQty(carts: CartsDatum[]): number {
-    return carts.length;
-  }
-
   useEffect(() => {
     if (changedCart.length > 0) {
       editCartItem(changedCart);
@@ -218,7 +205,6 @@ export default function Cart() {
 
   return (
     <>
-      <MenuBar cartCount={cartCount} />
       <div className='container py-4'>
         <div className={`${isProductLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />

@@ -5,9 +5,11 @@ import validationService from '../services/validation.service';
 import authService from '../services/api/admin/auth.service';
 import { Spinners } from '../components';
 import { Controller, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 
 export default function Login() {
   const [isLoginLoading, setIsLoginLoading] = useState(false);
+  const navigate = useNavigate();
 
   const {
     control,
@@ -38,7 +40,7 @@ export default function Login() {
       .login(data)
       .then(({ data: { token } }) => {
         sessionStorage.setItem('token', token);
-        window.location.reload();
+        navigate('/products');
       })
       .finally(() => {
         setIsLoginLoading(false);
@@ -50,7 +52,7 @@ export default function Login() {
       <div className={`${isLoginLoading ? 'd-flex' : 'd-none'} loading`}>
         <Spinners />
       </div>
-      <div className='container'>
+      <div className='login-layout container'>
         <div className='row justify-content-center mb-3'>
           <div className='login-card card col-12 col-md-6'>
             <h2 className='h2 mb-3 font-weight-normal text-center'>登入</h2>

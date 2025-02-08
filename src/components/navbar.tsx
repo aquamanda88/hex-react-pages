@@ -1,80 +1,124 @@
-import { NavLink, useLocation } from 'react-router';
+import { useState } from 'react';
+import { NavLink } from 'react-router';
+import { Person, Login, ShoppingCart } from './icons';
+import {
+  Badge,
+  Button,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+} from '@mui/material';
+import authService from '../services/api/admin/auth.service';
+import Spinners from './spinners';
 
-export default function Navbar() {
-  const location = useLocation();
+/** 元件參數型別 */
+interface NavBarProps {
+  /** 購物車總數量 */
+  cartCount: number;
+}
+
+export default function NavBar({ cartCount }: NavBarProps) {
+  const token = sessionStorage.getItem('token') ?? '';
+  const [isLoading, setIsLoading] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  /**
+   * 呼叫登出 API
+   *
+   * @param token - token
+   */
+  const logout = async (token: string) => {
+    handleClose();
+    setIsLoading(true);
+    authService
+      .logout(token)
+      .then(() => {
+        sessionStorage.removeItem('token');
+        window.location.reload();
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   return (
     <>
-      <nav className='bg-dark text-white'>
+      <div className={`${isLoading ? 'd-flex' : 'd-none'} loading`}>
+        <Spinners />
+      </div>
+      <nav className='menu-bar navbar navbar-light bg-white'>
         <div className='container'>
-          <div className='d-block'>
-            <ul className='nav col-12 col-lg-auto mb-2 justify-content-between mb-md-0'>
-              <li>
-                <NavLink
-                  className={`nav-link px-2 py-4 ${location.pathname === '/week01' ? 'text-secondary' : 'text-white'}`}
-                  to='/week01'
-                >
-                  第一週
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  className={`nav-link px-2 py-4 ${location.pathname === '/week02' ? 'text-secondary' : 'text-white'}`}
-                  to='/week02'
-                >
-                  第二週
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  className={`nav-link px-2 py-4 ${location.pathname === '/week03' ? 'text-secondary' : 'text-white'}`}
-                  to='/week03'
-                >
-                  第三週
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  className={`nav-link px-2 py-4 ${location.pathname === '/week04' ? 'text-secondary' : 'text-white'}`}
-                  to='/week04'
-                >
-                  第四週
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  className={`nav-link px-2 py-4 ${location.pathname === '/week05' ? 'text-secondary' : 'text-white'}`}
-                  to='/week05'
-                >
-                  第五週
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  className={`nav-link px-2 py-4 ${location.pathname === '/week06' ? 'text-secondary' : 'text-white'}`}
-                  to='/week06'
-                >
-                  第六週
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  className={`nav-link px-2 py-4 ${location.pathname === '/week07' ? 'text-secondary' : 'text-white'}`}
-                  to='/week07'
-                >
-                  第七週
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  className={`nav-link px-2 py-4 ${location.pathname === '/week08' ? 'text-secondary' : 'text-white'}`}
-                  to='/week08'
-                >
-                  第八週
-                </NavLink>
-              </li>
-            </ul>
+          <div className='menu-bar-list'>
+            <NavLink to='/products'>
+              <Button className='btn btn-primary'>全部商品</Button>
+            </NavLink>
+            <div className='page-bar'>
+              <NavLink to='/cart'>
+                <IconButton>
+                  <Badge badgeContent={cartCount} color='primary'>
+                    <ShoppingCart />
+                  </Badge>
+                </IconButton>
+              </NavLink>
+              <IconButton id='basic-button' onClick={handleClick}>
+                <Person />
+              </IconButton>
+            </div>
           </div>
+          <Menu
+            id='basic-menu'
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            {token ? (
+              <MenuItem
+                onClick={() => {
+                  logout(token);
+                }}
+              >
+                <ListItemIcon>
+                  <Login />
+                </ListItemIcon>
+                <ListItemText>登出</ListItemText>
+              </MenuItem>
+            ) : (
+              <MenuItem onClick={handleClose}>
+                <NavLink to='/login' className='d-flex'>
+                  <ListItemIcon>
+                    <Login />
+                  </ListItemIcon>
+                  <ListItemText>登入</ListItemText>
+                </NavLink>
+              </MenuItem>
+            )}
+            {/* <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <Bookmark />
+              </ListItemIcon>
+              <ListItemText>我的收藏</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <Logout />
+              </ListItemIcon>
+              <ListItemText>登出</ListItemText>
+            </MenuItem> */}
+          </Menu>
         </div>
       </nav>
     </>

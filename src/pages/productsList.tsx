@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router';
 import { Checkbox, Pagination, Skeleton, Stack } from '@mui/material';
-import { MenuBar } from '../components';
 import { Favorite, FavoriteBorder } from '../components/icons';
 import { PaginationDatum, ProductFullDatum } from '../core/models/utils.model';
-import { CartsDatum } from '../core/models/cart.model';
 import formatValueService from '../services/formatValue.service';
 import productApiService from '../services/api/user/products.service';
-import cartApiService from '../services/api/user/cart.service';
 
 export default function ProductsList() {
   const [isProductLoading, setIsProductLoading] = useState(true);
@@ -16,7 +13,6 @@ export default function ProductsList() {
   const [pagination, setPagination] = useState<PaginationDatum>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
-  const [cartCount, setCartCount] = useState(0);
   const [isFavoriteChecked, setIsFavoriteChecked] = useState<boolean[]>([]);
   const favoriteList = localStorage.getItem('favoriteList') ?? '';
 
@@ -76,21 +72,6 @@ export default function ProductsList() {
   };
 
   /**
-   * 呼叫取得購物車資料 API
-   */
-  const getCarts = async () => {
-    setIsProductLoading(true);
-    cartApiService
-      .getCarts()
-      .then(({ data: { data } }) => {
-        setCartCount(calculateTotalQty(data.carts));
-      })
-      .finally(() => {
-        setIsProductLoading(false);
-      });
-  };
-
-  /**
    * 確認目前該產品是否已加入收藏清單
    *
    * @param productId - 產品 ID
@@ -99,16 +80,6 @@ export default function ProductsList() {
   const checkFavoriteItem = (productId: string): boolean => {
     return favoriteList.split(', ').includes(productId);
   };
-
-  /**
-   * 取得購物車總數量
-   *
-   * @param carts - 購物車資料
-   * @returns 購物車內產品總數量
-   */
-  function calculateTotalQty(carts: CartsDatum[]): number {
-    return carts.length;
-  }
 
   function updateSkeletonCount(): void {
     const width = window.innerWidth;
@@ -127,7 +98,6 @@ export default function ProductsList() {
   useEffect(() => {
     updateSkeletonCount();
     getProducts();
-    getCarts();
     window.addEventListener('resize', updateSkeletonCount); // 監聽視窗大小變化
     return () => window.removeEventListener('resize', updateSkeletonCount); // 移除監聽
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -135,7 +105,6 @@ export default function ProductsList() {
 
   return (
     <>
-      <MenuBar cartCount={cartCount} />
       <div className='container py-4'>
         <div className='row mb-4'>
           {isProductLoading ? (

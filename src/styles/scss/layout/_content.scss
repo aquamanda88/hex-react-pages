@@ -5,6 +5,13 @@
   justify-content: center;
 }
 
+.login-layout {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .object-fit {
   -o-object-fit: cover;
   object-fit: cover;

@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Checkbox } from '@mui/material';
-import { MenuBar, Spinners } from '../components';
+import { Spinners } from '../components';
 import { Favorite, FavoriteBorder, InsertPhoto } from '../components/icons';
 import { ProductDatum } from '../core/models/utils.model';
 import {
   CartDataDatum,
   CartDataRequest,
-  CartsDatum,
 } from '../core/models/cart.model';
 import formatValueService from '../services/formatValue.service';
 import productApiService from '../services/api/user/products.service';
@@ -18,7 +17,6 @@ export default function ProductDetail() {
   const [isProductLoading, setIsProductLoading] = useState(true);
   const [product, setProduct] = useState<ProductDatum>({});
   const [, setCart] = useState<CartDataDatum>();
-  const [cartCount, setCartCount] = useState(0);
   const [isFavoriteChecked, setIsFavoriteChecked] = useState<boolean>(false);
   const favoriteList = localStorage.getItem('favoriteList') ?? '';
   const { id } = useParams();
@@ -116,7 +114,6 @@ export default function ProductDetail() {
       .getCarts()
       .then(({ data: { data } }) => {
         setCart(data);
-        setCartCount(calculateTotalQty(data.carts));
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -133,16 +130,6 @@ export default function ProductDetail() {
     return favoriteList.split(', ').includes(productId);
   };
 
-  /**
-   * 取得購物車總數量
-   *
-   * @param carts - 購物車資料
-   * @returns 購物車內產品總數量
-   */
-  function calculateTotalQty(carts: CartsDatum[]): number {
-    return carts.length;
-  }
-
   useEffect(() => {
     getProductItem(id ?? '');
     getCarts();
@@ -151,7 +138,6 @@ export default function ProductDetail() {
 
   return (
     <>
-      <MenuBar cartCount={cartCount} />
       <div className='product-detail-container container'>
         <div className={`${isProductLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />

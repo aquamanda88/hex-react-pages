@@ -1,4 +1,5 @@
 import { format } from "date-fns/fp/format";
+import { CartsDatum } from "../core/models/cart.model";
 
 /** 轉換內容值服務 */
 export class FormatValueService {
@@ -26,6 +27,16 @@ export class FormatValueService {
     const dateValue = new Date(secondsValue * 1000);
     const formattedDate = format('yyyy/MM/dd HH:mm:ss')(dateValue);
     return formattedDate;
+  }
+
+  /**
+   * 取得購物車總數量
+   *
+   * @param carts - 購物車資料
+   * @returns 購物車內產品總數量
+   */
+  calculateTotalQty(carts: CartsDatum[]): number {
+    return carts.length;
   }
 }
 

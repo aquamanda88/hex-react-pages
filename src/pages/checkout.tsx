@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, TextField } from '@mui/material';
-import { MenuBar, Spinners, Steppers } from '../components';
+import { Spinners, Steppers } from '../components';
 import { CartDataDatum, CartsDatum } from '../core/models/cart.model';
 import {
   OrderDataRequest,
@@ -191,7 +191,6 @@ export default function Checkout({ activeStep }: CheckoutProps) {
 
   return (
     <>
-      <MenuBar cartCount={cartCount} />
       <div className='container py-4'>
         <div className={`${isProductLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />

@@ -5,7 +5,7 @@ export { default as ProductsList } from './productsList';
 export { default as ProductDetail } from './productDetail';
 export { default as Cart } from './cart';
 export { default as Checkout } from './checkout';
-export { default as DashboardProductsList } from './dashboard/productsList';
+export { default as AdminProductsList } from './admin/productsList';
 export { default as Week01 } from './subPages/week01';
 export { default as Week02 } from './subPages/week02';
 export { default as Week03 } from './subPages/week03';
