@@ -3,7 +3,7 @@ import { NavLink } from 'react-router';
 import { Checkbox, Pagination, Skeleton, Stack } from '@mui/material';
 import { Favorite, FavoriteBorder } from '../components/icons';
 import { PaginationDatum, ProductFullDatum } from '../core/models/utils.model';
-import formatValueService from '../services/formatValue.service';
+import { formatPrice } from '../services/formatValue.service';
 import productApiService from '../services/api/user/products.service';
 
 export default function ProductsList() {
@@ -122,7 +122,10 @@ export default function ProductsList() {
           ) : (
             products.map((item, index) => {
               return (
-                <div className='product-list-grid position-relative' key={item.id}>
+                <div
+                  className='product-list-grid position-relative'
+                  key={item.id}
+                >
                   <NavLink
                     to={`/product/${item.id}`}
                     className='product-image-item stretched-link'
@@ -151,12 +154,10 @@ export default function ProductsList() {
                       />
                     </div>
                     <p className='font-en-h4-medium mb-0'>
-                      TWD {formatValueService.formatPrice(item.price)}
+                      TWD {formatPrice(item.price)}
                     </p>
                     <p className='font-en-p-regular text-secondary'>
-                      <del>
-                        TWD {formatValueService.formatPrice(item.origin_price)}
-                      </del>
+                      <del>TWD {formatPrice(item.origin_price)}</del>
                     </p>
                   </div>
                 </div>

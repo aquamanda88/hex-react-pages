@@ -42,12 +42,16 @@ function formatErrorMessage(message: string, status?: number) {
 
     switch (message) {
       case '驗證錯誤, 請重新登入':
+        break;
       case '請重新登入':
         sessionStorage.removeItem('token');
         window.location.reload();
         break;
       case '請重新登出':
         window.location.reload();
+        break;
+      case '禁止使用, 請確認 api_path 是否為本人使用。':
+        goToPage('/#/products');
         break;
     }
 

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Navbar } from '../../components';
-import { calculateTotalQty } from '../../services/formatValue.service';
-import cartApiService from '../../services/api/user/cart.service';
-import ProductsList from '../productsList';
+import { Outlet } from 'react-router';
+import { Footer, Navbar } from '../components';
+import { calculateTotalQty } from '../services/formatValue.service';
+import cartApiService from '../services/api/user/cart.service';
 
-export default function Week05() {
+export default function AdminLayout() {
   const [cartCount, setCartCount] = useState(0);
 
   /**
@@ -24,7 +24,8 @@ export default function Week05() {
   return (
     <>
       <Navbar cartCount={cartCount} />
-      <ProductsList />
+      <Outlet />
+      <Footer />
     </>
   );
 }

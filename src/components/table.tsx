@@ -2,7 +2,10 @@ import React from 'react';
 import { IconButton } from '@mui/material';
 import { ProductFullDatum } from '../core/models/utils.model';
 import { Check, Close, Delete, Edit } from './icons';
-import formatValueService from '../services/formatValue.service';
+import {
+  formatPrice,
+  formatUnknownText,
+} from '../services/formatValue.service';
 
 type TableProps = {
   /** 資料 */
@@ -36,14 +39,10 @@ const Table: React.FC<TableProps> = ({
           data.map((item) => (
             <tr key={item.id}>
               <td>{item.title}</td>
-              <td>{item.content?.name ?? 'Untitled'}</td>
-              <td>{item.content?.artists_zh_tw ?? '佚名'}</td>
-              <td className='text-end'>
-                {formatValueService.formatPrice(item.origin_price)}
-              </td>
-              <td className='text-end'>
-                {formatValueService.formatPrice(item.price)}
-              </td>
+              <td>{formatUnknownText('name', item.content?.name)}</td>
+              <td>{formatUnknownText('artists_zh_tw', item.content?.artists_zh_tw)}</td>
+              <td className='text-end'>{formatPrice(item.origin_price)}</td>
+              <td className='text-end'>{formatPrice(item.price)}</td>
               <td
                 className={`${item.is_enabled ? 'text-success' : 'text-danger'} text-center`}
               >

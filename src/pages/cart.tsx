@@ -3,11 +3,11 @@ import { NavLink, useNavigate } from 'react-router';
 import { Button, IconButton, TextField } from '@mui/material';
 import { Spinners } from '../components';
 import { Close } from '../components/icons';
+import { CartDataDatum, CartDataRequest } from '../core/models/cart.model';
 import {
-  CartDataDatum,
-  CartDataRequest,
-} from '../core/models/cart.model';
-import formatValueService from '../services/formatValue.service';
+  formatPrice,
+  formatUnknownText,
+} from '../services/formatValue.service';
 import cartApiService from '../services/api/user/cart.service';
 import Swal from 'sweetalert2';
 import { AxiosError } from 'axios';
@@ -156,7 +156,7 @@ export default function Cart() {
 
   /**
    * 呼叫刪除單一購物車資料 API
-   * 
+   *
    * @param id - 購物車 ID
    */
   const deleteCartItem = async (id: string) => {
@@ -249,25 +249,34 @@ export default function Cart() {
                         >
                           <p>{item.product.title}</p>
                           <p>
-                            <small>({item.product.content?.name})</small>
+                            <small>
+                              (
+                              {formatUnknownText(
+                                'name',
+                                item.product.content?.name
+                              )}
+                              )
+                            </small>
                           </p>
                         </NavLink>
                       </td>
                       <td className='text-start'>
-                        <p>作者：{item.product.content?.artists_zh_tw}</p>
+                        <p>
+                          作者：
+                          {formatUnknownText(
+                            'artists_zh_tw',
+                            item.product.content?.artists_zh_tw
+                          )}
+                        </p>
                         <p>媒材：{item.product.category}</p>
                       </td>
                       <td className='text-end col-md-2'>
                         <p className='font-en-p-medium'>
-                          TWD{' '}
-                          {formatValueService.formatPrice(item.product.price)}
+                          TWD {formatPrice(item.product.price)}
                         </p>
                         <p className='text-secondary'>
                           <del>
-                            TWD{' '}
-                            {formatValueService.formatPrice(
-                              item.product.origin_price
-                            )}
+                            TWD {formatPrice(item.product.origin_price)}
                           </del>
                         </p>
                       </td>
@@ -290,7 +299,7 @@ export default function Cart() {
                       </td>
                       <td className='text-end col-md-2'>
                         <p className='font-en-p-medium'>
-                          TWD {formatValueService.formatPrice(item.final_total)}
+                          TWD {formatPrice(item.final_total)}
                         </p>
                       </td>
                     </tr>
@@ -310,9 +319,7 @@ export default function Cart() {
               <div className='col-12 col-lg-6'>
                 <div className='d-flex justify-content-between'>
                   <h4>總金額</h4>
-                  <h3>
-                    TWD {formatValueService.formatPrice(cart?.final_total)}
-                  </h3>
+                  <h3>TWD {formatPrice(cart?.final_total)}</h3>
                 </div>
                 <div className='d-flex justify-content-end'>
                   <Button
@@ -331,7 +338,10 @@ export default function Cart() {
             <div className='d-flex justify-content-center'>
               <h2 className='font-zh-h2'>
                 您的購物車中沒有商品，
-                <NavLink to='/products' className='text-color-main d-inline-flex'>
+                <NavLink
+                  to='/products'
+                  className='text-color-main d-inline-flex'
+                >
                   <p className='btn-icon'>立即去選購</p>
                 </NavLink>
               </h2>

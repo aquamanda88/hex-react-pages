@@ -8,7 +8,10 @@ import {
   CartDataDatum,
   CartDataRequest,
 } from '../core/models/cart.model';
-import formatValueService from '../services/formatValue.service';
+import {
+  formatPrice,
+  formatUnknownText,
+} from '../services/formatValue.service';
 import productApiService from '../services/api/user/products.service';
 import cartApiService from '../services/api/user/cart.service';
 import Swal from 'sweetalert2';
@@ -190,8 +193,8 @@ export default function ProductDetail() {
               <>
                 <div className='d-flex justify-content-between align-items-center'>
                   <h5 className='mb-0'>
-                    {product.content?.artists_zh_tw ?? '佚名'} (
-                    {product.content?.artists ?? 'Unknown'})
+                    {formatUnknownText('artists_zh_tw', product.content?.artists_zh_tw)} (
+                    {formatUnknownText('artists', product.content?.artists)})
                   </h5>
                   <Checkbox
                     checked={isFavoriteChecked}
@@ -207,10 +210,10 @@ export default function ProductDetail() {
                 </div>
                 <h2 className='font-zh-h4-medium'>{product.title}</h2>
                 <h3 className='font-zh-h5-medium'>
-                  <i>{product.content?.name ?? 'Untitled'}</i>
+                  <i>{formatUnknownText('name', product.content?.name)}</i>
                 </h3>
                 <h4 className='font-zh-h4-medium'>
-                  {product.content?.year ?? 'Unknown'}
+                  {formatUnknownText('year', product.content?.year)}
                 </h4>
                 <h5>
                   <span className='badge rounded-pill bg-secondary font-zh-p-regular'>
@@ -219,11 +222,11 @@ export default function ProductDetail() {
                 </h5>
                 <p className='font-zh-p-medium'>{product.description}</p>
                 <p className='font-en-h4-medium mb-0'>
-                  TWD {formatValueService.formatPrice(product.price)}
+                  TWD {formatPrice(product.price)}
                 </p>
                 <p className='font-en-p-regular text-secondary'>
                   <del>
-                    TWD {formatValueService.formatPrice(product.origin_price)}
+                    TWD {formatPrice(product.origin_price)}
                   </del>
                 </p>
 

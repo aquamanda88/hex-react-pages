@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router';
-import Layout from '../layout';
+import Layout from '../layouts/layout';
 import {
+  AdminProductsList,
   Cart,
   Checkout,
   Login,
@@ -46,6 +47,10 @@ const routes = [
         element: <Checkout activeStep={2} />,
       },
     ],
+  },
+  {
+    path: '/dashboard',
+    element: <AdminProductsList />,
   },
   {
     path: '/login',

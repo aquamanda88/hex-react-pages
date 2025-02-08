@@ -22,12 +22,13 @@ import {
   ProductFullDatum,
   ProductItemDatum,
 } from '../../core/models/utils.model';
-import { Login } from '..';
+import { formatUnknownText } from '../../services/formatValue.service';
 import validationService from '../../services/validation.service';
 import authService from '../../services/api/admin/auth.service';
 import productApiService from '../../services/api/admin/products.service';
 import Table from '../../components/table';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -60,7 +61,7 @@ const defaultValues: ProductFullDatum = {
 };
 
 export default function AdminProductsList() {
-  const token = sessionStorage.getItem('token');
+  const token = sessionStorage.getItem('token') ?? '';
   const [isLoginLoading, setIsLoginLoading] = useState(true);
   const [isProductLoading, setIsProductLoading] = useState(true);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
@@ -77,6 +78,7 @@ export default function AdminProductsList() {
   );
   const subImagesUrl = subImagesMap[tempProduct?.id ?? ''] || [];
   const [newSubImagesUrl, setNewSubImagesUrl] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   const {
     control,
@@ -444,458 +446,454 @@ export default function AdminProductsList() {
           setIsLoginLoading(false);
         }
       });
+    } else {
+      navigate('/login');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
-      {token ? (
-        <>
-          <div className='container py-4'>
-            <div className={`${isLoginLoading ? 'd-flex' : 'd-none'} loading`}>
-              <Spinners />
+      <div className='container py-4'>
+        <div className={`${isLoginLoading ? 'd-flex' : 'd-none'} loading`}>
+          <Spinners />
+        </div>
+        <div className='row flex-column justify-content-center align-items-center'>
+          <div>
+            <div className='d-flex justify-content-center mb-4'>
+              <Button
+                variant='outlined'
+                className='btn btn-primary'
+                onClick={() => {
+                  logout(token);
+                }}
+              >
+                登出
+              </Button>
             </div>
-            <div className='row flex-column justify-content-center align-items-center'>
-              <div>
-                <div className='d-flex justify-content-center mb-4'>
-                  <Button
-                    variant='outlined'
-                    className='btn btn-primary'
-                    onClick={() => {
-                      logout(token);
-                    }}
-                  >
-                    登出
-                  </Button>
-                </div>
-                <div className='card mb-4'>
-                  <div className='d-flex justify-content-between mb-4'>
-                    <h2>所有商品</h2>
-                    <Button
-                      variant='contained'
-                      className='btn btn-secondary'
-                      onClick={() => {
-                        handleAddOpen();
-                      }}
-                    >
-                      <Add />
-                      <p className='btn-icon'>新增</p>
-                    </Button>
+            <div className='card mb-4'>
+              <div className='d-flex justify-content-between mb-4'>
+                <h2>所有商品</h2>
+                <Button
+                  variant='contained'
+                  className='btn btn-secondary'
+                  onClick={() => {
+                    handleAddOpen();
+                  }}
+                >
+                  <Add />
+                  <p className='btn-icon'>新增</p>
+                </Button>
+              </div>
+              <div className='products-table'>
+                {isProductLoading ? (
+                  <Skeleton variant='rectangular' width='100%'>
+                    <div style={{ paddingTop: '300px' }} />
+                  </Skeleton>
+                ) : (
+                  <div className='table-responsive'>
+                    <Table
+                      data={products}
+                      handleEditOpen={handleEditOpen}
+                      handleDeleteOpen={handleDeleteOpen}
+                    />
                   </div>
-                  <div className='products-table'>
-                    {isProductLoading ? (
-                      <Skeleton variant='rectangular' width='100%'>
-                        <div style={{ paddingTop: '300px' }} />
-                      </Skeleton>
-                    ) : (
-                      <div className='table-responsive'>
-                        <Table
-                          data={products}
-                          handleEditOpen={handleEditOpen}
-                          handleDeleteOpen={handleDeleteOpen}
-                        />
-                      </div>
-                    )}
-                    <div className='d-flex justify-content-center'>
-                      <Stack spacing={2}>
-                        <Pagination
-                          count={pagination.total_pages}
-                          page={currentPage}
-                          onChange={handlePageChange}
-                        />
-                      </Stack>
-                    </div>
-                  </div>
+                )}
+                <div className='d-flex justify-content-center'>
+                  <Stack spacing={2}>
+                    <Pagination
+                      count={pagination.total_pages}
+                      page={currentPage}
+                      onChange={handlePageChange}
+                    />
+                  </Stack>
                 </div>
               </div>
-              <Modal
-                open={deleteOpen}
-                setOpen={setDeleteOpen}
-                confirmBtnText={'刪除'}
-                handleConfirm={deleteProduct}
-              >
-                <div className='container'>
-                  <div className='row text-center justify-content-center'>
-                    <h4>是否確定要刪除</h4>
-                    <h2>《{deleteItem?.title}》</h2>
-                    <h5>
-                      <i>{deleteItem?.content?.name ?? 'Untitled'}</i>
-                    </h5>
-                    <p>
-                      <span>
-                        {deleteItem?.content?.artists_zh_tw ?? '佚名'}{' '}
-                      </span>
-                      <span>
-                        ({deleteItem?.content?.artists ?? 'Unknown'}),{' '}
-                      </span>
-                      <span>{deleteItem?.content?.year ?? 'Unknown'}</span>
-                    </p>
-                    {deleteItem?.imageUrl ? (
-                      <img
-                        src={deleteItem?.imageUrl}
-                        className='object-fit rounded preview-image p-0'
-                        alt='主圖'
-                      />
-                    ) : (
-                      <InsertPhoto className='no-image-icon' color='disabled' />
-                    )}
-                  </div>
-                </div>
-              </Modal>
-              <div className='col-lg-6'>
-                <Modal
-                  open={modalType === 'add' ? addOpen : editOpen}
-                  setOpen={modalType === 'add' ? setAddOpen : setEditOpen}
-                  isFullScreen={true}
-                >
-                  <div className='container card'>
-                    <div className='row'>
-                      <div className='col-md-6'>
-                        <form
-                          id='form'
-                          className='form-signin'
-                          onSubmit={handleSubmit(onSubmit)}
-                        >
-                          <div className='text-field-group'>
-                            <FormControl error={!!errors.title}>
-                              <Controller
-                                name='title'
-                                control={control}
-                                rules={validationService.titleValidator()}
-                                render={({ field }) => (
-                                  <TextField
-                                    {...field}
-                                    label='作品名稱'
-                                    type='text'
-                                    error={!!errors.title}
-                                    helperText={validationService.getHelperText(
-                                      errors.title
-                                    )}
-                                    onChange={(e) => {
-                                      field.onChange(e);
-                                    }}
-                                  />
+            </div>
+          </div>
+          <Modal
+            open={deleteOpen}
+            setOpen={setDeleteOpen}
+            confirmBtnText={'刪除'}
+            handleConfirm={deleteProduct}
+          >
+            <div className='container'>
+              <div className='row text-center justify-content-center'>
+                <h4>是否確定要刪除</h4>
+                <h2>《{deleteItem?.title}》</h2>
+                <h5>
+                  <i>{formatUnknownText('name', deleteItem?.content?.name)}</i>
+                </h5>
+                <p>
+                  <span>
+                    {formatUnknownText(
+                      'artists_zh_tw',
+                      deleteItem?.content?.artists_zh_tw
+                    )}{' '}
+                  </span>
+                  <span>
+                    (
+                    {formatUnknownText('artists', deleteItem?.content?.artists)}
+                    ),{' '}
+                  </span>
+                  <span>
+                    {formatUnknownText('year', deleteItem?.content?.year)}
+                  </span>
+                </p>
+                {deleteItem?.imageUrl ? (
+                  <img
+                    src={deleteItem?.imageUrl}
+                    className='object-fit rounded preview-image p-0'
+                    alt='主圖'
+                  />
+                ) : (
+                  <InsertPhoto className='no-image-icon' color='disabled' />
+                )}
+              </div>
+            </div>
+          </Modal>
+          <div className='col-lg-6'>
+            <Modal
+              open={modalType === 'add' ? addOpen : editOpen}
+              setOpen={modalType === 'add' ? setAddOpen : setEditOpen}
+              isFullScreen={true}
+            >
+              <div className='container card'>
+                <div className='row'>
+                  <div className='col-md-6'>
+                    <form
+                      id='form'
+                      className='form-signin'
+                      onSubmit={handleSubmit(onSubmit)}
+                    >
+                      <div className='text-field-group'>
+                        <FormControl error={!!errors.title}>
+                          <Controller
+                            name='title'
+                            control={control}
+                            rules={validationService.titleValidator()}
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                label='作品名稱'
+                                type='text'
+                                error={!!errors.title}
+                                helperText={validationService.getHelperText(
+                                  errors.title
                                 )}
+                                onChange={(e) => {
+                                  field.onChange(e);
+                                }}
                               />
-                            </FormControl>
-                            <FormControl>
-                              <Controller
-                                name='name'
-                                control={control}
-                                render={({ field }) => (
-                                  <TextField
-                                    {...field}
-                                    label='作品原文名稱'
-                                    type='text'
-                                    helperText={validationService.getHelperText()}
-                                    onChange={(e) => {
-                                      field.onChange(e);
-                                    }}
-                                  />
-                                )}
+                            )}
+                          />
+                        </FormControl>
+                        <FormControl>
+                          <Controller
+                            name='name'
+                            control={control}
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                label='作品原文名稱'
+                                type='text'
+                                helperText={validationService.getHelperText()}
+                                onChange={(e) => {
+                                  field.onChange(e);
+                                }}
                               />
-                            </FormControl>
-                            <div className='d-flex gap-3'>
-                              <FormControl className='w-100'>
-                                <Controller
-                                  name='artists_zh_tw'
-                                  control={control}
-                                  render={({ field }) => (
-                                    <TextField
-                                      {...field}
-                                      label='作者名稱'
-                                      type='text'
-                                      helperText={validationService.getHelperText()}
-                                      onChange={(e) => {
-                                        field.onChange(e);
-                                      }}
-                                    />
-                                  )}
-                                />
-                              </FormControl>
-                              <FormControl className='w-100'>
-                                <Controller
-                                  name='artists'
-                                  control={control}
-                                  render={({ field }) => (
-                                    <TextField
-                                      {...field}
-                                      label='作者原文名稱'
-                                      type='text'
-                                      helperText={validationService.getHelperText()}
-                                      onChange={(e) => {
-                                        field.onChange(e);
-                                      }}
-                                    />
-                                  )}
-                                />
-                              </FormControl>
-                            </div>
-                            <FormControl>
-                              <Controller
-                                name='year'
-                                control={control}
-                                render={({ field }) => (
-                                  <TextField
-                                    {...field}
-                                    label='作品年份'
-                                    type='text'
-                                    helperText={validationService.getHelperText()}
-                                    onChange={(e) => {
-                                      field.onChange(e);
-                                    }}
-                                  />
-                                )}
-                              />
-                            </FormControl>
-                            <FormControl>
-                              <Controller
-                                name='description'
-                                control={control}
-                                render={({ field }) => (
-                                  <TextField
-                                    {...field}
-                                    label='描述'
-                                    type='text'
-                                    multiline
-                                    maxRows={6}
-                                    helperText={validationService.getHelperText()}
-                                    onChange={(e) => {
-                                      field.onChange(e);
-                                    }}
-                                  />
-                                )}
-                              />
-                            </FormControl>
-                            <div className='d-flex gap-3'>
-                              <FormControl
-                                error={!!errors.category}
-                                className='w-100'
-                              >
-                                <Controller
-                                  name='category'
-                                  control={control}
-                                  rules={validationService.categoryValidator()}
-                                  render={({ field }) => (
-                                    <TextField
-                                      {...field}
-                                      label='分類'
-                                      type='text'
-                                      error={!!errors.category}
-                                      helperText={validationService.getHelperText(
-                                        errors.category
-                                      )}
-                                      onChange={(e) => {
-                                        field.onChange(e);
-                                      }}
-                                    />
-                                  )}
-                                />
-                              </FormControl>
-                              <FormControl
-                                error={!!errors.category}
-                                className='w-100'
-                              >
-                                <Controller
-                                  name='unit'
-                                  control={control}
-                                  rules={validationService.unitValidator()}
-                                  render={({ field }) => (
-                                    <TextField
-                                      {...field}
-                                      label='單位'
-                                      type='text'
-                                      error={!!errors.category}
-                                      helperText={validationService.getHelperText(
-                                        errors.category
-                                      )}
-                                      onChange={(e) => {
-                                        field.onChange(e);
-                                      }}
-                                    />
-                                  )}
-                                />
-                              </FormControl>
-                            </div>
-                            <div className='d-flex gap-3'>
-                              <FormControl
-                                error={!!errors.origin_price}
-                                className='w-100'
-                              >
-                                <Controller
-                                  name='origin_price'
-                                  control={control}
-                                  rules={validationService.priceValidator(
-                                    'origin_price'
-                                  )}
-                                  render={({ field }) => (
-                                    <TextField
-                                      {...field}
-                                      label='原價'
-                                      type='number'
-                                      error={!!errors.origin_price}
-                                      helperText={validationService.getHelperText(
-                                        errors.origin_price
-                                      )}
-                                      onPaste={handlePaste}
-                                      onChange={(e) => {
-                                        if (validationService.isValidInput(e)) {
-                                          field.onChange(e);
-                                        }
-                                      }}
-                                    />
-                                  )}
-                                />
-                              </FormControl>
-                              <FormControl
-                                error={!!errors.price}
-                                className='w-100'
-                              >
-                                <Controller
-                                  name='price'
-                                  control={control}
-                                  rules={validationService.priceValidator(
-                                    'price'
-                                  )}
-                                  render={({ field }) => (
-                                    <TextField
-                                      {...field}
-                                      label='售價'
-                                      type='number'
-                                      error={!!errors.price}
-                                      helperText={validationService.getHelperText(
-                                        errors.price
-                                      )}
-                                      onPaste={handlePaste}
-                                      onChange={(e) => {
-                                        if (validationService.isValidInput(e)) {
-                                          field.onChange(e);
-                                        }
-                                      }}
-                                    />
-                                  )}
-                                />
-                              </FormControl>
-                            </div>
-                          </div>
-                          <FormControl className='mb-2'>
+                            )}
+                          />
+                        </FormControl>
+                        <div className='d-flex gap-3'>
+                          <FormControl className='w-100'>
                             <Controller
-                              name='is_enabled'
+                              name='artists_zh_tw'
                               control={control}
                               render={({ field }) => (
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                      color='primary'
-                                      checked={field.value === 1 ? true : false}
-                                      onChange={(e) => field.onChange(e)}
-                                    />
-                                  }
-                                  label='是否啟用'
+                                <TextField
+                                  {...field}
+                                  label='作者名稱'
+                                  type='text'
+                                  helperText={validationService.getHelperText()}
+                                  onChange={(e) => {
+                                    field.onChange(e);
+                                  }}
                                 />
                               )}
                             />
                           </FormControl>
-                        </form>
+                          <FormControl className='w-100'>
+                            <Controller
+                              name='artists'
+                              control={control}
+                              render={({ field }) => (
+                                <TextField
+                                  {...field}
+                                  label='作者原文名稱'
+                                  type='text'
+                                  helperText={validationService.getHelperText()}
+                                  onChange={(e) => {
+                                    field.onChange(e);
+                                  }}
+                                />
+                              )}
+                            />
+                          </FormControl>
+                        </div>
+                        <FormControl>
+                          <Controller
+                            name='year'
+                            control={control}
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                label='作品年份'
+                                type='text'
+                                helperText={validationService.getHelperText()}
+                                onChange={(e) => {
+                                  field.onChange(e);
+                                }}
+                              />
+                            )}
+                          />
+                        </FormControl>
+                        <FormControl>
+                          <Controller
+                            name='description'
+                            control={control}
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                label='描述'
+                                type='text'
+                                multiline
+                                maxRows={6}
+                                helperText={validationService.getHelperText()}
+                                onChange={(e) => {
+                                  field.onChange(e);
+                                }}
+                              />
+                            )}
+                          />
+                        </FormControl>
+                        <div className='d-flex gap-3'>
+                          <FormControl
+                            error={!!errors.category}
+                            className='w-100'
+                          >
+                            <Controller
+                              name='category'
+                              control={control}
+                              rules={validationService.categoryValidator()}
+                              render={({ field }) => (
+                                <TextField
+                                  {...field}
+                                  label='分類'
+                                  type='text'
+                                  error={!!errors.category}
+                                  helperText={validationService.getHelperText(
+                                    errors.category
+                                  )}
+                                  onChange={(e) => {
+                                    field.onChange(e);
+                                  }}
+                                />
+                              )}
+                            />
+                          </FormControl>
+                          <FormControl
+                            error={!!errors.category}
+                            className='w-100'
+                          >
+                            <Controller
+                              name='unit'
+                              control={control}
+                              rules={validationService.unitValidator()}
+                              render={({ field }) => (
+                                <TextField
+                                  {...field}
+                                  label='單位'
+                                  type='text'
+                                  error={!!errors.category}
+                                  helperText={validationService.getHelperText(
+                                    errors.category
+                                  )}
+                                  onChange={(e) => {
+                                    field.onChange(e);
+                                  }}
+                                />
+                              )}
+                            />
+                          </FormControl>
+                        </div>
+                        <div className='d-flex gap-3'>
+                          <FormControl
+                            error={!!errors.origin_price}
+                            className='w-100'
+                          >
+                            <Controller
+                              name='origin_price'
+                              control={control}
+                              rules={validationService.priceValidator(
+                                'origin_price'
+                              )}
+                              render={({ field }) => (
+                                <TextField
+                                  {...field}
+                                  label='原價'
+                                  type='number'
+                                  error={!!errors.origin_price}
+                                  helperText={validationService.getHelperText(
+                                    errors.origin_price
+                                  )}
+                                  onPaste={handlePaste}
+                                  onChange={(e) => {
+                                    if (validationService.isValidInput(e)) {
+                                      field.onChange(e);
+                                    }
+                                  }}
+                                />
+                              )}
+                            />
+                          </FormControl>
+                          <FormControl error={!!errors.price} className='w-100'>
+                            <Controller
+                              name='price'
+                              control={control}
+                              rules={validationService.priceValidator('price')}
+                              render={({ field }) => (
+                                <TextField
+                                  {...field}
+                                  label='售價'
+                                  type='number'
+                                  error={!!errors.price}
+                                  helperText={validationService.getHelperText(
+                                    errors.price
+                                  )}
+                                  onPaste={handlePaste}
+                                  onChange={(e) => {
+                                    if (validationService.isValidInput(e)) {
+                                      field.onChange(e);
+                                    }
+                                  }}
+                                />
+                              )}
+                            />
+                          </FormControl>
+                        </div>
                       </div>
-                      <div className='col-md-6'>
-                        <div className='d-grid'>
-                          <div className='d-flex flex-column align-items-center'>
-                            <div className='image-group mb-4'>
-                              <Button
-                                className='btn btn-primary w-100'
-                                component='label'
-                                variant='contained'
-                              >
-                                <CloudUpload />
-                                <p className='btn-icon'>上傳主圖</p>
-                                <VisuallyHiddenInput
-                                  type='file'
-                                  accept='.jpg,.jpeg,.png'
-                                  onChange={(e) =>
-                                    handleImageUpload('major', e)
-                                  }
-                                  multiple
+                      <FormControl className='mb-2'>
+                        <Controller
+                          name='is_enabled'
+                          control={control}
+                          render={({ field }) => (
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  color='primary'
+                                  checked={field.value === 1 ? true : false}
+                                  onChange={(e) => field.onChange(e)}
                                 />
-                              </Button>
-                              <div className='d-flex justify-content-center'>
-                                {tempProduct?.imageUrl ? (
-                                  <img
-                                    src={tempProduct?.imageUrl}
-                                    className='object-fit rounded'
-                                    alt='主圖'
-                                  />
-                                ) : (
-                                  <InsertPhoto
-                                    className='no-image-icon'
-                                    color='disabled'
-                                  />
-                                )}
-                              </div>
-                            </div>
-                            <div className='image-group'>
-                              <Button
-                                className='btn btn-primary w-100'
-                                component='label'
-                                variant='contained'
-                                disabled={
-                                  6 <=
-                                  (tempProduct?.imagesUrl?.length ??
-                                    subImagesUrl.length)
-                                }
-                              >
-                                <CloudUpload />
-                                <p className='btn-icon'>
-                                  {(tempProduct?.imagesUrl?.length ??
-                                    subImagesUrl.length) >= 6
-                                    ? `已達到張數上限`
-                                    : `上傳副圖（還可上傳 ${6 - ((tempProduct?.imagesUrl?.length ?? newSubImagesUrl.length) || 0)} 張）`}
-                                </p>
-                                <VisuallyHiddenInput
-                                  type='file'
-                                  accept='.jpg,.jpeg,.png'
-                                  onChange={(e) => handleImageUpload('sub', e)}
-                                  multiple
-                                />
-                              </Button>
-                              <ul className='image-list row'>
-                                {tempProduct?.imagesUrl &&
-                                  tempProduct?.imagesUrl.map((item, index) => (
-                                    <li key={index} className='col-4'>
-                                      <img
-                                        className='sub-images rounded'
-                                        src={item}
-                                        alt={item}
-                                      />
-                                    </li>
-                                  ))}
-                                {!tempProduct?.imagesUrl &&
-                                  newSubImagesUrl &&
-                                  newSubImagesUrl.map((item, index) => (
-                                    <li key={index} className='col-4'>
-                                      <img
-                                        className='sub-images rounded'
-                                        src={item}
-                                        alt={item}
-                                      />
-                                    </li>
-                                  ))}
-                              </ul>
-                            </div>
+                              }
+                              label='是否啟用'
+                            />
+                          )}
+                        />
+                      </FormControl>
+                    </form>
+                  </div>
+                  <div className='col-md-6'>
+                    <div className='d-grid'>
+                      <div className='d-flex flex-column align-items-center'>
+                        <div className='image-group mb-4'>
+                          <Button
+                            className='btn btn-primary w-100'
+                            component='label'
+                            variant='contained'
+                          >
+                            <CloudUpload />
+                            <p className='btn-icon'>上傳主圖</p>
+                            <VisuallyHiddenInput
+                              type='file'
+                              accept='.jpg,.jpeg,.png'
+                              onChange={(e) => handleImageUpload('major', e)}
+                              multiple
+                            />
+                          </Button>
+                          <div className='d-flex justify-content-center'>
+                            {tempProduct?.imageUrl ? (
+                              <img
+                                src={tempProduct?.imageUrl}
+                                className='object-fit rounded'
+                                alt='主圖'
+                              />
+                            ) : (
+                              <InsertPhoto
+                                className='no-image-icon'
+                                color='disabled'
+                              />
+                            )}
                           </div>
+                        </div>
+                        <div className='image-group'>
+                          <Button
+                            className='btn btn-primary w-100'
+                            component='label'
+                            variant='contained'
+                            disabled={
+                              6 <=
+                              (tempProduct?.imagesUrl?.length ??
+                                subImagesUrl.length)
+                            }
+                          >
+                            <CloudUpload />
+                            <p className='btn-icon'>
+                              {(tempProduct?.imagesUrl?.length ??
+                                subImagesUrl.length) >= 6
+                                ? `已達到張數上限`
+                                : `上傳副圖（還可上傳 ${6 - ((tempProduct?.imagesUrl?.length ?? newSubImagesUrl.length) || 0)} 張）`}
+                            </p>
+                            <VisuallyHiddenInput
+                              type='file'
+                              accept='.jpg,.jpeg,.png'
+                              onChange={(e) => handleImageUpload('sub', e)}
+                              multiple
+                            />
+                          </Button>
+                          <ul className='image-list row'>
+                            {tempProduct?.imagesUrl &&
+                              tempProduct?.imagesUrl.map((item, index) => (
+                                <li key={index} className='col-4'>
+                                  <img
+                                    className='sub-images rounded'
+                                    src={item}
+                                    alt={item}
+                                  />
+                                </li>
+                              ))}
+                            {!tempProduct?.imagesUrl &&
+                              newSubImagesUrl &&
+                              newSubImagesUrl.map((item, index) => (
+                                <li key={index} className='col-4'>
+                                  <img
+                                    className='sub-images rounded'
+                                    src={item}
+                                    alt={item}
+                                  />
+                                </li>
+                              ))}
+                          </ul>
                         </div>
                       </div>
                     </div>
                   </div>
-                </Modal>
+                </div>
               </div>
-            </div>
+            </Modal>
           </div>
-        </>
-      ) : (
-        <Login />
-      )}
+        </div>
+      </div>
     </>
   );
 }
