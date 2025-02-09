@@ -17,9 +17,20 @@ axiosInstance.interceptors.request.use(
 
 const goToPage = (path: string) => {
   const env = process.env.NODE_ENV;
-  const url =
-    env === 'production' ? `/hex-react-pages/#/${path}` : `/#/${path}`;
-  window.location.href = url;
+  let urlText = '';
+
+  switch (env) {
+    case 'production':
+      urlText = `/hex-react-pages/#/${path}`;
+      break;
+    case 'development':
+      urlText = `/#/${path}`;
+      break;
+    default:
+      urlText = `/#/${path}`;
+      break;
+  }
+  window.location.href = urlText;
 };
 
 /**
@@ -45,13 +56,14 @@ function formatErrorMessage(message: string, status?: number) {
 
     switch (message) {
       case '驗證錯誤, 請重新登入':
+        goToPage('login');
         break;
       case '請重新登入':
         sessionStorage.removeItem('token');
-        window.location.reload();
+        goToPage('login');
         break;
       case '請重新登出':
-        window.location.reload();
+        goToPage('products');
         break;
       case '禁止使用, 請確認 api_path 是否為本人使用。':
         goToPage('products');

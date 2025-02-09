@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import {
   Button,
   TextField,
@@ -10,9 +11,18 @@ import {
   Pagination,
   styled,
   FormControl,
+  IconButton,
 } from '@mui/material';
-import { Modal, Spinners } from '../../components';
-import { Add, CloudUpload, InsertPhoto } from '../../components/icons';
+import { DataTable, Modal, Spinners } from '../../components';
+import {
+  Add,
+  Check,
+  Close,
+  CloudUpload,
+  Delete,
+  Edit,
+  InsertPhoto,
+} from '../../components/icons';
 import {
   AddProductRequest,
   ContentDatum,
@@ -22,13 +32,15 @@ import {
   ProductFullDatum,
   ProductItemDatum,
 } from '../../core/models/utils.model';
-import { formatUnknownText } from '../../services/formatValue.service';
+import {
+  formatPrice,
+  formatUnknownText,
+} from '../../services/formatValue.service';
 import validationService from '../../services/validation.service';
 import authService from '../../services/api/admin/auth.service';
 import productApiService from '../../services/api/admin/products.service';
-import Table from '../../components/table';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router';
+import { Column } from '../../components/dataTable';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -79,6 +91,51 @@ export default function AdminProductsList() {
   const subImagesUrl = subImagesMap[tempProduct?.id ?? ''] || [];
   const [newSubImagesUrl, setNewSubImagesUrl] = useState<string[]>([]);
   const navigate = useNavigate();
+
+  const columns: Column<ProductFullDatum>[] = [
+    { header: '作品名稱', accessor: 'title' },
+    {
+      header: '作品原文名稱',
+      accessor: (item: ProductFullDatum) =>
+        formatUnknownText('name', item.content?.name),
+    },
+    {
+      header: '作者名稱',
+      accessor: (item: ProductFullDatum) =>
+        formatUnknownText('artists_zh_tw', item.content?.artists_zh_tw),
+    },
+    {
+      header: '原價',
+      accessor: (item: ProductFullDatum) => formatPrice(item.origin_price),
+      tdClass: 'text-end',
+    },
+    {
+      header: '售價',
+      accessor: (item: ProductFullDatum) => formatPrice(item.price),
+      tdClass: 'text-end',
+    },
+    {
+      header: '是否啟用',
+      accessor: (item: ProductFullDatum) =>
+        item.is_enabled ? (
+          <Check className='text-success' />
+        ) : (
+          <Close className='text-danger' />
+        ),
+      tdClass: 'text-center',
+    },
+  ];
+
+  const actions = (item: ProductFullDatum) => (
+    <>
+      <IconButton onClick={() => handleEditOpen(item)}>
+        <Edit />
+      </IconButton>
+      <IconButton onClick={() => handleDeleteOpen(item)}>
+        <Delete sx={{ color: '#dc3545' }} />
+      </IconButton>
+    </>
+  );
 
   const {
     control,
@@ -468,10 +525,10 @@ export default function AdminProductsList() {
                 </Skeleton>
               ) : (
                 <div className='table-responsive'>
-                  <Table
+                  <DataTable
                     data={products}
-                    handleEditOpen={handleEditOpen}
-                    handleDeleteOpen={handleDeleteOpen}
+                    columns={columns}
+                    actions={actions}
                   />
                 </div>
               )}

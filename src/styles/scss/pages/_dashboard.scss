@@ -1,0 +1,36 @@
+.admin-dashboard {
+  background-color: #073757;
+  color: $white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  h2 {
+    text-align: center;
+    color: $white;
+    padding: 16px;
+    margin-bottom: 0;
+  }
+  a {
+    color: $white;
+  }
+
+  .list-item {
+    gap: 16px;
+  }
+
+  .MuiButtonBase-root {
+    .MuiListItemIcon-root {
+      color: $white;
+    }
+    &:hover {
+      background-color: #11435d;
+    }
+    &.Mui-selected {
+      background-color: #1d77a3;
+    }
+    &.Mui-selected:hover {
+      background-color: #1d77a3;
+    }
+  }
+}
