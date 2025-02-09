@@ -2,9 +2,6 @@ import axiosInstance from '../../../utils/axiosInstance';
 import { CartDataRequest } from '../../../core/models/cart.model';
 const { VITE_API, VITE_API_PATH } = import.meta.env;
 
-/** 權限 token */
-const token = sessionStorage.getItem('token');
-
 /** 訂單結帳 API 服務 */
 export class OrderApiService {
   /**
@@ -14,6 +11,8 @@ export class OrderApiService {
    * @returns API 回傳的資料
    */
   getOrders(page?: number) {
+    /** 權限 token */
+    const token = sessionStorage.getItem('token');
     /** API 網址 */
     const URL_PATH = page ? `orders?page=${page}` : 'orders';
 
@@ -35,6 +34,9 @@ export class OrderApiService {
    * @returns API 回傳的資料
    */
   editOrderItem(id: string, data: CartDataRequest) {
+    /** 權限 token */
+    const token = sessionStorage.getItem('token');
+
     return axiosInstance.put(
       `${VITE_API}/api/${VITE_API_PATH}/admin/order/${id}`,
       data,
@@ -53,6 +55,9 @@ export class OrderApiService {
    * @returns API 回傳的資料
    */
   deleteOrderItem(id: string) {
+    /** 權限 token */
+    const token = sessionStorage.getItem('token');
+
     return axiosInstance.delete(
       `${VITE_API}/api/${VITE_API_PATH}/admin/order/${id}`,
       {
@@ -69,6 +74,9 @@ export class OrderApiService {
    * @returns API 回傳的資料
    */
   deleteOrders() {
+    /** 權限 token */
+    const token = sessionStorage.getItem('token');
+
     return axiosInstance.delete(
       `${VITE_API}/api/${VITE_API_PATH}/admin/orders/all`,
       {
