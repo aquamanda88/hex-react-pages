@@ -10,14 +10,21 @@ export class OrderApiService {
   /**
    * 取得訂單資料
    *
+   * @param page - 頁數
    * @returns API 回傳的資料
    */
-  getOrders() {
-    return axiosInstance.get(`${VITE_API}/api/${VITE_API_PATH}/admin/orders`, {
-      headers: {
-        Authorization: token,
-      },
-    });
+  getOrders(page?: number) {
+    /** API 網址 */
+    const URL_PATH = page ? `orders?page=${page}` : 'orders';
+
+    return axiosInstance.get(
+      `${VITE_API}/api/${VITE_API_PATH}/admin/${URL_PATH}`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
   }
 
   /**

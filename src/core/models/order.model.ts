@@ -83,7 +83,7 @@ export interface OrderDatum extends OrdersDatum {
 
 /** 訂單資料 */
 export interface OrdersDatum {
-  /** 訂單送出時間 - 單位 (秒) */
+  /** 訂單建立時間 - 單位 (秒) */
   create_at?: number;
   /** 訂單 ID */
   id?: string;
@@ -91,10 +91,12 @@ export interface OrdersDatum {
   is_paid?: boolean;
   /** 付款時間 - 單位 (秒) */
   paid_date?: number;
-  /** 數量 */
+  /** 訂單序號 */
   num?: number;
   /** 會員留言備註內容 */
   message?: number;
+  /** 訂單總價 */
+  total?: number;
   /** 產品物件陣列 */
   products: ProductsDatum;
   /** 會員資料 */

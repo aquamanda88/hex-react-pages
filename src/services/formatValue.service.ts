@@ -7,7 +7,7 @@ import { CartsDatum } from '../core/models/cart.model';
  * @param price - 價格
  * @returns 加上千分位之價格
  */
-export function formatPrice(price: number | undefined): string {
+export function formatPrice(price?: number): string {
   if (price) {
     return new Intl.NumberFormat().format(price);
   } else {
@@ -16,14 +16,39 @@ export function formatPrice(price: number | undefined): string {
 }
 
 /**
- * 取得轉換後的日期
+ * 取得轉換後的日期格式
  *
  * @param secondsValue - 秒數
+ * @param formatType - 格式類型
  * @returns 轉換後的日期
  */
-export function formatDate(secondsValue: number): string {
-  const dateValue = new Date(secondsValue * 1000);
-  return format('yyyy/MM/dd HH:mm:ss')(dateValue);
+export function formatDate(
+  secondsValue?: number,
+  formatType: 'full' | 'short' = 'full'
+): string {
+  if (secondsValue) {
+    const dateValue = new Date(secondsValue * 1000);
+    const formatString =
+      formatType === 'full' ? 'yyyy/MM/dd HH:mm:ss' : 'yyyy/MM/dd';
+    return format(formatString)(dateValue);
+  } else {
+    return 'Unknown';
+  }
+}
+
+/**
+ * 取得自定義訂單編號
+ *
+ * @param secondsValue - 秒數
+ * @returns 自定義訂單編號
+ */
+export function generateOrderCode(secondsValue?: number): string {
+  if (secondsValue) {
+    const dateValue = new Date(secondsValue * 1000);
+    return format('yyyyMMddHHmmss')(dateValue);
+  } else {
+    return '00000000000000';
+  }
 }
 
 /**

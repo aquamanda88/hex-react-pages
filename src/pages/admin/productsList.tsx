@@ -13,6 +13,7 @@ import {
   FormControl,
   IconButton,
 } from '@mui/material';
+import { Column } from '../../components/dataTable';
 import { DataTable, Modal, Spinners } from '../../components';
 import {
   Add,
@@ -40,7 +41,6 @@ import validationService from '../../services/validation.service';
 import authService from '../../services/api/admin/auth.service';
 import productApiService from '../../services/api/admin/products.service';
 import Swal from 'sweetalert2';
-import { Column } from '../../components/dataTable';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -74,7 +74,7 @@ const defaultValues: ProductFullDatum = {
 
 export default function AdminProductsList() {
   const token = sessionStorage.getItem('token') ?? '';
-  const [isLoginLoading, setIsLoginLoading] = useState(true);
+  const [isFullScreenLoading, setIsFullScreenLoading] = useState(true);
   const [isProductLoading, setIsProductLoading] = useState(true);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
   const [pagination, setPagination] = useState<PaginationDatum>({});
@@ -345,7 +345,7 @@ export default function AdminProductsList() {
     type: string,
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setIsLoginLoading(true);
+    setIsFullScreenLoading(true);
     if (e.target.files !== null) {
       const file = e.target.files[0];
       const formData = new FormData();
@@ -384,7 +384,7 @@ export default function AdminProductsList() {
           }
         })
         .finally(() => {
-          setIsLoginLoading(false);
+          setIsFullScreenLoading(false);
         });
     }
   };
@@ -480,15 +480,15 @@ export default function AdminProductsList() {
   };
 
   useEffect(() => {
-    setIsLoginLoading(true);
+    setIsFullScreenLoading(true);
     if (token) {
       checkLogin(token).then((res) => {
         if (res) {
           getProducts().finally(() => {
-            setIsLoginLoading(false);
+            setIsFullScreenLoading(false);
           });
         } else {
-          setIsLoginLoading(false);
+          setIsFullScreenLoading(false);
         }
       });
     } else {
@@ -500,7 +500,7 @@ export default function AdminProductsList() {
   return (
     <>
       <div className='container py-4'>
-        <div className={`${isLoginLoading ? 'd-flex' : 'd-none'} loading`}>
+        <div className={`${isFullScreenLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />
         </div>
         <div className='row flex-column justify-content-center align-items-center'>
