@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import { Person, Login, ShoppingCart } from './icons';
 import {
   Badge,
-  Button,
   IconButton,
   ListItemIcon,
   ListItemText,
@@ -24,6 +23,7 @@ export default function NavBar({ cartCount }: NavBarProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -57,25 +57,23 @@ export default function NavBar({ cartCount }: NavBarProps) {
       <div className={`${isLoading ? 'd-flex' : 'd-none'} loading`}>
         <Spinners />
       </div>
-      <nav className='menu-bar navbar navbar-light bg-white'>
+      <nav className='menu-bar navbar navbar-light'>
         <div className='container'>
-          <div className='menu-bar-list'>
-            <div className='d-flex'>
-              <NavLink to='/products'>
-                <Button className='btn btn-secondary'>全部商品</Button>
-              </NavLink>
-              <NavLink to='/admin'>
-                <Button className='btn btn-secondary'>後台</Button>
-              </NavLink>
-            </div>
+          <div className='menu-navbar'>
+            <ul className='navbar-list d-flex'>
+              <li>
+                <NavLink to='/products'>全部商品</NavLink>
+              </li>
+              <li>
+                <NavLink to='/admin'>後台</NavLink>
+              </li>
+            </ul>
             <div className='page-bar'>
-              <NavLink to='/cart'>
-                <IconButton>
-                  <Badge badgeContent={cartCount} color='primary'>
-                    <ShoppingCart />
-                  </Badge>
-                </IconButton>
-              </NavLink>
+              <IconButton onClick={() => navigate('/cart')}>
+                <Badge badgeContent={cartCount} color='primary'>
+                  <ShoppingCart />
+                </Badge>
+              </IconButton>
               <IconButton id='basic-button' onClick={handleClick}>
                 <Person />
               </IconButton>

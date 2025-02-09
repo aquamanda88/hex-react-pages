@@ -9,18 +9,18 @@
   }
 
   &.btn-primary {
-    @include bg-color(#2e9cca);
+    @include bg-color(#78a1b1);
     @include text-color($white);
     &:hover {
-      @include common-hover($white, $main);
+      @include common-hover($white, #658795);
     }
   }
 
   &.btn-secondary {
     @include bg-color(#efefef);
-    @include text-color(#29648a);
+    @include text-color(#587682);
     &:hover {
-      @include common-hover(#29648a, #d6d6d6);
+      @include common-hover(#587682, #3f555d);
     }
   }
 
@@ -39,10 +39,10 @@
   }
 
   &.btn-primary {
-    @include border-color(#2e9cca);
-    @include text-color(#2e9cca);
+    @include border-color(#78a1b1);
+    @include text-color(#78a1b1);
     &:hover {
-      @include bg-color(#2e9cca);
+      @include bg-color(#78a1b1);
       @include text-color($white);
     }
   }
@@ -54,18 +54,18 @@
   }
 
   &.btn-primary {
-    @include text-color(#29648a);
+    @include text-color(#587682);
     &:hover {
       @include bg-color(#efefef);
-      @include text-color(#29648a);
+      @include text-color(#587682);
     }
   }
 
   &.btn-secondary {
-    @include text-color(#29648a);
+    @include text-color(#587682);
     &:hover {
       @include bg-color(transparent);
-      @include text-color(#1583b1);
+      @include text-color(#3f555d);
     }
   }
 }

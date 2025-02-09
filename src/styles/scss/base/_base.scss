@@ -38,11 +38,11 @@ body {
 }
 
 header {
-  background-color: #ffffff;
+  background-color: #f2f6f8;
 }
 
 footer {
-  background-color: #efefef;
+  background-color: #dfeaee;
 }
 
 main.container-fluid {
@@ -51,10 +51,10 @@ main.container-fluid {
 
 /** Text */
 .text-color-main {
-  @include text-color(#29648a);
+  @include text-color(#587682);
   &:hover {
     @include bg-color(transparent);
-    @include text-color(#1583b1);
+    @include text-color(#3f555d);
   }
 }
 .text-color-gray-500 {
@@ -95,4 +95,15 @@ main.container-fluid {
 
 .MuiButtonBase-root.MuiCheckbox-root {
   padding: 8px;
+}
+
+.MuiFormControl-root .MuiFormControlLabel-root .MuiCheckbox-root.Mui-checked {
+  color: #78a1b1;
+}
+
+.MuiStepper-root {
+  .MuiSvgIcon-root.Mui-completed,
+  .MuiSvgIcon-root.Mui-active {
+    color: #78a1b1;
+  }
 }

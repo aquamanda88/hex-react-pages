@@ -23,6 +23,7 @@
 @mixin btn-style($padding-y, $padding-x, $border-color: transparent) {
   padding: $padding-y $padding-x;
   border: 1px solid $border-color;
+  border-radius: 25px;
   box-shadow: none;
 }
 @mixin common-hover($color, $background-color) {

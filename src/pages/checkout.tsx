@@ -644,9 +644,9 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                       <div>
                         <CheckCircleOutline
                           className='mb-2'
-                          style={{ fontSize: '80px' }}
+                          style={{ fontSize: '80px', color: '#78a1b1' }}
                         />
-                        <h5>付款成功</h5>
+                        <h5 style={{ color: '#78a1b1' }}>付款成功</h5>
                       </div>
                       <ul className='border-secondary border-top border-bottom w-100 pt-3'>
                         <li className='d-flex justify-content-between'>
