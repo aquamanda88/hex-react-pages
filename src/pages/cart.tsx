@@ -11,6 +11,7 @@ import {
 import cartApiService from '../services/api/user/cart.service';
 import Swal from 'sweetalert2';
 import { AxiosError } from 'axios';
+import eventBus from '../components/eventBus';
 
 export default function Cart() {
   const [isProductLoading, setIsProductLoading] = useState(true);
@@ -169,6 +170,7 @@ export default function Cart() {
           icon: 'success',
           title: message,
         });
+        eventBus.emit('updateCart');
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -189,6 +191,7 @@ export default function Cart() {
           icon: 'success',
           title: message,
         });
+        eventBus.emit('updateCart');
       })
       .finally(() => {
         setIsProductLoading(false);

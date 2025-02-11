@@ -40,6 +40,7 @@ import {
 import validationService from '../../services/validation.service';
 import authService from '../../services/api/admin/auth.service';
 import productApiService from '../../services/api/admin/products.service';
+import eventBus from '../../components/eventBus';
 import Swal from 'sweetalert2';
 
 const VisuallyHiddenInput = styled('input')({
@@ -425,6 +426,7 @@ export default function AdminProductsList() {
           icon: 'success',
           title: message,
         });
+        eventBus.emit('updateCart');
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -452,6 +454,7 @@ export default function AdminProductsList() {
           icon: 'success',
           title: message,
         });
+        eventBus.emit('updateCart');
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -473,6 +476,7 @@ export default function AdminProductsList() {
           icon: 'success',
           title: message,
         });
+        eventBus.emit('updateCart');
       })
       .finally(() => {
         setIsProductLoading(false);

@@ -20,7 +20,7 @@
     @include bg-color(#efefef);
     @include text-color(#587682);
     &:hover {
-      @include common-hover(#587682, #3f555d);
+      @include common-hover(#587682, #dbdbdb);
     }
   }
 

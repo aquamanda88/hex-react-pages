@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 import { Person, Login, ShoppingCart } from './icons';
 import {
@@ -9,17 +9,15 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
+import { calculateTotalQty } from '../services/formatValue.service';
+import cartApiService from '../services/api/user/cart.service';
 import authService from '../services/api/admin/auth.service';
 import Spinners from './spinners';
+import eventBus from './eventBus';
 
-/** 元件參數型別 */
-interface NavBarProps {
-  /** 購物車總數量 */
-  cartCount: number;
-}
-
-export default function NavBar({ cartCount }: NavBarProps) {
+export default function NavBar() {
   const token = sessionStorage.getItem('token') ?? '';
+  const [cartCount, setCartCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -52,6 +50,23 @@ export default function NavBar({ cartCount }: NavBarProps) {
       });
   };
 
+  /**
+   * 呼叫取得購物車資料 API
+   */
+  const getCarts = async () => {
+    cartApiService.getCarts().then(({ data: { data } }) => {
+      setCartCount(calculateTotalQty(data.carts));
+    });
+  };
+
+  useEffect(() => {
+    getCarts();
+    eventBus.on('updateCart', getCarts);
+    return () => {
+      eventBus.off('updateCart', getCarts);
+    };
+  }, []);
+
   return (
     <>
       <div className={`${isLoading ? 'd-flex' : 'd-none'} loading`}>
@@ -62,10 +77,14 @@ export default function NavBar({ cartCount }: NavBarProps) {
           <div className='menu-navbar'>
             <ul className='navbar-list d-flex'>
               <li>
-                <NavLink to='/products'>全部商品</NavLink>
+                <NavLink className='text-color-main' to='/products'>
+                  全部商品
+                </NavLink>
               </li>
               <li>
-                <NavLink to='/admin'>後台</NavLink>
+                <NavLink className='text-color-main' to='/admin'>
+                  後台
+                </NavLink>
               </li>
             </ul>
             <div className='page-bar'>

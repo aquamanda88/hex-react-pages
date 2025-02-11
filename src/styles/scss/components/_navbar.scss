@@ -11,8 +11,8 @@
 }
 
 .menu-bar {
-  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.12);
-  background-color: #78a1b1;
+  box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.3);
+  background-color: #dfeaed;
   padding: 0;
   position: fixed;
   z-index: 100;
@@ -26,15 +26,9 @@
   width: 100%;
   gap: 16px;
   .navbar-list a {
-    @include font(18px, 0.02em, 150%);
-    @include text-color(#f2f6f8);
-    padding: 12px 16px;
+    padding: 18px 16px;
     width: 110px;
     text-align: center;
-    &:hover {
-      @include bg-color(transparent);
-      @include text-color(#bfd4dd);
-    }
   }
 }
 

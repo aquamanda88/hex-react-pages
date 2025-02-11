@@ -4,10 +4,7 @@ import { Button, Checkbox } from '@mui/material';
 import { Spinners } from '../components';
 import { Favorite, FavoriteBorder, InsertPhoto } from '../components/icons';
 import { ProductDatum } from '../core/models/utils.model';
-import {
-  CartDataDatum,
-  CartDataRequest,
-} from '../core/models/cart.model';
+import { CartDataDatum, CartDataRequest } from '../core/models/cart.model';
 import {
   formatPrice,
   formatUnknownText,
@@ -15,6 +12,7 @@ import {
 import productApiService from '../services/api/user/products.service';
 import cartApiService from '../services/api/user/cart.service';
 import Swal from 'sweetalert2';
+import eventBus from '../components/eventBus';
 
 export default function ProductDetail() {
   const [isProductLoading, setIsProductLoading] = useState(true);
@@ -97,11 +95,12 @@ export default function ProductDetail() {
     cartApiService
       .addCartItem(data)
       .then(({ data: { message } }) => {
+        getCarts();
         Swal.fire({
           icon: 'success',
           title: message,
         });
-        getCarts();
+        eventBus.emit('updateCart');
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -149,7 +148,7 @@ export default function ProductDetail() {
           <div className='product-image col-12 col-lg-6'>
             {product.imageUrl ? (
               <button
-              className='hvr-glow'
+                className='hvr-glow'
                 type='button'
                 onClick={() =>
                   handleImageClick(
@@ -193,8 +192,11 @@ export default function ProductDetail() {
               <>
                 <div className='d-flex justify-content-between align-items-center'>
                   <h5 className='mb-0'>
-                    {formatUnknownText('artists_zh_tw', product.content?.artists_zh_tw)} (
-                    {formatUnknownText('artists', product.content?.artists)})
+                    {formatUnknownText(
+                      'artists_zh_tw',
+                      product.content?.artists_zh_tw
+                    )}{' '}
+                    ({formatUnknownText('artists', product.content?.artists)})
                   </h5>
                   <Checkbox
                     checked={isFavoriteChecked}
@@ -225,9 +227,7 @@ export default function ProductDetail() {
                   TWD {formatPrice(product.price)}
                 </p>
                 <p className='font-en-p-regular text-secondary'>
-                  <del>
-                    TWD {formatPrice(product.origin_price)}
-                  </del>
+                  <del>TWD {formatPrice(product.origin_price)}</del>
                 </p>
 
                 <Button

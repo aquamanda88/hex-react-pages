@@ -1,0 +1,12 @@
+.login-layout {
+  background-image: url(https://storage.googleapis.com/vue-course-api.appspot.com/olive-branch/1739268106294.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=btLT4OS6BYd3t%2BxY7cbspqh%2Fs0Az%2B69QlY2s1UF06yNg3VdabhBiU4kJC9mL48ErM%2BP2DVLY611VA3Z%2Bg72xd91Hs6tIYSfQnpJNO8nLAXXWNjZ%2BeF9rN2yqT0VwV5VnjhXV%2Fa79cUXrZAluPIgwkjbUvc7cQ7OlCI0AMPpi%2BMfxL6O4QPtwKed7jQNC108vvpQL94Inuz3J5ptvGE14lkPHKgkrhJ9Y0fK06wlbFi%2FGm5Bk9d8bR13KW%2FK04xXm6d8ngnZKGABehIgVRQdHc36cwmr1guxkz3cgN7bMPCtL2sWL%2B0EL56qK9kMDk6kvyoF9fWmWsjEQTugED%2BlipA%3D%3D);
+  background-size: cover;
+  background-position: bottom;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  h2 {
+    margin-bottom: 48px;
+  }
+}

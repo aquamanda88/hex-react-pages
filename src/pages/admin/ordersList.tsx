@@ -14,6 +14,7 @@ import authService from '../../services/api/admin/auth.service';
 import ordersApiService from '../../services/api/admin/orders.service';
 import { Delete, Edit } from '../../components/icons';
 import Swal from 'sweetalert2';
+import eventBus from '../../components/eventBus';
 
 export default function AdminOrdersList() {
   const token = sessionStorage.getItem('token') ?? '';
@@ -168,6 +169,7 @@ export default function AdminOrdersList() {
           icon: 'success',
           title: message,
         });
+        eventBus.emit('updateCart');
       })
       .finally(() => {
         setIsLoading(false);
@@ -187,6 +189,7 @@ export default function AdminOrdersList() {
           icon: 'success',
           title: message,
         });
+        eventBus.emit('updateCart');
       })
       .finally(() => {
         setIsLoading(false);
