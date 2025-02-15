@@ -21,7 +21,6 @@ import authService from '../../services/api/admin/auth.service';
 import ordersApiService from '../../services/api/admin/orders.service';
 import { Delete, Edit } from '../../components/Icons';
 import Swal from 'sweetalert2';
-import eventBus from '../../components/EventBus';
 
 export default function AdminOrdersList() {
   const token = sessionStorage.getItem('token') ?? '';
@@ -162,9 +161,9 @@ export default function AdminOrdersList() {
   };
 
   /**
-   * 呼叫刪除單一購物車資料 API
+   * 呼叫刪除單一訂單資料 API
    *
-   * @param id - 購物車 ID
+   * @param id - 訂單 ID
    */
   const deleteOrderItem = async (id: string) => {
     setIsLoading(true);
@@ -176,7 +175,6 @@ export default function AdminOrdersList() {
           icon: 'success',
           title: message,
         });
-        eventBus.emit('updateCart');
       })
       .finally(() => {
         setIsLoading(false);
@@ -184,7 +182,7 @@ export default function AdminOrdersList() {
   };
 
   /**
-   * 呼叫刪除單一購物車資料 API
+   * 呼叫刪除單一訂單資料 API
    */
   const deleteOrderAll = async () => {
     setIsLoading(true);
@@ -196,7 +194,6 @@ export default function AdminOrdersList() {
           icon: 'success',
           title: message,
         });
-        eventBus.emit('updateCart');
       })
       .finally(() => {
         setIsLoading(false);

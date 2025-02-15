@@ -1,5 +1,4 @@
 import { format } from 'date-fns/fp/format';
-import { CartsDatum } from '../core/models/cart.model';
 
 /**
  * 價格加上千分位
@@ -64,14 +63,4 @@ export function formatUnknownText(name: string, value?: string): string {
   } else {
     return name === 'artists_zh_tw' ? '佚名' : 'Unknown';
   }
-}
-
-/**
- * 取得購物車總數量
- *
- * @param carts - 購物車資料
- * @returns 購物車內產品總數量
- */
-export function calculateTotalQty(carts: CartsDatum[]): number {
-  return carts.length;
 }

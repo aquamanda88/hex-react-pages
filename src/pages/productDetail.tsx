@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { useDispatch } from 'react-redux';
 import { Button, Checkbox } from '@mui/material';
 import { Spinners } from '../components/Index';
 import { Favorite, FavoriteBorder, InsertPhoto } from '../components/Icons';
+import { calculateCartCount } from '../slice/countSlice';
 import { ProductDatum } from '../core/models/utils.model';
 import { CartDataDatum, CartDataRequest } from '../core/models/cart.model';
 import {
@@ -12,7 +14,6 @@ import {
 import productApiService from '../services/api/user/products.service';
 import cartApiService from '../services/api/user/cart.service';
 import Swal from 'sweetalert2';
-import eventBus from '../components/EventBus';
 
 export default function ProductDetail() {
   const [isProductLoading, setIsProductLoading] = useState(false);
@@ -21,6 +22,7 @@ export default function ProductDetail() {
   const [isFavoriteChecked, setIsFavoriteChecked] = useState<boolean>(false);
   const favoritesList = localStorage.getItem('favoritesList');
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   /**
    * 處理收藏清單事件
@@ -100,7 +102,6 @@ export default function ProductDetail() {
           icon: 'success',
           title: message,
         });
-        eventBus.emit('updateCart');
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -116,6 +117,7 @@ export default function ProductDetail() {
       .getCarts()
       .then(({ data: { data } }) => {
         setCart(data);
+        dispatch(calculateCartCount(data.carts.length));
       })
       .finally(() => {
         setIsProductLoading(false);

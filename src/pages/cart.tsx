@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
 import { Button, IconButton, TextField } from '@mui/material';
 import { Spinners } from '../components/Index';
 import { Close, InsertPhoto } from '../components/Icons';
+import { calculateCartCount } from '../slice/countSlice';
 import { CartDataDatum, CartDataRequest } from '../core/models/cart.model';
 import {
   formatPrice,
@@ -11,13 +13,13 @@ import {
 import cartApiService from '../services/api/user/cart.service';
 import Swal from 'sweetalert2';
 import { AxiosError } from 'axios';
-import eventBus from '../components/EventBus';
 
 export default function Cart() {
   const [isProductLoading, setIsProductLoading] = useState(false);
   const [cart, setCart] = useState<CartDataDatum>();
   const [changedCart, setChangedCart] = useState<CartDataRequest[]>([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   /**
    * 處理開啟刪除商品 modal 事件
@@ -102,6 +104,7 @@ export default function Cart() {
       .getCarts()
       .then(({ data: { data } }) => {
         setCart(data);
+        dispatch(calculateCartCount(data.carts.length));
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -170,7 +173,6 @@ export default function Cart() {
           icon: 'success',
           title: message,
         });
-        eventBus.emit('updateCart');
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -191,7 +193,6 @@ export default function Cart() {
           icon: 'success',
           title: message,
         });
-        eventBus.emit('updateCart');
       })
       .finally(() => {
         setIsProductLoading(false);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 import { Person, ShoppingCart, Bookmark, Dashboard } from './Icons';
 import {
   Badge,
@@ -10,15 +11,15 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
-import { calculateTotalQty } from '../services/formatValue.service';
+import { calculateCartCount, selectCount } from '../slice/countSlice';
 import cartApiService from '../services/api/user/cart.service';
-import eventBus from './EventBus';
 
 export default function NavBar() {
-  const [cartCount, setCartCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const count = useSelector(selectCount);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -33,16 +34,12 @@ export default function NavBar() {
    */
   const getCarts = async () => {
     cartApiService.getCarts().then(({ data: { data } }) => {
-      setCartCount(calculateTotalQty(data.carts));
+      dispatch(calculateCartCount(data.carts.length));
     });
   };
 
   useEffect(() => {
     getCarts();
-    eventBus.on('updateCart', getCarts);
-    return () => {
-      eventBus.off('updateCart', getCarts);
-    };
   }, []);
 
   return (
@@ -59,7 +56,7 @@ export default function NavBar() {
             </ul>
             <div className='page-bar'>
               <IconButton onClick={() => navigate('/cart')}>
-                <Badge badgeContent={cartCount} color='primary'>
+                <Badge badgeContent={count} color='primary'>
                   <ShoppingCart />
                 </Badge>
               </IconButton>
