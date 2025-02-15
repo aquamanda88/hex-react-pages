@@ -16,32 +16,32 @@
 
 // 標題 5
 .font-zh-h5 {
-  @include font(20px, 0.04em);
+  @include font(20px, 0.04em, 1.2);
 }
 
 // 按鈕
 .font-zh-button {
-  @include font(16px, 0.02em, 150%);
+  @include font(16px, 0.02em);
 }
 
 // 內文-medium
 .font-zh-p-medium {
-  @include font(18px, 0.02em, 150%);
+  @include font(18px, 0.02em);
 }
 
 // 內文-regular
 .font-zh-p-regular {
-  @include font(16px, 0.02em, 100%);
+  @include font(16px, 0.02em, 1);
 }
 
 // 備註文字-medium
 .font-zh-small-medium {
-  @include font(14px, 0.02em, 150%);
+  @include font(14px, 0.02em);
 }
 
 // 備註文字-regular
 .font-zh-small-regular {
-  @include font(14px, 0.02em, 150%);
+  @include font(14px, 0.02em);
 }
 
 /** 英文字體 */
@@ -50,7 +50,7 @@
   @include font(32px, 0.005em);
 }
 .font-en-h2-medium {
-  @include font(32px, 0.005em, 150%, 600);
+  @include font(32px, 0.005em, 1.5, 600);
 }
 
 // h3
@@ -58,7 +58,7 @@
   @include font(28px, 0.005em);
 }
 .font-en-h3-medium {
-  @include font(28px, 0.005em, 150%, 600);
+  @include font(28px, 0.005em, 1.5, 600);
 }
 
 // h4
@@ -66,7 +66,7 @@
   @include font(24px, 0.005em);
 }
 .font-en-h4-medium {
-  @include font(24px, 0.005em, 150%, 600);
+  @include font(24px, 0.005em, 1.5, 600);
 }
 
 // h5
@@ -74,7 +74,7 @@
   @include font(20px, 0.005em);
 }
 .font-en-h5-medium {
-  @include font(20px, 0.005em, 150%, 600);
+  @include font(20px, 0.005em, 1.5, 600);
 }
 
 // button
@@ -84,20 +84,20 @@
 
 // p/medium
 .font-en-p-medium {
-  @include font(18px, 0.005em, 150%, 600);
+  @include font(18px, 0.005em, 1.5, 600);
 }
 
 // p/regular
 .font-en-p-regular {
-  @include font(16px, 0.005em, 150%);
+  @include font(16px, 0.005em);
 }
 
 // small/medium
 .font-en-small-medium {
-  @include font(14px, 0.005em, 150%);
+  @include font(14px, 0.005em);
 }
 
 // small/regular
 .font-en-small-regular {
-  @include font(14px, 0.005em, 150%);
+  @include font(14px, 0.005em);
 }
