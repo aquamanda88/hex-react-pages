@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 import { Button, IconButton, TextField } from '@mui/material';
-import { Spinners } from '../components';
-import { Close, InsertPhoto } from '../components/icons';
+import { Spinners } from '../components/Index';
+import { Close, InsertPhoto } from '../components/Icons';
 import { CartDataDatum, CartDataRequest } from '../core/models/cart.model';
 import {
   formatPrice,
@@ -11,7 +11,7 @@ import {
 import cartApiService from '../services/api/user/cart.service';
 import Swal from 'sweetalert2';
 import { AxiosError } from 'axios';
-import eventBus from '../components/eventBus';
+import eventBus from '../components/EventBus';
 
 export default function Cart() {
   const [isProductLoading, setIsProductLoading] = useState(true);

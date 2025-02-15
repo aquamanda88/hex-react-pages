@@ -1,5 +1,5 @@
-import { Header } from '../../components';
-import { AdminProductsList } from '..';
+import { Header } from '../../components/Index';
+import { AdminProductsList } from '../Index';
 
 export default function Week04() {
   return (

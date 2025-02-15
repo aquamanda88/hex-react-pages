@@ -13,8 +13,8 @@ import {
   FormControl,
   IconButton,
 } from '@mui/material';
-import { Column } from '../../components/dataTable';
-import { DataTable, Modal, Spinners } from '../../components';
+import { Column } from '../../components/DataTable';
+import { DataTable, Modal, Spinners } from '../../components/Index';
 import {
   Add,
   Check,
@@ -23,7 +23,7 @@ import {
   Delete,
   Edit,
   InsertPhoto,
-} from '../../components/icons';
+} from '../../components/Icons';
 import {
   AddProductRequest,
   ContentDatum,
@@ -40,7 +40,7 @@ import {
 import validationService from '../../services/validation.service';
 import authService from '../../services/api/admin/auth.service';
 import productApiService from '../../services/api/admin/products.service';
-import eventBus from '../../components/eventBus';
+import eventBus from '../../components/EventBus';
 import Swal from 'sweetalert2';
 
 const VisuallyHiddenInput = styled('input')({

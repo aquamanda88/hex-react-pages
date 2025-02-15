@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router';
-import { Footer, Navbar } from '../components';
+import { Footer, Navbar } from '../components/Index';
 
 
 export default function Layout() { 

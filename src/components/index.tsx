@@ -1,8 +1,8 @@
-export { default as Navbar } from './navbar';
-export { default as Header } from './header';
-export { default as Footer } from './footer';
-export { default as Modal } from './modal';
-export { default as Spinners } from './spinners';
-export { default as Steppers } from './steppers';
-export { default as DataTable } from './dataTable';
-export { default as MenuList } from './menuList';
+export { default as Navbar } from './Navbar';
+export { default as Header } from './Header';
+export { default as Footer } from './Footer';
+export { default as Modal } from './Modal';
+export { default as Spinners } from './Spinners';
+export { default as Steppers } from './Steppers';
+export { default as DataTable } from './DataTable';
+export { default as MenuList } from './MenuList';

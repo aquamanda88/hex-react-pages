@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
-import { Person, Login, ShoppingCart } from './icons';
+import { Person, Login, ShoppingCart } from './Icons';
 import {
   Badge,
   IconButton,
@@ -12,8 +12,8 @@ import {
 import { calculateTotalQty } from '../services/formatValue.service';
 import cartApiService from '../services/api/user/cart.service';
 import authService from '../services/api/admin/auth.service';
-import Spinners from './spinners';
-import eventBus from './eventBus';
+import Spinners from './Spinners';
+import eventBus from './EventBus';
 
 export default function NavBar() {
   const token = sessionStorage.getItem('token') ?? '';

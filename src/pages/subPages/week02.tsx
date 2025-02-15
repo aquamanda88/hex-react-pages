@@ -1,4 +1,4 @@
-import Header from '../../components/header';
+import Header from '../../components/Header';
 import { useEffect, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { LoginReq } from '../../core/models/admin/auth.model';

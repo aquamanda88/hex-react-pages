@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Button, IconButton, Pagination, Skeleton, Stack } from '@mui/material';
-import { DataTable, Spinners } from '../../components';
+import { DataTable, Spinners } from '../../components/Index';
 import { PaginationDatum } from '../../core/models/utils.model';
 import { OrdersDatum } from '../../core/models/order.model';
-import { Column } from '../../components/dataTable';
+import { Column } from '../../components/DataTable';
 import {
   formatPrice,
   formatDate,
@@ -12,9 +12,9 @@ import {
 } from '../../services/formatValue.service';
 import authService from '../../services/api/admin/auth.service';
 import ordersApiService from '../../services/api/admin/orders.service';
-import { Delete, Edit } from '../../components/icons';
+import { Delete, Edit } from '../../components/Icons';
 import Swal from 'sweetalert2';
-import eventBus from '../../components/eventBus';
+import eventBus from '../../components/EventBus';
 
 export default function AdminOrdersList() {
   const token = sessionStorage.getItem('token') ?? '';

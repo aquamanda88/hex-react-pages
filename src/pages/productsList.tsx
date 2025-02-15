@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router';
 import { Checkbox, Pagination, Skeleton, Stack } from '@mui/material';
-import { Favorite, FavoriteBorder } from '../components/icons';
+import { Favorite, FavoriteBorder } from '../components/Icons';
 import { PaginationDatum, ProductFullDatum } from '../core/models/utils.model';
 import { formatPrice } from '../services/formatValue.service';
 import productApiService from '../services/api/user/products.service';

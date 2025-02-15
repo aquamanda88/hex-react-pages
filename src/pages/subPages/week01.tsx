@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Header from '../../components/header';
+import Header from '../../components/Header';
 import { ProductFullDatum } from '../../core/models/utils.model';
 
 export default function Week01() {

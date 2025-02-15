@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Checkbox } from '@mui/material';
-import { Spinners } from '../components';
-import { Favorite, FavoriteBorder, InsertPhoto } from '../components/icons';
+import { Spinners } from '../components/Index';
+import { Favorite, FavoriteBorder, InsertPhoto } from '../components/Icons';
 import { ProductDatum } from '../core/models/utils.model';
 import { CartDataDatum, CartDataRequest } from '../core/models/cart.model';
 import {
@@ -12,7 +12,7 @@ import {
 import productApiService from '../services/api/user/products.service';
 import cartApiService from '../services/api/user/cart.service';
 import Swal from 'sweetalert2';
-import eventBus from '../components/eventBus';
+import eventBus from '../components/EventBus';
 
 export default function ProductDetail() {
   const [isProductLoading, setIsProductLoading] = useState(true);

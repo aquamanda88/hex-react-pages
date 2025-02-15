@@ -9,7 +9,7 @@ import {
   Stack,
   Pagination,
 } from '@mui/material';
-import { Header, Modal, Spinners } from '../../components';
+import { Header, Modal, Spinners } from '../../components/Index';
 import {
   Add,
   Check,
@@ -17,7 +17,7 @@ import {
   Delete,
   Edit,
   InsertPhoto,
-} from '../../components/icons';
+} from '../../components/Icons';
 import {
   AddProductRequest,
   ContentDatum,

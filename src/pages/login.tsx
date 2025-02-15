@@ -3,7 +3,7 @@ import { LoginReq } from '../core/models/admin/auth.model';
 import { Button, FormControl, TextField } from '@mui/material';
 import validationService from '../services/validation.service';
 import authService from '../services/api/admin/auth.service';
-import { Spinners } from '../components';
+import { Spinners } from '../components/Index';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 

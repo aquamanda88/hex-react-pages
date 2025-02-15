@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, TextField } from '@mui/material';
-import { Spinners, Steppers } from '../components';
+import { Spinners, Steppers } from '../components/Index';
 import { CartDataDatum, CartsDatum } from '../core/models/cart.model';
 import {
   OrderDataRequest,
@@ -19,7 +19,7 @@ import cartApiService from '../services/api/user/cart.service';
 import orderApiService from '../services/api/user/order.service';
 import FormControl from '@mui/material/FormControl';
 import Swal from 'sweetalert2';
-import { CheckCircleOutline, InsertPhoto } from '../components/icons';
+import { CheckCircleOutline, InsertPhoto } from '../components/Icons';
 
 const steps = ['填寫訂單資料', '確認訂單內容', '進行付款', '完成結帳'];
 

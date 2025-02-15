@@ -9,8 +9,8 @@ import {
   OutlinedInput,
   TextField,
 } from '@mui/material';
-import { Header } from '../components';
-import { Add, KeyboardArrowLeft, KeyboardArrowRight } from '../components/icons';
+import { Header } from '../components/Index';
+import { Add, KeyboardArrowLeft, KeyboardArrowRight } from '../components/Icons';
 
 export default function Home() {
   return (

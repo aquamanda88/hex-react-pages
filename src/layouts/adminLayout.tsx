@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router';
-import { MenuList } from '../components';
+import { MenuList } from '../components/Index';
 
 export default function AdminLayout() {
   return (

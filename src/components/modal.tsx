@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Button, IconButton, Dialog, DialogActions } from '@mui/material';
-import { Close } from './icons';
+import { Close } from './Icons';
 import React from 'react';
 
 /** 元件參數型別 */

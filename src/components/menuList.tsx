@@ -6,8 +6,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import authService from '../services/api/admin/auth.service';
-import Spinners from './spinners';
-import { Drafts, Source } from './icons';
+import Spinners from './Spinners';
+import { Drafts, Source } from './Icons';
 
 export default function MenuList() {
   const token = sessionStorage.getItem('token') ?? '';
