@@ -6,6 +6,7 @@ import {
   AdminProductsList,
   Cart,
   Checkout,
+  FavoritesList,
   Login,
   PageNotFound,
   ProductDetail,
@@ -15,7 +16,6 @@ import {
   Week03,
   Week04,
   Week05,
-  Week06,
 } from '../pages/Index';
 import AdminOrdersList from '../pages/admin/OrdersList';
 
@@ -47,6 +47,10 @@ const routes = [
       {
         path: 'checkout/:id',
         element: <Checkout activeStep={2} />,
+      },
+      {
+        path: 'favorites',
+        element: <FavoritesList />,
       },
     ],
   },
@@ -95,10 +99,6 @@ const routes = [
   {
     path: '/week05',
     element: <Week05 />,
-  },
-  {
-    path: '/week06',
-    element: <Week06 />,
   },
   {
     path: '*',

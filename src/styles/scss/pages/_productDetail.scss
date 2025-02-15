@@ -20,6 +20,11 @@
     height: -webkit-fit-content;
     height: -moz-fit-content;
     height: fit-content;
+    &.hvr-glow:focus,
+    &.hvr-grow-shadow {
+      transform: none;
+      box-shadow: none;
+    }
   }
 }
 
@@ -40,5 +45,8 @@
   .product-detail-container {
     background-color: #f5f5f5;
     padding-top: 0;
+  }
+  .hvr-glow:hover {
+    box-shadow: none;
   }
 }

@@ -35,8 +35,8 @@ export default function Week03() {
   const [formData, setFormData] = useState<LoginReq>({});
   const [loginErrors, setLoginErrors] = useState<LoginValidation>({});
   const [loginErrorsMessage, setLoginErrorsMessage] = useState<LoginReq>({});
-  const [isLoginLoading, setIsLoginLoading] = useState(true);
-  const [isProductLoading, setIsProductLoading] = useState(true);
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
+  const [isProductLoading, setIsProductLoading] = useState(false);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
   const [pagination, setPagination] = useState<PaginationDatum>({});
   const [currentPage, setCurrentPage] = useState(1);

@@ -75,8 +75,8 @@ const defaultValues: ProductFullDatum = {
 
 export default function AdminProductsList() {
   const token = sessionStorage.getItem('token') ?? '';
-  const [isFullScreenLoading, setIsFullScreenLoading] = useState(true);
-  const [isProductLoading, setIsProductLoading] = useState(true);
+  const [isFullScreenLoading, setIsFullScreenLoading] = useState(false);
+  const [isProductLoading, setIsProductLoading] = useState(false);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
   const [pagination, setPagination] = useState<PaginationDatum>({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -631,7 +631,7 @@ export default function AdminProductsList() {
                             render={({ field }) => (
                               <TextField
                                 {...field}
-                                label='作品原文名稱'
+                                label='作品原文名稱（選填）'
                                 type='text'
                                 helperText={validationService.getHelperText()}
                                 onChange={(e) => {
@@ -649,7 +649,7 @@ export default function AdminProductsList() {
                               render={({ field }) => (
                                 <TextField
                                   {...field}
-                                  label='作者名稱'
+                                  label='作者名稱（選填）'
                                   type='text'
                                   helperText={validationService.getHelperText()}
                                   onChange={(e) => {
@@ -666,7 +666,7 @@ export default function AdminProductsList() {
                               render={({ field }) => (
                                 <TextField
                                   {...field}
-                                  label='作者原文名稱'
+                                  label='作者原文名稱（選填）'
                                   type='text'
                                   helperText={validationService.getHelperText()}
                                   onChange={(e) => {
@@ -684,7 +684,7 @@ export default function AdminProductsList() {
                             render={({ field }) => (
                               <TextField
                                 {...field}
-                                label='作品年份'
+                                label='作品年份（選填）'
                                 type='text'
                                 helperText={validationService.getHelperText()}
                                 onChange={(e) => {
@@ -701,7 +701,7 @@ export default function AdminProductsList() {
                             render={({ field }) => (
                               <TextField
                                 {...field}
-                                label='描述'
+                                label='描述（選填）'
                                 type='text'
                                 multiline
                                 maxRows={6}

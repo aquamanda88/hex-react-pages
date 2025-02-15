@@ -30,7 +30,7 @@ interface CheckoutProps {
 }
 
 export default function Checkout({ activeStep }: CheckoutProps) {
-  const [isProductLoading, setIsProductLoading] = useState(true);
+  const [isProductLoading, setIsProductLoading] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [cartData, setCartData] = useState<CartDataDatum>();
   const [orderDataRequest, setOrderDataRequest] = useState<OrderDataRequest>();
@@ -195,6 +195,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
 
   return (
     <>
+      <h2 className='page-title'>結帳</h2>
       <div className='content-layout container'>
         <div className={`${isProductLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />
@@ -306,7 +307,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                             render={({ field }) => (
                               <TextField
                                 {...field}
-                                label='留言'
+                                label='留言（選填）'
                                 type='text'
                                 multiline
                                 rows={6}
@@ -631,7 +632,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                           to='/products'
                           className='text-color-main d-flex justify-content-center'
                         >
-                          <p className='btn-icon'>立即去選購</p>
+                          <p className='btn-icon'>馬上去逛逛</p>
                         </NavLink>
                       </div>
                     </div>
@@ -690,12 +691,12 @@ export default function Checkout({ activeStep }: CheckoutProps) {
           <div className='layout'>
             <div className='d-flex justify-content-center'>
               <h2 className='font-zh-h2'>
-                您的購物車中沒有商品，
+                您的購物車中沒有任何商品，
                 <NavLink
                   to='/products'
                   className='text-color-main d-inline-flex'
                 >
-                  <p className='btn-icon'>立即去選購</p>
+                  <p className='btn-icon'>馬上去逛逛</p>
                 </NavLink>
               </h2>
             </div>

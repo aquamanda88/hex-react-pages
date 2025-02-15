@@ -14,7 +14,7 @@ import { AxiosError } from 'axios';
 import eventBus from '../components/EventBus';
 
 export default function Cart() {
-  const [isProductLoading, setIsProductLoading] = useState(true);
+  const [isProductLoading, setIsProductLoading] = useState(false);
   const [cart, setCart] = useState<CartDataDatum>();
   const [changedCart, setChangedCart] = useState<CartDataRequest[]>([]);
   const navigate = useNavigate();
@@ -208,11 +208,11 @@ export default function Cart() {
 
   return (
     <>
+      <h2 className='page-title'>購物車</h2>
       <div className='content-layout container'>
         <div className={`${isProductLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />
         </div>
-        <h2 className='text-center mb-4'>購物車</h2>
         {cart?.carts && cart?.carts.length > 0 ? (
           <>
             <div className='table-responsive-lg mb-2'>
@@ -347,12 +347,12 @@ export default function Cart() {
           <div className='layout'>
             <div className='d-flex justify-content-center'>
               <h2 className='font-zh-h2'>
-                您的購物車中沒有商品，
+                您的購物車中沒有任何商品，
                 <NavLink
                   to='/products'
                   className='text-color-main d-inline-flex'
                 >
-                  <p className='btn-icon'>立即去選購</p>
+                  <p className='btn-icon'>馬上去逛逛</p>
                 </NavLink>
               </h2>
             </div>

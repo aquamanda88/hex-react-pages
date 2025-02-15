@@ -18,4 +18,5 @@ export {
   CloudUpload,
   Source,
   Drafts,
+  Dashboard,
 } from '@mui/icons-material';

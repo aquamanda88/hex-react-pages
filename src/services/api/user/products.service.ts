@@ -4,6 +4,17 @@ const { VITE_API, VITE_API_PATH } = import.meta.env;
 /** 產品 API 服務 */
 export class ProductApiService {
   /**
+   * 取得所有產品資料
+   *
+   * @returns API 回傳的資料
+   */
+  getAllProducts() {
+    return axiosInstance.get(
+      `${VITE_API}/api/${VITE_API_PATH}/products/all`
+    );
+  }
+
+  /**
    * 取得產品資料
    *
    * @param page - 頁數

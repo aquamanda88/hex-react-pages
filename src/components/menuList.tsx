@@ -31,7 +31,7 @@ export default function MenuList() {
       .logout(token)
       .then(() => {
         sessionStorage.removeItem('token');
-        navigate('/login');
+        navigate('/products');
       })
       .finally(() => {
         setIsLoading(false);

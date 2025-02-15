@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Button, IconButton, Pagination, Skeleton, Stack } from '@mui/material';
+import {
+  Button,
+  IconButton,
+  Pagination,
+  PaginationItem,
+  Skeleton,
+  Stack,
+} from '@mui/material';
 import { DataTable, Spinners } from '../../components/Index';
 import { PaginationDatum } from '../../core/models/utils.model';
 import { OrdersDatum } from '../../core/models/order.model';
@@ -253,6 +260,17 @@ export default function AdminOrdersList() {
                     count={pagination.total_pages}
                     page={currentPage}
                     onChange={handlePageChange}
+                    renderItem={(item) => (
+                      <PaginationItem
+                        {...item}
+                        disabled={
+                          item.page === currentPage ||
+                          (item.type === 'previous' && currentPage === 1) ||
+                          (item.type === 'next' &&
+                            currentPage === pagination.total_pages)
+                        }
+                      />
+                    )}
                   />
                 </Stack>
               </div>

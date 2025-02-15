@@ -15,11 +15,11 @@ import Swal from 'sweetalert2';
 import eventBus from '../components/EventBus';
 
 export default function ProductDetail() {
-  const [isProductLoading, setIsProductLoading] = useState(true);
+  const [isProductLoading, setIsProductLoading] = useState(false);
   const [product, setProduct] = useState<ProductDatum>({});
   const [, setCart] = useState<CartDataDatum>();
   const [isFavoriteChecked, setIsFavoriteChecked] = useState<boolean>(false);
-  const favoriteList = localStorage.getItem('favoriteList') ?? '';
+  const favoritesList = localStorage.getItem('favoritesList');
   const { id } = useParams();
 
   /**
@@ -28,12 +28,12 @@ export default function ProductDetail() {
    * @param id - 產品 ID
    */
   const handleFavoriteChange = (id: string) => {
-    const favoriteListArray = favoriteList.split(', ');
+    const favoritesListArray = favoritesList ? favoritesList.split(', ') : [];
     const updatedList = isFavoriteChecked
-      ? favoriteListArray.filter((item) => item !== id)
-      : [...favoriteListArray, id];
+      ? favoritesListArray.filter((item) => item !== id)
+      : [...favoritesListArray, id];
 
-    localStorage.setItem('favoriteList', updatedList.join(', '));
+    localStorage.setItem('favoritesList', updatedList.join(', '));
 
     setIsFavoriteChecked(updatedList.includes(id));
   };
@@ -129,7 +129,9 @@ export default function ProductDetail() {
    * @returns 該產品是否已加入收藏清單
    */
   const checkFavoriteItem = (productId: string): boolean => {
-    return favoriteList.split(', ').includes(productId);
+    return favoritesList
+      ? favoritesList.split(', ').includes(productId)
+      : false;
   };
 
   useEffect(() => {

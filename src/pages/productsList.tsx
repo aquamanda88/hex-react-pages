@@ -7,14 +7,14 @@ import { formatPrice } from '../services/formatValue.service';
 import productApiService from '../services/api/user/products.service';
 
 export default function ProductsList() {
-  const [isProductLoading, setIsProductLoading] = useState(true);
+  const [isProductLoading, setIsProductLoading] = useState(false);
   const [skeletonCount, setSkeletonCount] = useState(5);
   const [skeletonWidth, setSkeletonWidth] = useState('');
   const [pagination, setPagination] = useState<PaginationDatum>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
   const [isFavoriteChecked, setIsFavoriteChecked] = useState<boolean[]>([]);
-  const favoriteList = localStorage.getItem('favoriteList') ?? '';
+  const favoritesList = localStorage.getItem('favoritesList') ?? '';
 
   /**
    * 處理收藏清單事件
@@ -23,12 +23,12 @@ export default function ProductsList() {
    * @param id - 產品 ID
    */
   const handleFavoriteChange = (index: number, id: string) => {
-    const favoriteListArray = favoriteList.split(', ');
+    const favoritesListArray = favoritesList.split(', ');
     const updatedList = isFavoriteChecked[index]
-      ? favoriteListArray.filter((item) => item !== id)
-      : [...favoriteListArray, id];
+      ? favoritesListArray.filter((item) => item !== id)
+      : [...favoritesListArray, id];
 
-    localStorage.setItem('favoriteList', updatedList.join(', '));
+    localStorage.setItem('favoritesList', updatedList.join(', '));
 
     setIsFavoriteChecked((prevState) => {
       const newState = [...prevState];
@@ -78,7 +78,7 @@ export default function ProductsList() {
    * @returns 該產品是否已加入收藏清單
    */
   const checkFavoriteItem = (productId: string): boolean => {
-    return favoriteList.split(', ').includes(productId);
+    return favoritesList.split(', ').includes(productId);
   };
 
   function updateSkeletonCount(): void {
@@ -105,6 +105,7 @@ export default function ProductsList() {
 
   return (
     <>
+      <h2 className='page-title'>作品</h2>
       <div className='content-layout container'>
         <div className='row mb-4'>
           {isProductLoading ? (
