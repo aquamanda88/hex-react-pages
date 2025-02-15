@@ -65,9 +65,6 @@ function formatErrorMessage(message: string, status?: number) {
       case '請重新登出':
         goToPage('products');
         break;
-      case '禁止使用, 請確認 api_path 是否為本人使用。':
-        goToPage('products');
-        break;
     }
 
     switch (status) {
