@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
-import {
-  Button,
-  IconButton,
-  Pagination,
-  Skeleton,
-  Stack,
-} from '@mui/material';
+import { Link, useNavigate } from 'react-router';
+import { Button, IconButton, Pagination, Skeleton, Stack } from '@mui/material';
 import { DataTable, Spinners } from '../../components/Index';
 import { PaginationDatum } from '../../core/models/utils.model';
 import { OrdersDatum } from '../../core/models/order.model';
@@ -18,7 +12,7 @@ import {
 } from '../../services/formatValue.service';
 import authService from '../../services/api/admin/auth.service';
 import ordersApiService from '../../services/api/admin/orders.service';
-import { Delete, Edit } from '../../components/Icons';
+import { ArrowForwardIos, Delete } from '../../components/Icons';
 import Swal from 'sweetalert2';
 import { useDispatch } from 'react-redux';
 import { toggleToast, updateMessage } from '../../redux/toastSlice';
@@ -36,7 +30,12 @@ export default function AdminOrdersList() {
   const columns: Column<OrdersDatum>[] = [
     {
       header: '訂單編號',
-      accessor: (item: OrdersDatum) => generateOrderCode(item.create_at),
+      accessor: (item: OrdersDatum) => (
+        <Link to={`/admin/order/${item.id}`} className="table-text-link">
+          <p>{generateOrderCode(item.create_at)}</p>
+          <ArrowForwardIos />
+        </Link>
+      ),
       tdClass: 'text-center',
     },
     {
@@ -45,17 +44,7 @@ export default function AdminOrdersList() {
       tdClass: 'text-center',
     },
     {
-      header: '客戶姓名',
-      accessor: (item: OrdersDatum) => item.user?.name,
-      tdClass: 'text-center',
-    },
-    {
-      header: '客戶聯絡電話',
-      accessor: (item: OrdersDatum) => item.user?.tel,
-      tdClass: 'text-center',
-    },
-    {
-      header: '訂單總價',
+      header: '訂單總價 (TWD)',
       accessor: (item: OrdersDatum) => formatPrice(item.total),
       tdClass: 'text-end',
     },
@@ -73,9 +62,6 @@ export default function AdminOrdersList() {
 
   const actions = (item: OrdersDatum) => (
     <>
-      <IconButton>
-        <Edit />
-      </IconButton>
       <IconButton onClick={() => handleDeleteItem(item)}>
         <Delete sx={{ color: '#dc3545' }} />
       </IconButton>
@@ -101,7 +87,7 @@ export default function AdminOrdersList() {
    */
   const handleDeleteItem = (deleteItem: OrdersDatum) => {
     Swal.fire({
-      title: `是否確定要刪除訂單 ${generateOrderCode(deleteItem.create_at)}？`,
+      title: `是否確定要刪除<br>${generateOrderCode(deleteItem.create_at)}？`,
       icon: 'warning',
       showCancelButton: true,
       cancelButtonText: '我再想想',

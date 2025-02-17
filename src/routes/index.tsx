@@ -18,6 +18,7 @@ import {
   Week05,
 } from '../pages/Index';
 import AdminOrdersList from '../pages/admin/OrdersList';
+import AdminOrderDetail from '../pages/admin/OrderDetail';
 
 const routes = [
   {
@@ -69,6 +70,10 @@ const routes = [
       {
         path: 'orders',
         element: <AdminOrdersList />,
+      },
+      {
+        path: 'order/:id',
+        element: <AdminOrderDetail />,
       },
     ],
   },

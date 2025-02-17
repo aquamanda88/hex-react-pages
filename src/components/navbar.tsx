@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Person, ShoppingCart, Bookmark, Dashboard } from './Icons';
 import {
@@ -49,9 +49,9 @@ export default function NavBar() {
           <div className='menu-navbar'>
             <ul className='navbar-list d-flex'>
               <li>
-                <NavLink className='text-color-main' to='/products'>
+                <Link className='text-color-main' to='/products'>
                   全部作品
-                </NavLink>
+                </Link>
               </li>
             </ul>
             <div className='page-bar'>
@@ -74,24 +74,24 @@ export default function NavBar() {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <NavLink to='/favorites'>
+            <Link to='/favorites'>
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
                   <Bookmark />
                 </ListItemIcon>
                 <ListItemText>我的收藏</ListItemText>
               </MenuItem>
-            </NavLink>
+            </Link>
 
             <Divider />
-            <NavLink to='/admin'>
+            <Link to='/admin'>
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
                   <Dashboard />
                 </ListItemIcon>
                 <ListItemText>後台</ListItemText>
               </MenuItem>
-            </NavLink>
+            </Link>
           </Menu>
         </div>
       </nav>

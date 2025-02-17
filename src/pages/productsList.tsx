@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router';
+import { Link } from 'react-router';
+import { useDispatch } from 'react-redux';
 import { Checkbox, Pagination, Skeleton, Stack } from '@mui/material';
 import { Favorite, FavoriteBorder } from '../components/Icons';
 import { PaginationDatum, ProductFullDatum } from '../core/models/utils.model';
+import { toggleToast, updateMessage } from '../redux/toastSlice';
 import { formatPrice } from '../services/formatValue.service';
 import productApiService from '../services/api/user/products.service';
 
@@ -15,6 +17,7 @@ export default function ProductsList() {
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
   const [isFavoriteChecked, setIsFavoriteChecked] = useState<boolean[]>([]);
   const favoritesList = localStorage.getItem('favoritesList') ?? '';
+  const dispatch = useDispatch();
 
   /**
    * 處理收藏清單事件
@@ -29,6 +32,24 @@ export default function ProductsList() {
       : [...favoritesListArray, id];
 
     localStorage.setItem('favoritesList', updatedList.join(', '));
+
+    if (isFavoriteChecked[index]) {
+      dispatch(toggleToast(true));
+      dispatch(
+        updateMessage({
+          text: '已從收藏清單移除',
+          status: true,
+        })
+      );
+    } else {
+      dispatch(toggleToast(true));
+      dispatch(
+        updateMessage({
+          text: '已加入收藏清單',
+          status: true,
+        })
+      );
+    }
 
     setIsFavoriteChecked((prevState) => {
       const newState = [...prevState];
@@ -128,7 +149,7 @@ export default function ProductsList() {
                   className='product-list-grid position-relative'
                   key={item.id}
                 >
-                  <NavLink
+                  <Link
                     to={`/product/${item.id}`}
                     className='product-image-item stretched-link'
                   >
@@ -137,7 +158,7 @@ export default function ProductsList() {
                       className='image-item'
                       alt={item.imageUrl}
                     ></img>
-                  </NavLink>
+                  </Link>
                   <div className='product-info-item'>
                     <div className='item-title d-flex justify-content-between align-items-start'>
                       <h3 className='font-zh-h5'>{item.title}</h3>

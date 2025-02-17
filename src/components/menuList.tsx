@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink, useNavigate, useLocation } from 'react-router';
+import { Link, useNavigate, useLocation } from 'react-router';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -49,7 +49,7 @@ export default function MenuList() {
           <Divider className='bg-white' />
           <List component='nav' aria-label='main mailbox folders'>
             {navItems.map((item) => (
-              <NavLink key={item.path} to={`/admin/${item.path}`}>
+              <Link key={item.path} to={`/admin/${item.path}`}>
                 <ListItemButton
                   className='list-item'
                   selected={currentPath === item.path}
@@ -57,18 +57,18 @@ export default function MenuList() {
                   {item.icon}
                   <ListItemText primary={item.label} />
                 </ListItemButton>
-              </NavLink>
+              </Link>
             ))}
           </List>
         </div>
         <div className='list-footer'>
           <Divider className='bg-white' />
           <List component='nav' aria-label='secondary mailbox folder'>
-            <NavLink to='/products'>
+            <Link to='/products'>
               <ListItemButton>
                 <ListItemText primary='返回商品頁' />
               </ListItemButton>
-            </NavLink>
+            </Link>
             <ListItemButton onClick={() => logout(token)}>
               <ListItemText primary='登出' />
             </ListItemButton>

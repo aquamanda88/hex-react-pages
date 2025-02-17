@@ -5,7 +5,7 @@ import validationService from '../services/validation.service';
 import authService from '../services/api/admin/auth.service';
 import { Spinners } from '../components/Index';
 import { Controller, useForm } from 'react-hook-form';
-import { NavLink, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 export default function Login() {
   const [isLoginLoading, setIsLoginLoading] = useState(false);
@@ -106,7 +106,7 @@ export default function Login() {
                   </FormControl>
                 </div>
                 <div className='d-flex gap-2'>
-                  <NavLink to='/products' className="w-100">
+                  <Link to='/products' className="w-100">
                     <Button
                       className='btn btn-secondary w-100'
                       variant='contained'
@@ -115,7 +115,7 @@ export default function Login() {
                     >
                       返回商品頁
                     </Button>
-                  </NavLink>
+                  </Link>
                   <Button
                     className='btn btn-primary w-100'
                     variant='contained'

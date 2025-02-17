@@ -35,11 +35,13 @@ export const toastSlice = createSlice({
       const { text, status } = action.payload;
       const id = Date.now();
 
-      state.messages.push({
-        id,
-        text,
-        status,
-      });
+      state.messages = [
+        {
+          id,
+          text,
+          status,
+        },
+      ];
     },
   },
 });

@@ -107,12 +107,12 @@ export default function AdminProductsList() {
         formatUnknownText('artists_zh_tw', item.content?.artists_zh_tw),
     },
     {
-      header: '原價',
+      header: '原價 (TWD)',
       accessor: (item: ProductFullDatum) => formatPrice(item.origin_price),
       tdClass: 'text-end',
     },
     {
-      header: '售價',
+      header: '售價 (TWD)',
       accessor: (item: ProductFullDatum) => formatPrice(item.price),
       tdClass: 'text-end',
     },

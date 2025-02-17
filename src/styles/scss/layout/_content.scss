@@ -39,22 +39,7 @@
   font-size: 36px;
 }
 
-.MuiSnackbar-root {
-  .MuiSnackbarContent-root {
-    box-shadow: 0px 0px 32px 0px rgba(100, 100, 100, 2);
-  }
-
-  &.toast-success {
-    .MuiSnackbarContent-root {
-      color: #00623f;
-      background-color: #ecfad0;
-    }
-  }
-
-  &.toast-danger {
-    .MuiSnackbarContent-root {
-      color: #cd2745;
-      background-color: #fef3ef;
-    }
-  }
+.info-item-list .info-item {
+  display: flex;
+  gap: 32px;
 }

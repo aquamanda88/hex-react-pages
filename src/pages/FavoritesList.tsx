@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router';
+import { Link } from 'react-router';
 import { Checkbox, Pagination, Skeleton, Stack } from '@mui/material';
 import { Favorite, FavoriteBorder } from '../components/Icons';
 import { ProductFullDatum } from '../core/models/utils.model';
 import { formatPrice } from '../services/formatValue.service';
 import productApiService from '../services/api/user/products.service';
-import Spinners from '../components/Spinners';
+import { useDispatch } from 'react-redux';
+import { toggleToast, updateMessage } from '../redux/toastSlice';
 
 export default function FavoritesList() {
-  const [isFullScreenLoading, setIsFullScreenLoading] = useState(false);
   const [isProductLoading, setIsProductLoading] = useState(false);
   const [skeletonCount, setSkeletonCount] = useState(5);
   const [skeletonWidth, setSkeletonWidth] = useState('');
@@ -17,6 +17,7 @@ export default function FavoritesList() {
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
   const [isFavoriteChecked, setIsFavoriteChecked] = useState<boolean[]>([]);
   const favoritesList = localStorage.getItem('favoritesList');
+  const dispatch = useDispatch();
 
   /**
    * 處理收藏清單事件
@@ -32,7 +33,26 @@ export default function FavoritesList() {
 
     localStorage.setItem('favoritesList', updatedList.join(', '));
 
+    if (isFavoriteChecked[index]) {
+      dispatch(toggleToast(true));
+      dispatch(
+        updateMessage({
+          text: '已從收藏清單移除',
+          status: true,
+        })
+      );
+    } else {
+      dispatch(toggleToast(true));
+      dispatch(
+        updateMessage({
+          text: '已加入收藏清單',
+          status: true,
+        })
+      );
+    }
+
     setIsFavoriteChecked((prevState) => {
+      setIsProductLoading(true);
       const newState = [...prevState];
       newState[index] = !newState[index];
       return newState;
@@ -41,18 +61,6 @@ export default function FavoritesList() {
       favoritesList?.includes(item.id!)
     );
     setProducts(filteredProducts);
-    handleReload();
-  };
-
-  /**
-   * 處理重新載入頁面事件
-   */
-  const handleReload = () => {
-    setIsFullScreenLoading(true);
-    window.location.reload();
-    window.addEventListener('load', () => {
-      setIsFullScreenLoading(false);
-    });
   };
 
   /**
@@ -139,13 +147,10 @@ export default function FavoritesList() {
     window.addEventListener('resize', updateSkeletonCount); // 監聽視窗大小變化
     return () => window.removeEventListener('resize', updateSkeletonCount); // 移除監聽
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [favoritesList]);
 
   return (
     <>
-      <div className={`${isFullScreenLoading ? 'd-flex' : 'd-none'} loading`}>
-        <Spinners />
-      </div>
       <h2 className='page-title'>收藏清單</h2>
       {products && products.length > 0 ? (
         <div className='content-layout container'>
@@ -169,7 +174,7 @@ export default function FavoritesList() {
                     className='product-list-grid position-relative'
                     key={item.id}
                   >
-                    <NavLink
+                    <Link
                       to={`/product/${item.id}`}
                       className='product-image-item stretched-link'
                     >
@@ -178,7 +183,7 @@ export default function FavoritesList() {
                         className='image-item'
                         alt={item.imageUrl}
                       ></img>
-                    </NavLink>
+                    </Link>
                     <div className='product-info-item'>
                       <div className='item-title d-flex justify-content-between align-items-start'>
                         <h3 className='font-zh-h5'>{item.title}</h3>
@@ -223,9 +228,9 @@ export default function FavoritesList() {
           <div className='d-flex justify-content-center'>
             <h2 className='font-zh-h2'>
               您的收藏清單中沒有任何商品，
-              <NavLink to='/products' className='text-color-main d-inline-flex'>
+              <Link to='/products' className='text-color-main d-inline-flex'>
                 <p className='btn-icon'>馬上去逛逛</p>
-              </NavLink>
+              </Link>
             </h2>
           </div>
         </div>

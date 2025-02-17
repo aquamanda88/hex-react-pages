@@ -11,6 +11,7 @@ export {
   Person,
   KeyboardArrowLeft,
   KeyboardArrowRight,
+  ArrowForwardIos,
   CheckCircleOutline,
   Favorite,
   FavoriteBorder,

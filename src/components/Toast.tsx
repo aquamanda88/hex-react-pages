@@ -26,7 +26,7 @@ export default function Toast() {
             key={message.id}
             open={isToastOpen}
             className={message.status ? 'toast-success' : 'toast-danger'}
-            autoHideDuration={5000}
+            autoHideDuration={3000}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             onClose={handleClose}
             action={action}

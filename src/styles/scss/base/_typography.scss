@@ -8,6 +8,9 @@
 .font-zh-h3 {
   @include font(28px, 0.04em);
 }
+.font-zh-h3-medium {
+  @include font(28px, 0.04em, 1.5, 700);
+}
 
 // 標題 4
 .font-zh-h4 {

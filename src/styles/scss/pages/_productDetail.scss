@@ -21,7 +21,7 @@
     height: -moz-fit-content;
     height: fit-content;
     &.hvr-glow:focus,
-    &.hvr-grow-shadow {
+    &.hvr-grow-shadow:focus {
       transform: none;
       box-shadow: none;
     }

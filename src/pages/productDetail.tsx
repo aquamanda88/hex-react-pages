@@ -21,8 +21,8 @@ export default function ProductDetail() {
   const [product, setProduct] = useState<ProductDatum>({});
   const [, setCart] = useState<CartDataDatum>();
   const [isFavoriteChecked, setIsFavoriteChecked] = useState<boolean>(false);
-  const favoritesList = localStorage.getItem('favoritesList');
   const { id } = useParams();
+  const favoritesList = localStorage.getItem('favoritesList');
   const dispatch = useDispatch();
 
   /**
@@ -37,7 +37,23 @@ export default function ProductDetail() {
       : [...favoritesListArray, id];
 
     localStorage.setItem('favoritesList', updatedList.join(', '));
-
+    if (isFavoriteChecked) {
+      dispatch(toggleToast(true));
+      dispatch(
+        updateMessage({
+          text: '已從收藏清單移除',
+          status: true,
+        })
+      );
+    } else {
+      dispatch(toggleToast(true));
+      dispatch(
+        updateMessage({
+          text: '已加入收藏清單',
+          status: true,
+        })
+      );
+    }
     setIsFavoriteChecked(updatedList.includes(id));
   };
 

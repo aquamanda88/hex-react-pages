@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { NavLink, useNavigate, useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, TextField } from '@mui/material';
 import { Spinners, Steppers } from '../components/Index';
@@ -346,7 +346,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                         {cartData?.carts.map((item) => (
                           <tr key={item.id}>
                             <td>
-                              <NavLink to={`/product/${item.product.id}`}>
+                              <Link to={`/product/${item.product.id}`}>
                                 {item.product.imageUrl ? (
                                   <img
                                     className='cart-image'
@@ -359,10 +359,10 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                                     color='disabled'
                                   />
                                 )}
-                              </NavLink>
+                              </Link>
                             </td>
                             <td className='text-start'>
-                              <NavLink
+                              <Link
                                 className='link-button'
                                 to={`/product/${item.product.id}`}
                               >
@@ -377,7 +377,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                                     )
                                   </small>
                                 </p>
-                              </NavLink>
+                              </Link>
                             </td>
                             <td className='text-start'>
                               <p>
@@ -442,14 +442,14 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                       </div>
                       <div className='row'>
                         <div className='col-6'>
-                          <NavLink to='/products' className='w-100'>
+                          <Link to='/products' className='w-100'>
                             <Button
                               className='btn btn-secondary w-100'
                               variant='contained'
                             >
                               先逛逛
                             </Button>
-                          </NavLink>
+                          </Link>
                         </div>
                         <div className='col-6'>
                           <Button
@@ -598,14 +598,14 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                           </div>
                           <div className='row'>
                             <div className='col-6'>
-                              <NavLink to='/products' className='w-100'>
+                              <Link to='/products' className='w-100'>
                                 <Button
                                   className='btn btn-secondary w-100'
                                   variant='contained'
                                 >
                                   先逛逛
                                 </Button>
-                              </NavLink>
+                              </Link>
                             </div>
                             <div className='col-6'>
                               <Button
@@ -629,12 +629,12 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                         <h2 className='font-zh-h2'>
                           您目前沒有可供進行付款的訂單。
                         </h2>
-                        <NavLink
+                        <Link
                           to='/products'
                           className='text-color-main d-flex justify-content-center'
                         >
                           <p className='btn-icon'>馬上去逛逛</p>
-                        </NavLink>
+                        </Link>
                       </div>
                     </div>
                   )}
@@ -674,14 +674,14 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                           <p>{formatDate(selectedOrderData?.paid_date)}</p>
                         </li>
                       </ul>
-                      <NavLink to='/products' className='w-100'>
+                      <Link to='/products' className='w-100'>
                         <Button
                           className='btn btn-primary w-100'
                           variant='contained'
                         >
                           回商品頁
                         </Button>
-                      </NavLink>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -693,12 +693,12 @@ export default function Checkout({ activeStep }: CheckoutProps) {
             <div className='d-flex justify-content-center'>
               <h2 className='font-zh-h2'>
                 您的購物車中沒有任何商品，
-                <NavLink
+                <Link
                   to='/products'
                   className='text-color-main d-inline-flex'
                 >
                   <p className='btn-icon'>馬上去逛逛</p>
-                </NavLink>
+                </Link>
               </h2>
             </div>
           </div>

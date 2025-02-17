@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { AxiosError } from 'axios';
 import { Button, IconButton, TextField } from '@mui/material';
@@ -245,7 +245,7 @@ export default function Cart() {
                         </IconButton>
                       </td>
                       <td>
-                        <NavLink to={`/product/${item.product.id}`}>
+                        <Link to={`/product/${item.product.id}`}>
                           {item.product.imageUrl ? (
                             <img
                               className='cart-image'
@@ -258,10 +258,10 @@ export default function Cart() {
                               color='disabled'
                             />
                           )}
-                        </NavLink>
+                        </Link>
                       </td>
                       <td className='text-start'>
-                        <NavLink
+                        <Link
                           className='link-button'
                           to={`/product/${item.product.id}`}
                         >
@@ -276,7 +276,7 @@ export default function Cart() {
                               )
                             </small>
                           </p>
-                        </NavLink>
+                        </Link>
                       </td>
                       <td className='text-start'>
                         <p>
@@ -356,12 +356,12 @@ export default function Cart() {
             <div className='d-flex justify-content-center'>
               <h2 className='font-zh-h2'>
                 您的購物車中沒有任何商品，
-                <NavLink
+                <Link
                   to='/products'
                   className='text-color-main d-inline-flex'
                 >
                   <p className='btn-icon'>馬上去逛逛</p>
-                </NavLink>
+                </Link>
               </h2>
             </div>
           </div>
