@@ -13,6 +13,7 @@ import {
   formatPrice,
   formatDate,
   formatUnknownText,
+  generateOrderCode,
 } from '../services/formatValue.service';
 import validationService from '../services/validation.service';
 import cartApiService from '../services/api/user/cart.service';
@@ -652,7 +653,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                       <ul className='border-secondary border-top border-bottom w-100 pt-3'>
                         <li className='d-flex justify-content-between'>
                           <p>訂單編號</p>
-                          <p>{selectedOrderData?.id}</p>
+                          <p>{generateOrderCode(selectedOrderData?.create_at)}</p>
                         </li>
                         <li className='d-flex justify-content-between'>
                           <p>訂單總金額</p>
@@ -660,7 +661,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                         </li>
                         <li className='d-flex justify-content-between'>
                           <p>訂單成立時間</p>
-                          <p>{formatDate(selectedOrderData?.create_at ?? 0)}</p>
+                          <p>{formatDate(selectedOrderData?.create_at)}</p>
                         </li>
                         <li className='d-flex justify-content-between'>
                           <p>付款狀態</p>
@@ -670,7 +671,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                         </li>
                         <li className='d-flex justify-content-between'>
                           <p>付款時間</p>
-                          <p>{formatDate(selectedOrderData?.paid_date ?? 0)}</p>
+                          <p>{formatDate(selectedOrderData?.paid_date)}</p>
                         </li>
                       </ul>
                       <NavLink to='/products' className='w-100'>

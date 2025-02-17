@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Button, Checkbox } from '@mui/material';
 import { Spinners } from '../components/Index';
 import { Favorite, FavoriteBorder, InsertPhoto } from '../components/Icons';
-import { calculateCartCount } from '../slice/countSlice';
+import { calculateCartCount } from '../redux/countSlice';
 import { ProductDatum } from '../core/models/utils.model';
 import { CartDataDatum, CartDataRequest } from '../core/models/cart.model';
 import {
@@ -14,6 +14,7 @@ import {
 import productApiService from '../services/api/user/products.service';
 import cartApiService from '../services/api/user/cart.service';
 import Swal from 'sweetalert2';
+import { toggleToast, updateMessage } from '../redux/toastSlice';
 
 export default function ProductDetail() {
   const [isProductLoading, setIsProductLoading] = useState(false);
@@ -96,12 +97,15 @@ export default function ProductDetail() {
     setIsProductLoading(true);
     cartApiService
       .addCartItem(data)
-      .then(({ data: { message } }) => {
+      .then(({ data: { message, success } }) => {
         getCarts();
-        Swal.fire({
-          icon: 'success',
-          title: message,
-        });
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: message,
+            status: success,
+          })
+        );
       })
       .finally(() => {
         setIsProductLoading(false);

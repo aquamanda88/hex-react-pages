@@ -44,6 +44,7 @@ export default function ProductsList() {
    * @param page - 選取的頁數
    */
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
+    if (page === currentPage) return;
     setCurrentPage(page);
     getProducts(page);
   };

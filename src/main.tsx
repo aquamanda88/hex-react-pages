@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import routes from './routes/Index.tsx';
 import './styles.scss';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import store from './store.ts';
+import store from './redux/store.ts';
 
 const router = createHashRouter(routes);
 

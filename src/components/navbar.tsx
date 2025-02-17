@@ -11,7 +11,7 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
-import { calculateCartCount, selectCount } from '../slice/countSlice';
+import { calculateCartCount, selectCount } from '../redux/countSlice';
 import cartApiService from '../services/api/user/cart.service';
 
 export default function NavBar() {

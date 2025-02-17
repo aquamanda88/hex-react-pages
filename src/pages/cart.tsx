@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
+import { AxiosError } from 'axios';
 import { Button, IconButton, TextField } from '@mui/material';
 import { Spinners } from '../components/Index';
 import { Close, InsertPhoto } from '../components/Icons';
-import { calculateCartCount } from '../slice/countSlice';
+import { calculateCartCount } from '../redux/countSlice';
+import { toggleToast, updateMessage } from '../redux/toastSlice';
 import { CartDataDatum, CartDataRequest } from '../core/models/cart.model';
 import {
   formatPrice,
@@ -12,7 +14,6 @@ import {
 } from '../services/formatValue.service';
 import cartApiService from '../services/api/user/cart.service';
 import Swal from 'sweetalert2';
-import { AxiosError } from 'axios';
 
 export default function Cart() {
   const [isProductLoading, setIsProductLoading] = useState(false);
@@ -167,12 +168,15 @@ export default function Cart() {
     setIsProductLoading(true);
     cartApiService
       .deleteCartItem(id)
-      .then(({ data: { message } }) => {
+      .then(({ data: { message, success } }) => {
         getCarts();
-        Swal.fire({
-          icon: 'success',
-          title: message,
-        });
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: message,
+            status: success,
+          })
+        );
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -187,12 +191,15 @@ export default function Cart() {
 
     cartApiService
       .deleteCarts()
-      .then(({ data: { message } }) => {
+      .then(({ data: { message, success } }) => {
         getCarts();
-        Swal.fire({
-          icon: 'success',
-          title: message,
-        });
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: message,
+            status: success,
+          })
+        );
       })
       .finally(() => {
         setIsProductLoading(false);

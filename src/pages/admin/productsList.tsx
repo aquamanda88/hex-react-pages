@@ -40,7 +40,8 @@ import {
 import validationService from '../../services/validation.service';
 import authService from '../../services/api/admin/auth.service';
 import productApiService from '../../services/api/admin/products.service';
-import Swal from 'sweetalert2';
+import { useDispatch } from 'react-redux';
+import { toggleToast, updateMessage } from '../../redux/toastSlice';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -91,6 +92,7 @@ export default function AdminProductsList() {
   const subImagesUrl = subImagesMap[tempProduct?.id ?? ''] || [];
   const [newSubImagesUrl, setNewSubImagesUrl] = useState<string[]>([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const columns: Column<ProductFullDatum>[] = [
     { header: '作品名稱', accessor: 'title' },
@@ -169,6 +171,7 @@ export default function AdminProductsList() {
    * @param page - 選取的頁數
    */
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
+    if (page === currentPage) return;
     setCurrentPage(page);
     getProducts(page);
   };
@@ -419,12 +422,15 @@ export default function AdminProductsList() {
 
     productApiService
       .addProductItem(addProductRequest)
-      .then(({ data: { message } }) => {
+      .then(({ data: { message, success } }) => {
         getProducts();
-        Swal.fire({
-          icon: 'success',
-          title: message,
-        });
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: message,
+            status: success,
+          })
+        );
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -446,12 +452,15 @@ export default function AdminProductsList() {
 
     productApiService
       .editProductItem(id, editProductRequest)
-      .then(({ data: { message } }) => {
+      .then(({ data: { message, success } }) => {
         getProducts();
-        Swal.fire({
-          icon: 'success',
-          title: message,
-        });
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: message,
+            status: success,
+          })
+        );
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -467,12 +476,15 @@ export default function AdminProductsList() {
 
     productApiService
       .deleteProductItem(deleteItem?.id ?? '')
-      .then(({ data: { message } }) => {
+      .then(({ data: { message, success } }) => {
         getProducts();
-        Swal.fire({
-          icon: 'success',
-          title: message,
-        });
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: message,
+            status: success,
+          })
+        );
       })
       .finally(() => {
         setIsProductLoading(false);

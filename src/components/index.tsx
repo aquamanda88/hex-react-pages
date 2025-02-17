@@ -6,3 +6,4 @@ export { default as Spinners } from './Spinners';
 export { default as Steppers } from './Steppers';
 export { default as DataTable } from './DataTable';
 export { default as MenuList } from './MenuList';
+export { default as Toast } from './Toast';

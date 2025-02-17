@@ -4,7 +4,6 @@ import {
   Button,
   IconButton,
   Pagination,
-  PaginationItem,
   Skeleton,
   Stack,
 } from '@mui/material';
@@ -21,6 +20,8 @@ import authService from '../../services/api/admin/auth.service';
 import ordersApiService from '../../services/api/admin/orders.service';
 import { Delete, Edit } from '../../components/Icons';
 import Swal from 'sweetalert2';
+import { useDispatch } from 'react-redux';
+import { toggleToast, updateMessage } from '../../redux/toastSlice';
 
 export default function AdminOrdersList() {
   const token = sessionStorage.getItem('token') ?? '';
@@ -30,6 +31,7 @@ export default function AdminOrdersList() {
   const [pagination, setPagination] = useState<PaginationDatum>({});
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const columns: Column<OrdersDatum>[] = [
     {
@@ -87,14 +89,15 @@ export default function AdminOrdersList() {
    * @param page - 選取的頁數
    */
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
+    if (page === currentPage) return;
     setCurrentPage(page);
     getOrders(page);
   };
 
   /**
-   * 處理開啟刪除商品 modal 事件
+   * 處理開啟刪除訂單 modal 事件
    *
-   * @param deleteItem - 欲刪除的商品資料
+   * @param deleteItem - 欲刪除的訂單資料
    */
   const handleDeleteItem = (deleteItem: OrdersDatum) => {
     Swal.fire({
@@ -104,7 +107,7 @@ export default function AdminOrdersList() {
       cancelButtonText: '我再想想',
       confirmButtonColor: '#cc2e41',
       cancelButtonColor: 'grey',
-      confirmButtonText: '確認清除',
+      confirmButtonText: '確認刪除',
     }).then((result) => {
       if (result.isConfirmed && deleteItem.id) {
         deleteOrderItem(deleteItem.id);
@@ -113,17 +116,17 @@ export default function AdminOrdersList() {
   };
 
   /**
-   * 處理開啟刪除商品 modal 事件
+   * 處理開啟刪除所有訂單 modal 事件
    */
   const handleDeleteAll = () => {
     Swal.fire({
-      title: `是否確定要清空訂單？`,
+      title: `是否確定要刪除所有訂單？`,
       icon: 'warning',
       showCancelButton: true,
       cancelButtonText: '我再想想',
       confirmButtonColor: '#cc2e41',
       cancelButtonColor: 'grey',
-      confirmButtonText: '確認清除',
+      confirmButtonText: '確認刪除',
     }).then((result) => {
       if (result.isConfirmed) {
         deleteOrderAll();
@@ -169,12 +172,15 @@ export default function AdminOrdersList() {
     setIsLoading(true);
     ordersApiService
       .deleteOrderItem(id)
-      .then(({ data: { message } }) => {
+      .then(({ data: { message, success } }) => {
         getOrders();
-        Swal.fire({
-          icon: 'success',
-          title: message,
-        });
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: message,
+            status: success,
+          })
+        );
       })
       .finally(() => {
         setIsLoading(false);
@@ -182,18 +188,21 @@ export default function AdminOrdersList() {
   };
 
   /**
-   * 呼叫刪除單一訂單資料 API
+   * 呼叫刪除全部訂單資料 API
    */
   const deleteOrderAll = async () => {
     setIsLoading(true);
     ordersApiService
       .deleteOrders()
-      .then(({ data: { message } }) => {
+      .then(({ data: { message, success } }) => {
         getOrders();
-        Swal.fire({
-          icon: 'success',
-          title: message,
-        });
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: message,
+            status: success,
+          })
+        );
       })
       .finally(() => {
         setIsLoading(false);
@@ -234,7 +243,7 @@ export default function AdminOrdersList() {
                 onClick={handleDeleteAll}
                 disabled={orders.length === 0}
               >
-                清空所有訂單
+                刪除所有訂單
               </Button>
             </div>
             <div className='products-table'>
@@ -257,17 +266,6 @@ export default function AdminOrdersList() {
                     count={pagination.total_pages}
                     page={currentPage}
                     onChange={handlePageChange}
-                    renderItem={(item) => (
-                      <PaginationItem
-                        {...item}
-                        disabled={
-                          item.page === currentPage ||
-                          (item.type === 'previous' && currentPage === 1) ||
-                          (item.type === 'next' &&
-                            currentPage === pagination.total_pages)
-                        }
-                      />
-                    )}
                   />
                 </Stack>
               </div>
