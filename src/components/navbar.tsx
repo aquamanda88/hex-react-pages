@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { Person, ShoppingCart, Bookmark, Dashboard } from './Icons';
+import { Person, ShoppingCart, Bookmark, Dashboard, Feed } from './Icons';
 import {
   Badge,
   Divider,
@@ -83,7 +83,14 @@ export default function NavBar() {
                 <ListItemText>我的收藏</ListItemText>
               </MenuItem>
             </Link>
-
+            <Link to='/orders'>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <Feed />
+                </ListItemIcon>
+                <ListItemText>訂單記錄</ListItemText>
+              </MenuItem>
+            </Link>
             <Divider />
             <Link to='/admin'>
               <MenuItem onClick={handleClose}>

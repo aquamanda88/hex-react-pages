@@ -127,7 +127,7 @@ export default function ProductsList() {
 
   return (
     <>
-      <h2 className='page-title'>作品</h2>
+      <h2 className='page-title'>全部作品</h2>
       <div className='content-layout container'>
         <div className='row mb-4'>
           {isProductLoading ? (

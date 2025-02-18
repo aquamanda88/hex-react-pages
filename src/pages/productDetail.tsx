@@ -164,6 +164,7 @@ export default function ProductDetail() {
 
   return (
     <>
+    <h2 className='page-title'>作品資訊</h2>
       <div className='product-detail-container container'>
         <div className={`${isProductLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />

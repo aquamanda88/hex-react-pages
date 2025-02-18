@@ -3,11 +3,15 @@ import Layout from '../layouts/Layout';
 import AdminLayout from '../layouts/AdminLayout';
 import Home from '../pages/Home';
 import {
+  AdminOrderDetail,
+  AdminOrdersList,
   AdminProductsList,
   Cart,
   Checkout,
   FavoritesList,
   Login,
+  OrderDetail,
+  OrdersList,
   PageNotFound,
   ProductDetail,
   ProductsList,
@@ -17,8 +21,6 @@ import {
   Week04,
   Week05,
 } from '../pages/Index';
-import AdminOrdersList from '../pages/admin/OrdersList';
-import AdminOrderDetail from '../pages/admin/OrderDetail';
 
 const routes = [
   {
@@ -52,6 +54,14 @@ const routes = [
       {
         path: 'favorites',
         element: <FavoritesList />,
+      },
+      {
+        path: 'orders',
+        element: <OrdersList />,
+      },
+      {
+        path: 'order/:id',
+        element: <OrderDetail />,
       },
     ],
   },

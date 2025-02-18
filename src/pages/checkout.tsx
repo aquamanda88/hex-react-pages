@@ -17,7 +17,7 @@ import {
 } from '../services/formatValue.service';
 import validationService from '../services/validation.service';
 import cartApiService from '../services/api/user/cart.service';
-import orderApiService from '../services/api/user/order.service';
+import orderApiService from '../services/api/user/orders.service';
 import FormControl from '@mui/material/FormControl';
 import Swal from 'sweetalert2';
 import { CheckCircleOutline, InsertPhoto } from '../components/Icons';
@@ -131,8 +131,8 @@ export default function Checkout({ activeStep }: CheckoutProps) {
         );
         setTimeout(() => {
           navigate(`/checkout/${orderId}`);
+          window.location.reload();
         }, 1200);
-        window.location.reload();
       })
       .finally(() => {
         setIsProductLoading(false);

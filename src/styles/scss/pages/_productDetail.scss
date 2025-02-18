@@ -1,5 +1,4 @@
 .product-detail-container {
-  padding-top: 98px;
   padding-bottom: 28px;
 }
 
@@ -42,9 +41,11 @@
 }
 
 @media (max-width: 575px) {
+  .page-title {
+    margin-bottom: 0;
+  }
   .product-detail-container {
     background-color: #f5f5f5;
-    padding-top: 0;
   }
   .hvr-glow:hover {
     box-shadow: none;
