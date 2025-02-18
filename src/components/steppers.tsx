@@ -31,10 +31,6 @@ export const Steppers = forwardRef<{ nextStep: () => void }, StepperProps>(
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    // const handleReset = () => {
-    //   setActiveStep(0);
-    // };
-
     useImperativeHandle(ref, () => ({
       nextStep: handleNext,
     }));
@@ -57,10 +53,6 @@ export const Steppers = forwardRef<{ nextStep: () => void }, StepperProps>(
         {activeStep === steps.length - 1 ? (
           <React.Fragment>
             <div className='container py-4'>{children[activeStep]}</div>
-            {/* <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
-            </Box> */}
           </React.Fragment>
         ) : (
           <React.Fragment>
@@ -75,11 +67,6 @@ export const Steppers = forwardRef<{ nextStep: () => void }, StepperProps>(
                   上一步
                 </Button>
               )}
-
-              {/* <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleNext}>
-                {activeStep === steps.length - 1 ? '完成' : '下一步'}
-              </Button> */}
             </Box>
           </React.Fragment>
         )}

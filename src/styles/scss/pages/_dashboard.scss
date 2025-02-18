@@ -1,5 +1,5 @@
 .admin-dashboard {
-  background-color: #073757;
+  background-color: $blue-900;
   color: $white;
   height: 100%;
   display: flex;
@@ -20,17 +20,17 @@
   }
 
   .MuiButtonBase-root {
-    .MuiListItemIcon-root {
+    .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
       color: $white;
     }
     &:hover {
-      background-color: #11435d;
+      background-color: $blue-800;
     }
     &.Mui-selected {
-      background-color: #1d77a3;
+      background-color: $blue-600;
     }
     &.Mui-selected:hover {
-      background-color: #1d77a3;
+      background-color: $blue-600;
     }
   }
 }

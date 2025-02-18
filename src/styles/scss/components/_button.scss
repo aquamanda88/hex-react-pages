@@ -9,24 +9,40 @@
   }
 
   &.btn-primary {
-    @include bg-color(#78a1b1);
+    @include bg-color($blue-500);
     @include text-color($white);
+    .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+      @include text-color($white);
+    }
     &:hover {
-      @include common-hover($white, #658795);
+      @include common-hover($white, $blue-600);
+    }
+    &:active {
+      @include bg-color($blue-600);
     }
   }
 
   &.btn-secondary {
-    @include bg-color(#efefef);
-    @include text-color(#587682);
+    @include bg-color($gray-100);
+    @include text-color($blue-600);
+    .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+      @include text-color($blue-600);
+    }
     &:hover {
-      @include common-hover(#587682, #dbdbdb);
+      @include common-hover($blue-600, $gray-200);
+    }
+    &:active {
+      @include bg-color($gray-200);
+      @include text-color($blue-600);
     }
   }
 
   &.btn-danger {
-    @include bg-color(#cc2e41);
+    @include bg-color(#CD2745);
     @include text-color($white);
+    .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+      @include text-color($white);
+    }
     &:hover {
       @include common-hover($white, #b31528);
     }
@@ -39,11 +55,20 @@
   }
 
   &.btn-primary {
-    @include border-color(#78a1b1);
-    @include text-color(#78a1b1);
+    @include border-color($blue-500);
+    @include text-color($blue-500);
+    .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+      @include text-color($blue-500);
+    }
     &:hover {
-      @include bg-color(#78a1b1);
+      @include bg-color($blue-500);
       @include text-color($white);
+      .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+        @include text-color($white);
+      }
+    }
+    &:active {
+      @include bg-color($blue-600);
     }
   }
 }
@@ -54,18 +79,34 @@
   }
 
   &.btn-primary {
-    @include text-color(#587682);
+    @include text-color($blue-600);
+    .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+      @include text-color($blue-600);
+    }
     &:hover {
-      @include bg-color(#efefef);
-      @include text-color(#587682);
+      @include bg-color($gray-100);
+      @include text-color($blue-600);
+    }
+    &:active {
+      @include bg-color($gray-200);
+      @include text-color($blue-600);
+      border: none;
     }
   }
 
   &.btn-secondary {
-    @include text-color(#587682);
+    @include text-color($blue-600);
+    .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+      @include text-color($blue-600);
+    }
     &:hover {
       @include bg-color(transparent);
-      @include text-color(#3f555d);
+      @include text-color($blue-700);
+    }
+    &:active {
+      @include bg-color(transparent);
+      @include text-color($blue-800);
+      border: none;
     }
   }
 }
@@ -82,5 +123,21 @@
   }
   .btn-icon {
     margin-bottom: 0;
+  }
+}
+/** navbar 選單按鈕 */
+.text-color-main {
+  @include text-color($blue-600);
+  &:hover {
+    @include bg-color(transparent);
+    @include text-color($blue-700);
+  }
+}
+/** 純文字按鈕 */
+.navbar-btn {
+  @include text-color($white);
+  &:hover {
+    @include bg-color(transparent);
+    @include text-color($gray-300);
   }
 }

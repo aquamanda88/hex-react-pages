@@ -1,0 +1,43 @@
+// 全站 icon
+.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+  font-size: 24px;
+  color: $blue-600;
+}
+
+// 全站 checkbox
+.MuiButtonBase-root.MuiCheckbox-root {
+  padding: 8px;
+}
+
+// 全站 checkbox checked
+.MuiFormControl-root .MuiFormControlLabel-root .MuiCheckbox-root.Mui-checked {
+  .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+    color: $blue-500;
+  }
+}
+
+// 全站 disabled
+.MuiButtonBase-root.MuiButton-root.Mui-disabled {
+  color: $blue-600;
+  &.MuiButton-outlined {
+    border: 1px solid $gray-600;
+  }
+}
+
+// 全站 stepper
+.MuiStepper-root {
+  .MuiSvgIcon-root.Mui-completed,
+  .MuiSvgIcon-root.Mui-active {
+    color: $blue-500;
+  }
+}
+
+.stepper-item {
+  .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+    font-size: 80px;
+    color: $blue-500;
+  }
+  h5 {
+    color: $blue-500;
+  }
+}

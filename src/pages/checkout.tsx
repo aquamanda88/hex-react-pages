@@ -21,6 +21,8 @@ import orderApiService from '../services/api/user/order.service';
 import FormControl from '@mui/material/FormControl';
 import Swal from 'sweetalert2';
 import { CheckCircleOutline, InsertPhoto } from '../components/Icons';
+import { useDispatch } from 'react-redux';
+import { toggleToast, updateMessage } from '../redux/toastSlice';
 
 const steps = ['填寫訂單資料', '確認訂單內容', '進行付款', '完成結帳'];
 
@@ -41,6 +43,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
   const stepperRef = useRef<{ nextStep: () => void } | null>(null);
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const {
     control,
@@ -84,8 +87,9 @@ export default function Checkout({ activeStep }: CheckoutProps) {
         icon: 'warning',
         showCancelButton: true,
         cancelButtonText: '我再想想',
-        cancelButtonColor: 'grey',
+        cancelButtonColor: '#888888',
         confirmButtonText: '確認送出',
+        confirmButtonColor: '#668996',
       }).then((result) => {
         if (result.isConfirmed) {
           sendOrderItem(orderData);
@@ -117,16 +121,18 @@ export default function Checkout({ activeStep }: CheckoutProps) {
     setIsProductLoading(true);
     orderApiService
       .sendOrderItem(data)
-      .then(({ data }) => {
-        Swal.fire({
-          icon: 'success',
-          title: data.message,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            navigate(`/checkout/${data.orderId}`);
-            window.location.reload();
-          }
-        });
+      .then(({ data: { message, success, orderId } }) => {
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: message,
+            status: success,
+          })
+        );
+        setTimeout(() => {
+          navigate(`/checkout/${orderId}`);
+        }, 1200);
+        window.location.reload();
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -157,19 +163,23 @@ export default function Checkout({ activeStep }: CheckoutProps) {
     setIsProductLoading(true);
     orderApiService
       .sendPayment(order_id)
-      .then(({ data: { message } }) => {
+      .then(({ data: { message, success } }) => {
         getCarts();
-        Swal.fire({
-          icon: 'success',
-          title: message,
-        }).then((result) => {
-          if (result.isConfirmed && stepperRef.current) {
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: message,
+            status: success,
+          })
+        );
+        setTimeout(() => {
+          if (stepperRef.current) {
             stepperRef.current.nextStep();
             if (id) {
               getOrderItem(id);
             }
           }
-        });
+        }, 1200);
       })
       .finally(() => {
         setIsProductLoading(false);
@@ -520,10 +530,11 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                                   <td className='text-start'>
                                     <p>
                                       作者：
-                                      {
+                                      {formatUnknownText(
+                                        'artists_zh_tw',
                                         selectedOrderData.products[res].product
                                           .content?.artists_zh_tw
-                                      }
+                                      )}
                                     </p>
                                     <p>
                                       媒材：
@@ -597,28 +608,40 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                             <h3>TWD {formatPrice(selectedOrderData?.total)}</h3>
                           </div>
                           <div className='row'>
-                            <div className='col-6'>
-                              <Link to='/products' className='w-100'>
-                                <Button
-                                  className='btn btn-secondary w-100'
-                                  variant='contained'
-                                >
-                                  先逛逛
-                                </Button>
-                              </Link>
-                            </div>
-                            <div className='col-6'>
-                              <Button
-                                className='btn btn-primary w-100'
-                                variant='contained'
-                                disabled={selectedOrderData?.is_paid}
-                                onClick={() => id && sendPayment(id)}
-                              >
-                                {selectedOrderData?.is_paid
-                                  ? '已付款'
-                                  : '去付款'}
-                              </Button>
-                            </div>
+                            {selectedOrderData?.is_paid ? (
+                              <div className='col-12'>
+                                <Link to='/products' className='w-100'>
+                                  <Button
+                                    className='btn btn-primary w-100'
+                                    variant='contained'
+                                  >
+                                    先逛逛
+                                  </Button>
+                                </Link>
+                              </div>
+                            ) : (
+                              <>
+                                <div className='col-6'>
+                                  <Link to='/products' className='w-100'>
+                                    <Button
+                                      className='btn btn-secondary w-100'
+                                      variant='contained'
+                                    >
+                                      先逛逛
+                                    </Button>
+                                  </Link>
+                                </div>
+                                <div className='col-6'>
+                                  <Button
+                                    className='btn btn-primary w-100'
+                                    variant='contained'
+                                    onClick={() => id && sendPayment(id)}
+                                  >
+                                    確認付款
+                                  </Button>
+                                </div>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -643,17 +666,16 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                 <div className='row justify-content-center'>
                   <div className='col-12 col-lg-6'>
                     <div className='d-flex flex-column align-items-center gap-4'>
-                      <div>
-                        <CheckCircleOutline
-                          className='mb-2'
-                          style={{ fontSize: '80px', color: '#78a1b1' }}
-                        />
-                        <h5 style={{ color: '#78a1b1' }}>付款成功</h5>
+                      <div className='stepper-item'>
+                        <CheckCircleOutline className='mb-2' />
+                        <h5>付款成功</h5>
                       </div>
                       <ul className='border-secondary border-top border-bottom w-100 pt-3'>
                         <li className='d-flex justify-content-between'>
                           <p>訂單編號</p>
-                          <p>{generateOrderCode(selectedOrderData?.create_at)}</p>
+                          <p>
+                            {generateOrderCode(selectedOrderData?.create_at)}
+                          </p>
                         </li>
                         <li className='d-flex justify-content-between'>
                           <p>訂單總金額</p>
@@ -693,10 +715,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
             <div className='d-flex justify-content-center'>
               <h2 className='font-zh-h2'>
                 您的購物車中沒有任何商品，
-                <Link
-                  to='/products'
-                  className='text-color-main d-inline-flex'
-                >
+                <Link to='/products' className='text-color-main d-inline-flex'>
                   <p className='btn-icon'>馬上去逛逛</p>
                 </Link>
               </h2>

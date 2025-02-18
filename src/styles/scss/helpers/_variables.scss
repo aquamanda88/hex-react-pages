@@ -1,28 +1,35 @@
 /** Color */
-// Main
-$main: #1583b1;
-
-/** Gray Scale */
 // White
 $white: #ffffff;
 
-// Black
-$black: #121212;
+// Main
+$main: #1583b1;
 
-// 100
-$gray-100: #efefef;
+/** Blue Scale */
+$blue-100: #bcd0d8;
+$blue-200: #a7c2cc;
+$blue-300: #93b4c1;
+$blue-400: #7fa6b5;
+$blue-500: #668996;
+$blue-600: #54717c;
+$blue-700: #425961;
+$blue-800: #304047;
+$blue-900: #1e282c;
 
-// 200
-$gray-200: #b3b3b3;
+/** Gray Scale */
+$gray-100: #f8f8f8;
+$gray-200: #efefef;
+$gray-300: #e0e0e0;
+$gray-400: #cccccc;
+$gray-500: #b2b2b2;
+$gray-600: #888888;
+$gray-700: #666666;
+$gray-800: #333333;
+$gray-900: #212121;
 
-// 300
-$gray-300: #9c9c9c;
-
-// 400
-$gray-400: #535353;
-
-// 500
-$gray-500: #404040;
-
-// 600
-$gray-600: #212529;
+/** Ecru Scale */
+$ecru-100: #ffffda;
+$ecru-200: #feebc1;
+$ecru-300: #e4d1a7;
+$ecru-400: #cbb88e;
+$ecru-500: #b19e74;

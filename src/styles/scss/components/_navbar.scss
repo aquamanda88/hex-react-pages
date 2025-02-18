@@ -1,37 +1,43 @@
-.nav li {
-  transition: 0.3s all;
-  &:hover {
-    opacity: 0.7;
-  }
-}
-
-.page-bar {
-  display: flex;
-  gap: 8px;
-}
-
-.menu-bar {
+nav.navbar {
   box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.3);
-  background-color: #dfeaed;
+  background-color: $blue-500;
   padding: 0;
   position: fixed;
   z-index: 100;
   width: 100%;
 }
 
-.menu-navbar {
+.navbar .navbar-items {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   gap: 16px;
+
+  .navbar-list li {
+    border-bottom: 2px solid transparent;
+  }
+  .navbar-list li.active {
+    border-bottom: 2px solid $white;
+  }
   .navbar-list a {
     padding: 18px 16px;
     width: 110px;
     text-align: center;
   }
+  .page-items {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+.page-items .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+  @include text-color($white);
+  &:hover {
+    @include text-color($gray-300);
+  }
 }
 
 .MuiBadge-badge.MuiBadge-colorPrimary {
-  background-color: $gray-300;
+  background-color: $ecru-500;
 }

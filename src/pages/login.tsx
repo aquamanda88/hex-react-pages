@@ -56,7 +56,7 @@ export default function Login() {
         <div className='container'>
           <div className='row justify-content-center mb-3'>
             <div className='login-card card col-12 col-xl-5'>
-              <h2 className='font-zh-h3 text-center'>會員登入</h2>
+              <h2 className='font-zh-h3 text-center'>管理員登入</h2>
               <form
                 id='form'
                 className='form-signin'

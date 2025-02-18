@@ -134,7 +134,7 @@ export default function AdminProductsList() {
         <Edit />
       </IconButton>
       <IconButton onClick={() => handleDeleteOpen(item)}>
-        <Delete sx={{ color: '#dc3545' }} />
+        <Delete className='text-danger' />
       </IconButton>
     </>
   );
@@ -837,7 +837,7 @@ export default function AdminProductsList() {
                                 <Checkbox
                                   color='primary'
                                   checked={field.value === 1 ? true : false}
-                                  onChange={(e) => field.onChange(e)}
+                                  onChange={(e) => field.onChange(e.target.checked ? 1 : 0)}
                                 />
                               }
                               label='是否啟用'

@@ -142,9 +142,10 @@ export default function AdminOrderDetail() {
                   <div className='detail-item'>
                     <div className='d-flex justify-content-between'>
                       <div className='info-item-list'>
+                        <p>訂單 ID：{selectedOrder?.id}</p>
                         <div className='info-item'>
                           <p>
-                            訂單成立：{formatDate(selectedOrder?.create_at)}
+                            訂單成立時間：{formatDate(selectedOrder?.create_at)}
                           </p>
                           <p>付款方式：信用卡</p>
                         </div>

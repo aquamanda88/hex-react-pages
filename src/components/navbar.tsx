@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Person, ShoppingCart, Bookmark, Dashboard } from './Icons';
 import {
@@ -17,6 +17,7 @@ import cartApiService from '../services/api/user/cart.service';
 export default function NavBar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const count = useSelector(selectCount);
@@ -44,17 +45,17 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className='menu-bar navbar navbar-light'>
+      <nav className='navbar navbar-light'>
         <div className='container'>
-          <div className='menu-navbar'>
+          <div className='navbar-items'>
             <ul className='navbar-list d-flex'>
-              <li>
-                <Link className='text-color-main' to='/products'>
+              <li className={pathname === '/products' ? 'active' : ''}>
+                <Link className='navbar-btn' to='/products'>
                   全部作品
                 </Link>
               </li>
             </ul>
-            <div className='page-bar'>
+            <div className='page-items'>
               <IconButton onClick={() => navigate('/cart')}>
                 <Badge badgeContent={count} color='primary'>
                   <ShoppingCart />

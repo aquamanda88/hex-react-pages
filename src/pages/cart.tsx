@@ -31,8 +31,8 @@ export default function Cart() {
       icon: 'warning',
       showCancelButton: true,
       cancelButtonText: '我再想想',
-      confirmButtonColor: '#cc2e41',
-      cancelButtonColor: 'grey',
+      confirmButtonColor: '#CD2745',
+      cancelButtonColor: '#888888',
       confirmButtonText: '確認清除',
     }).then((result) => {
       if (result.isConfirmed) {
@@ -132,27 +132,34 @@ export default function Cart() {
       const lastMessage = responses[responses.length - 1]?.data?.message;
 
       if (lastMessage) {
-        Swal.fire({
-          icon: 'success',
-          title: lastMessage,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            navigate('/checkout');
-            window.location.reload();
-          }
-        });
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: lastMessage,
+            status: true,
+          })
+        );
+        setTimeout(() => {
+          navigate('/checkout');
+        }, 1200);
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        Swal.fire({
-          icon: 'error',
-          title: error.response?.data?.message,
-        });
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: error.response?.data?.message,
+            status: false,
+          })
+        );
       } else {
-        Swal.fire({
-          icon: 'error',
-          title: '發生無預期錯誤',
-        });
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: '發生無預期錯誤',
+            status: false,
+          })
+        );
       }
     } finally {
       setIsProductLoading(false);
@@ -223,7 +230,7 @@ export default function Cart() {
         </div>
         {cart?.carts && cart?.carts.length > 0 ? (
           <>
-            <div className='table-responsive-lg mb-2'>
+            <div className='table-responsive mb-2'>
               <table className='cart-table table'>
                 <thead className='text-center table-light'>
                   <tr className='align-baseline'>
@@ -356,10 +363,7 @@ export default function Cart() {
             <div className='d-flex justify-content-center'>
               <h2 className='font-zh-h2'>
                 您的購物車中沒有任何商品，
-                <Link
-                  to='/products'
-                  className='text-color-main d-inline-flex'
-                >
+                <Link to='/products' className='text-color-main d-inline-flex'>
                   <p className='btn-icon'>馬上去逛逛</p>
                 </Link>
               </h2>

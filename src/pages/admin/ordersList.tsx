@@ -31,7 +31,7 @@ export default function AdminOrdersList() {
     {
       header: '訂單編號',
       accessor: (item: OrdersDatum) => (
-        <Link to={`/admin/order/${item.id}`} className="table-text-link">
+        <Link to={`/admin/order/${item.id}`} className='table-text-link'>
           <p>{generateOrderCode(item.create_at)}</p>
           <ArrowForwardIos />
         </Link>
@@ -63,7 +63,7 @@ export default function AdminOrdersList() {
   const actions = (item: OrdersDatum) => (
     <>
       <IconButton onClick={() => handleDeleteItem(item)}>
-        <Delete sx={{ color: '#dc3545' }} />
+        <Delete className='text-danger' />
       </IconButton>
     </>
   );
@@ -91,8 +91,8 @@ export default function AdminOrdersList() {
       icon: 'warning',
       showCancelButton: true,
       cancelButtonText: '我再想想',
-      confirmButtonColor: '#cc2e41',
-      cancelButtonColor: 'grey',
+      confirmButtonColor: '#CD2745',
+      cancelButtonColor: '#888888',
       confirmButtonText: '確認刪除',
     }).then((result) => {
       if (result.isConfirmed && deleteItem.id) {
@@ -110,8 +110,8 @@ export default function AdminOrdersList() {
       icon: 'warning',
       showCancelButton: true,
       cancelButtonText: '我再想想',
-      confirmButtonColor: '#cc2e41',
-      cancelButtonColor: 'grey',
+      confirmButtonColor: '#CD2745',
+      cancelButtonColor: '#888888',
       confirmButtonText: '確認刪除',
     }).then((result) => {
       if (result.isConfirmed) {
