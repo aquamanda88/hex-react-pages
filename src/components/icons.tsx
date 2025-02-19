@@ -22,4 +22,5 @@ export {
   Person,
   ShoppingCart,
   Source,
+  Menu,
 } from '@mui/icons-material';

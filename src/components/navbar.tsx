@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { Person, ShoppingCart, Bookmark, Dashboard, Feed } from './Icons';
+import { Person, ShoppingCart, Bookmark, Feed } from './Icons';
 import {
   Badge,
-  Divider,
   IconButton,
   ListItemIcon,
   ListItemText,
@@ -13,6 +12,7 @@ import {
 } from '@mui/material';
 import { calculateCartCount, selectCount } from '../redux/countSlice';
 import cartApiService from '../services/api/user/cart.service';
+import { Drawers } from './Index';
 
 export default function NavBar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -21,6 +21,25 @@ export default function NavBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const count = useSelector(selectCount);
+
+  const dropdownItems = [
+    {
+      url: '/products',
+      content: '全部作品',
+    },
+    {
+      url: '/cart',
+      content: '購物車',
+    },
+    {
+      url: '/favorites',
+      content: '我的收藏',
+    },
+    {
+      url: '/orders',
+      content: '訂單記錄',
+    },
+  ];
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -46,7 +65,7 @@ export default function NavBar() {
   return (
     <>
       <nav className='navbar navbar-light'>
-        <div className='container'>
+        <div className='container-fluid'>
           <div className='navbar-items'>
             <h1>
               <Link className='font-en-h2-medium' to='/home'>
@@ -54,22 +73,27 @@ export default function NavBar() {
               </Link>
             </h1>
             <div className='d-flex align-items-center'>
-              <ul className='navbar-list d-flex'>
-                <li className={pathname === '/products' ? 'active' : ''}>
-                  <Link className='link-gray' to='/products'>
-                    全部作品
-                  </Link>
-                </li>
-              </ul>
-              <div className='page-items'>
-                <IconButton onClick={() => navigate('/cart')}>
-                  <Badge badgeContent={count} color='primary'>
-                    <ShoppingCart />
-                  </Badge>
-                </IconButton>
-                <IconButton onClick={handleClick}>
-                  <Person />
-                </IconButton>
+              <div className='d-block d-md-none'>
+                <Drawers dropdownItems={dropdownItems} />
+              </div>
+              <div className='d-none d-md-flex align-items-center'>
+                <ul className='navbar-list d-flex'>
+                  <li className={pathname === '/products' ? 'active' : ''}>
+                    <Link className='link-gray' to='/products'>
+                      全部作品
+                    </Link>
+                  </li>
+                </ul>
+                <div className='page-items d-flex'>
+                  <IconButton onClick={() => navigate('/cart')}>
+                    <Badge badgeContent={count} color='primary'>
+                      <ShoppingCart />
+                    </Badge>
+                  </IconButton>
+                  <IconButton onClick={handleClick}>
+                    <Person />
+                  </IconButton>
+                </div>
               </div>
             </div>
           </div>
@@ -96,15 +120,6 @@ export default function NavBar() {
                   <Feed />
                 </ListItemIcon>
                 <ListItemText>訂單記錄</ListItemText>
-              </MenuItem>
-            </Link>
-            <Divider />
-            <Link to='/admin'>
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <Dashboard />
-                </ListItemIcon>
-                <ListItemText>後台</ListItemText>
               </MenuItem>
             </Link>
           </Menu>

@@ -1,0 +1,35 @@
+footer {
+  background-color: $blue-700;
+  color: $white;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.link-light {
+  line-height: 1.2;
+}
+
+.link-light .MuiSvgIcon-root {
+  transition: all 0.3s;
+  @include text-color($white);
+}
+
+.link-light .MuiSvgIcon-root:hover {
+  opacity: 0.7;
+}
+
+.footer-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.copyright-statement {
+  line-height: 2;
+}
