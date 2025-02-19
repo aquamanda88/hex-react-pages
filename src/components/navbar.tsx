@@ -48,22 +48,29 @@ export default function NavBar() {
       <nav className='navbar navbar-light'>
         <div className='container'>
           <div className='navbar-items'>
-            <ul className='navbar-list d-flex'>
-              <li className={pathname === '/products' ? 'active' : ''}>
-                <Link className='navbar-btn' to='/products'>
-                  全部作品
-                </Link>
-              </li>
-            </ul>
-            <div className='page-items'>
-              <IconButton onClick={() => navigate('/cart')}>
-                <Badge badgeContent={count} color='primary'>
-                  <ShoppingCart />
-                </Badge>
-              </IconButton>
-              <IconButton id='basic-button' onClick={handleClick}>
-                <Person />
-              </IconButton>
+            <h1>
+              <Link className='font-en-h2-medium' to='/home'>
+                Olive Branch
+              </Link>
+            </h1>
+            <div className='d-flex align-items-center'>
+              <ul className='navbar-list d-flex'>
+                <li className={pathname === '/products' ? 'active' : ''}>
+                  <Link className='link-gray' to='/products'>
+                    全部作品
+                  </Link>
+                </li>
+              </ul>
+              <div className='page-items'>
+                <IconButton onClick={() => navigate('/cart')}>
+                  <Badge badgeContent={count} color='primary'>
+                    <ShoppingCart />
+                  </Badge>
+                </IconButton>
+                <IconButton onClick={handleClick}>
+                  <Person />
+                </IconButton>
+              </div>
             </div>
           </div>
           <Menu

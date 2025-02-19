@@ -1,31 +1,36 @@
+import { Link } from 'react-router';
+import { GitHub } from './Icons';
+import { IconButton } from '@mui/material';
+
 export default function Footer() {
   return (
     <>
       <footer className='footer mt-auto py-3'>
         <div className='container text-center'>
-          <div className='row justify-content-center'>
-            <div className='col-6'>
-              <h4>關於圖片與描述使用說明</h4>
-              <p>
-                本站的所有畫作圖片均來自於
-                <a
-                  className='text-color-main d-inline-block'
-                  href='https://www.nga.gov/notices/open-access-policy.html'
-                  target='_blank'
-                >
-                  【華盛頓國家藝廊】
-                </a>
-                <br/>並根據其提供的 CC0 公眾領域授權使用。
-              </p>
-              <p>
-                本站中關於畫作的文字描述由 ChatGPT
-                自動生成，這些描述可能會包含不準確或錯誤的內容，僅供參考使用。如需更詳盡或準確的資訊，建議參考官方或學術資源。
-              </p>
+          <div className='d-flex justify-content-between align-items-center'>
+            <div className='content'>
+              <p className='mb-0'>本網站僅供作品使用，無包含任何商業用途</p>
+              <span className='text-color-gray-400'>
+                &copy; {new Date().getFullYear()} Olive Branch - All Rights
+                Reserved.
+              </span>
+            </div>
+            <div className='footer-links'>
+              <Link className='link-light' to='/copyright-statement'>
+                著作權聲明
+              </Link>
+              <a
+                className='link-light'
+                href='https://github.com/aquamanda88/'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                <IconButton>
+                  <GitHub />
+                </IconButton>
+              </a>
             </div>
           </div>
-          <span className='text-muted'>
-            &copy; {new Date().getFullYear()} - 六角學院
-          </span>
         </div>
       </footer>
     </>

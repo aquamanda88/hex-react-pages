@@ -228,7 +228,7 @@ export default function FavoritesList() {
           <div className='d-flex justify-content-center'>
             <h2 className='font-zh-h2'>
               您的收藏清單中沒有任何商品，
-              <Link to='/products' className='text-color-main d-inline-flex'>
+              <Link to='/products' className='text-color-blue d-inline-flex'>
                 <p className='btn-icon'>馬上去逛逛</p>
               </Link>
             </h2>

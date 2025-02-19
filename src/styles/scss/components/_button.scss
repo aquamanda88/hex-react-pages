@@ -38,7 +38,7 @@
   }
 
   &.btn-danger {
-    @include bg-color(#CD2745);
+    @include bg-color(#cd2745);
     @include text-color($white);
     .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
       @include text-color($white);
@@ -110,12 +110,6 @@
     }
   }
 }
-.link-button {
-  transition: all 0.4s;
-  &:hover {
-    @include text-color(#1583b1);
-  }
-}
 /** icon 型按鈕 */
 .btn {
   .MuiSvgIcon-fontSizeMedium {
@@ -125,19 +119,25 @@
     margin-bottom: 0;
   }
 }
-/** navbar 選單按鈕 */
-.text-color-main {
+/** 純文字按鈕 */
+.text-color-blue {
   @include text-color($blue-600);
   &:hover {
     @include bg-color(transparent);
     @include text-color($blue-700);
   }
 }
-/** 純文字按鈕 */
-.navbar-btn {
+.link-gray {
+  transition: all 0.3s;
+  @include text-color($gray-900);
+  &:hover {
+    opacity: 0.7;
+  }
+}
+.link-light {
+  transition: all 0.3s;
   @include text-color($white);
   &:hover {
-    @include bg-color(transparent);
-    @include text-color($gray-300);
+    opacity: 0.7;
   }
 }

@@ -269,7 +269,7 @@ export default function Cart() {
                       </td>
                       <td className='text-start'>
                         <Link
-                          className='link-button'
+                          className='link-gray'
                           to={`/product/${item.product.id}`}
                         >
                           <p>{item.product.title}</p>
@@ -363,7 +363,7 @@ export default function Cart() {
             <div className='d-flex justify-content-center'>
               <h2 className='font-zh-h2'>
                 您的購物車中沒有任何商品，
-                <Link to='/products' className='text-color-main d-inline-flex'>
+                <Link to='/products' className='text-color-blue d-inline-flex'>
                   <p className='btn-icon'>馬上去逛逛</p>
                 </Link>
               </h2>

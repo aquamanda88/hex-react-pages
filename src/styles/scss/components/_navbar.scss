@@ -1,6 +1,6 @@
 nav.navbar {
   box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.3);
-  background-color: $blue-500;
+  background-color: $white;
   padding: 0;
   position: fixed;
   z-index: 100;
@@ -16,14 +16,17 @@ nav.navbar {
 
   .navbar-list li {
     border-bottom: 2px solid transparent;
-  }
-  .navbar-list li.active {
-    border-bottom: 2px solid $white;
-  }
-  .navbar-list a {
-    padding: 18px 16px;
-    width: 110px;
-    text-align: center;
+    &.active .link-gray {
+      color: $blue-600;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    a {
+      padding: 18px 16px;
+      width: 110px;
+      text-align: center;
+    }
   }
   .page-items {
     display: flex;
@@ -31,11 +34,8 @@ nav.navbar {
   }
 }
 
-.page-items .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
-  @include text-color($white);
-  &:hover {
-    @include text-color($gray-300);
-  }
+.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+  color: $gray-900;
 }
 
 .MuiBadge-badge.MuiBadge-colorPrimary {

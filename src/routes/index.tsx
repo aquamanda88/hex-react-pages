@@ -15,6 +15,7 @@ import {
   PageNotFound,
   ProductDetail,
   ProductsList,
+  CopyrightStatement,
   Week01,
   Week02,
   Week03,
@@ -29,7 +30,15 @@ const routes = [
     children: [
       {
         index: true,
-        element: <Navigate to='products' replace />,
+        element: <Navigate to='home' replace />,
+      },
+      {
+        path: '/home',
+        element: <Home />,
+      },
+      {
+        path: '/copyright-statement',
+        element: <CopyrightStatement />,
       },
       {
         path: 'products',
@@ -90,10 +99,6 @@ const routes = [
   {
     path: '/login',
     element: <Login />,
-  },
-  {
-    path: '/component',
-    element: <Home />,
   },
   {
     path: '/week01',

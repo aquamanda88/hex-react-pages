@@ -13,6 +13,7 @@ export {
   Favorite,
   FavoriteBorder,
   Feed,
+  GitHub,
   InsertPhoto,
   KeyboardArrowLeft,
   KeyboardArrowRight,
