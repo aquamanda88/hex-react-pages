@@ -4,8 +4,8 @@
   align-items: center;
   height: 100vh;
   text-align: center;
-  background-color: #464866;
-  color: #ffffff;
+  background-color: $blue-600;
+  color: $white;
 }
 
 .notfound {
@@ -37,7 +37,7 @@
 }
 
 .notfound .notfound-404 h1 > span {
-  text-shadow: -8px 0px 0px #aaabb8;
+  text-shadow: -8px 0px 0px $gray-500;
 }
 
 .notfound .notfound-404 h3 {
@@ -48,7 +48,7 @@
   margin: 0px;
   letter-spacing: 3px;
   padding-left: 6px;
-  color: #ffffff;
+  color: $white;
 }
 
 .notfound h2 {
@@ -57,5 +57,5 @@
   text-transform: uppercase;
   margin-top: 0px;
   margin-bottom: 25px;
-  color: #ffffff;
+  color: $white;
 }

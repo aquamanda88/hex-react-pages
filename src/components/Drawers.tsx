@@ -49,8 +49,8 @@ export default function Drawers({ dropdownItems }: DrawersProps) {
     >
       <List className='navbar-dropdown'>
         <ListItem>
-          {dropdownItems.map((item) => (
-            <Link to={item.url}>
+          {dropdownItems.map((item, index) => (
+            <Link to={item.url} key={index}>
               <ListItemButton>{item.content}</ListItemButton>
             </Link>
           ))}

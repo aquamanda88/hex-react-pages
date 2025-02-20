@@ -1,9 +1,78 @@
 import { Link } from 'react-router';
 import { GitHub } from './Icons';
+import { Button, FormControl, TextField } from '@mui/material';
+import validationService from '../services/validation.service';
+import { Controller, useForm } from 'react-hook-form';
+import { toggleToast, updateMessage } from '../redux/toastSlice';
+import { useDispatch } from 'react-redux';
 
 export default function Footer() {
+  const dispatch = useDispatch();
+  
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: 'onSubmit',
+    defaultValues: { email: '' },
+  });
+
+  /**
+   * 處理送出表單事件
+   *
+   */
+  const onSubmit = () => {
+    dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: '已送出',
+            status: true,
+          })
+        );
+  };
+
   return (
     <>
+      <div className='email-block'>
+        <div className='dark-mask'></div>
+        <div className='email-block-content'>
+          <h2 className='text-light font-zh-h2'>
+            訂閱我們的電子報
+            <br />
+            接收最新消息
+          </h2>
+          <form className='d-flex' onSubmit={handleSubmit(onSubmit)}>
+            <FormControl className='w-50' error={!!errors.email}>
+              <Controller
+                name='email'
+                control={control}
+                rules={validationService.emailValidator()}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    variant='filled'
+                    label='Email'
+                    type='email'
+                    onChange={(e) => {
+                      if (validationService.isValidInput(e)) {
+                        field.onChange(e.target.value);
+                      }
+                    }}
+                  />
+                )}
+              />
+            </FormControl>
+            <Button
+              className='btn btn-primary'
+              variant='contained'
+              type='submit'
+            >
+              送出
+            </Button>
+          </form>
+        </div>
+      </div>
       <footer className='footer mt-auto py-3'>
         <div className='container text-center'>
           <div className='footer-block flex-column flex-md-row'>

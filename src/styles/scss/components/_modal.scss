@@ -5,7 +5,7 @@
 
 .modal-content {
   padding: 24px 0;
-  background-color: #efefef;
+  background-color: $gray-200;
 }
 
 .preview-image {
@@ -22,4 +22,8 @@
 
 .no-image-icon.MuiSvgIcon-colorDisabled {
   font-size: 300px;
+}
+
+.no-image-icon.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+  color: $gray-400;
 }

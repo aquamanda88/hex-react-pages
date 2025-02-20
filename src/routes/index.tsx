@@ -1,7 +1,6 @@
 import { Navigate } from 'react-router';
 import Layout from '../layouts/Layout';
 import AdminLayout from '../layouts/AdminLayout';
-import Home from '../pages/Home';
 import {
   AdminOrderDetail,
   AdminOrdersList,
@@ -21,6 +20,7 @@ import {
   Week03,
   Week04,
   Week05,
+  Home,
 } from '../pages/Index';
 
 const routes = [

@@ -121,7 +121,7 @@ export default function Home() {
                 ></img>
               </Link>
               <div className='top-info-item'>
-                <h3 className='font-zh-h5'>{item.title}</h3>
+                <h3 className='font-zh-h3'>{item.title}</h3>
                 <p className='font-en-h4-medium mb-0'>
                   TWD {formatPrice(item.price)}
                 </p>

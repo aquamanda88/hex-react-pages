@@ -1,3 +1,38 @@
+.email-block {
+  background-image: url(https://storage.googleapis.com/vue-course-api.appspot.com/olive-branch/1740036922354.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=n%2FbUcp3FUAxLTmTGqUHO5tbnuhD55JOT5qeWlb8sLBgEPIDQD6uwHxFadL0g5qu5v1caNFLv68s7S7sGKo98BSlNt5d%2FNRm7ZcxvXf%2Br2doqW6ysT6KjqncAyH0Oguij8f4SMH9RmAESPjNuE1xA1NkwSUvKtvS0u44f0n0ce2rN9RLEv49al253espozSygFAyPTFNpKQgNJolYkZvT03SMNe2B5k4Jc3IDxbrQkgmB6F94Yge3eu2H9OPxyMzWwQMS48CtipIsUTSqvCvse%2BDShnwobo%2FF3eSlDs8NhxqyPN5Qw43XozAea36VbkwpqPkMttl51WIb%2F96kd2sStQ%3D%3D);
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  margin-bottom: 0;
+  .dark-mask {
+    background-color: $gray-600;
+    opacity: 0.7;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  .email-block-content {
+    padding: 48px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    .MuiInputBase-root {
+      background-color: $gray-100;
+      border-radius: 0;
+    }
+    .MuiInputBase-root.MuiFilledInput-underline::before {
+      border-bottom: none;
+    }
+    button {
+      border-radius: 0;
+    }
+  }
+}
+
 footer {
   background-color: $blue-700;
   color: $white;
