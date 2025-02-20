@@ -60,6 +60,46 @@ li.flex-md-row-reverse img {
   padding-left: 0;
 }
 
+.block-title {
+  text-align: center;
+  padding: 36px;
+  margin-bottom: 0;
+  font-family: 'Lato', 'LXGW WenKai Mono TC';
+}
+
+.top-product-items {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 36px;
+  gap: 24px;
+}
+
+.top-product-item {
+  .top-image-item {
+    max-width: 430px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    -o-object-fit: cover;
+  }
+
+  .top-info-item {
+    padding: 8px;
+    width: 100%;
+    h3.font-zh-h5 {
+      margin-bottom: 8px;
+      padding-top: 8px;
+      display: -webkit-box;
+      overflow: hidden;
+      line-clamp: 1;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+    }
+  }
+}
+
 @media (max-width: 767px) {
   .primary-text {
     display: none;
@@ -111,5 +151,16 @@ li.flex-md-row-reverse img {
 
   .secondary-content-items li.flex-md-row-reverse img {
     padding-left: 48px;
+  }
+}
+
+@media (max-width: 767px) {
+  .top-product-items {
+    flex-direction: column;
+  }
+  .top-product-item {
+    .top-image-item {
+      max-width: 100%;
+    }
   }
 }

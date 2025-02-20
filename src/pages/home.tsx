@@ -1,7 +1,14 @@
-import { Button } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
+import { Button } from '@mui/material';
+import { ProductFullDatum } from '../core/models/utils.model';
+import productApiService from '../services/api/user/products.service';
+import AOS from 'aos';
+import { formatPrice } from '../services/formatValue.service';
 
 export default function Home() {
+  const [products, setProducts] = useState<ProductFullDatum[]>([]);
+
   const contentItems = [
     {
       imgUrl:
@@ -22,6 +29,24 @@ export default function Home() {
       content: '讓人人都能擁有經典名作，輕鬆提升居家品味。',
     },
   ];
+
+  /**
+   * 呼叫取得商品列表 API
+   *
+   */
+  const getAllProducts = async () => {
+    productApiService.getAllProducts().then(({ data: { products } }) => {
+      const randomProducts = products
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3);
+      setProducts(randomProducts);
+    });
+  };
+
+  useEffect(() => {
+    AOS.init();
+    getAllProducts();
+  }, []);
 
   return (
     <>
@@ -69,6 +94,8 @@ export default function Home() {
           {contentItems.map((item, index) => (
             <li
               className={`${index === 1 ? 'flex-md-row-reverse' : 'flex-md-row'}`}
+              data-aos={`${index === 1 ? 'fade-left' : 'fade-right'}`}
+              key={index}
             >
               <img
                 className='col-12 col-md-6'
@@ -78,6 +105,29 @@ export default function Home() {
               <div className='secondary-text col-12 col-md-6'>
                 <h3>{item.title}</h3>
                 <p>{item.content}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <h2 className='block-title'>熱門作品</h2>
+        <ul className='top-product-items'>
+          {products.map((item) => (
+            <li className='top-product-item' key={item.id} data-aos='flip-up'>
+              <Link to={`/product/${item.id}`}>
+                <img
+                  src={item.imageUrl}
+                  className='top-image-item'
+                  alt={item.title}
+                ></img>
+              </Link>
+              <div className='top-info-item'>
+                <h3 className='font-zh-h5'>{item.title}</h3>
+                <p className='font-en-h4-medium mb-0'>
+                  TWD {formatPrice(item.price)}
+                </p>
+                <p className='font-en-p-regular text-secondary mb-0'>
+                  <del>TWD {formatPrice(item.origin_price)}</del>
+                </p>
               </div>
             </li>
           ))}
