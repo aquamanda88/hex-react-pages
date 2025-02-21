@@ -1,10 +1,9 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
-import { ReactNode, forwardRef, useImperativeHandle, useState } from 'react';
+import { Fragment, ReactNode, forwardRef, useImperativeHandle, useState } from 'react';
 
 /** 元件參數型別 */
 interface StepperProps {
@@ -41,7 +40,7 @@ export const Steppers = forwardRef<{ nextStep: () => void }, StepperProps>(
           {steps.map((label) => {
             const stepProps: { completed?: boolean } = {};
             const labelProps: {
-              optional?: React.ReactNode;
+              optional?: ReactNode;
             } = {};
             return (
               <Step key={label} {...stepProps}>
@@ -51,11 +50,11 @@ export const Steppers = forwardRef<{ nextStep: () => void }, StepperProps>(
           })}
         </Stepper>
         {activeStep === steps.length - 1 ? (
-          <React.Fragment>
+          <Fragment>
             <div className='container py-4'>{children[activeStep]}</div>
-          </React.Fragment>
+          </Fragment>
         ) : (
-          <React.Fragment>
+          <Fragment>
             <div className='container py-4'>{children[activeStep]}</div>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               {activeStep === 1 && (
@@ -68,7 +67,7 @@ export const Steppers = forwardRef<{ nextStep: () => void }, StepperProps>(
                 </Button>
               )}
             </Box>
-          </React.Fragment>
+          </Fragment>
         )}
       </Box>
     );

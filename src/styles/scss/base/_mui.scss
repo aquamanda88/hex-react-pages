@@ -26,9 +26,14 @@
 
 // 全站 stepper
 .MuiStepper-root {
-  .MuiSvgIcon-root.Mui-completed,
-  .MuiSvgIcon-root.Mui-active {
+  .MuiSvgIcon-root.MuiStepIcon-root.Mui-completed {
     color: $blue-500;
+  }
+  .MuiSvgIcon-root.MuiStepIcon-root.Mui-active {
+    color: $blue-700;
+  }
+  .MuiSvgIcon-root.MuiStepIcon-root {
+    color: $gray-500;
   }
 }
 

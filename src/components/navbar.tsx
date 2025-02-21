@@ -73,7 +73,7 @@ export default function NavBar() {
               </Link>
             </h1>
             <div className='d-flex align-items-center'>
-              <div className='d-block d-md-none'>
+              <div className='dropdown-btn d-block d-md-none'>
                 <Drawers dropdownItems={dropdownItems} />
               </div>
               <div className='d-none d-md-flex align-items-center'>

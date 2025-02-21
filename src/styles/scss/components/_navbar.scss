@@ -78,5 +78,13 @@ nav.navbar {
 @media (max-width: 767px) {
   nav.navbar {
     z-index: 9999;
+    .container-fluid {
+      padding: 0 24px;
+    }
+    .dropdown-btn {
+      button {
+        width: 100%;
+      }
+    }
   }
 }

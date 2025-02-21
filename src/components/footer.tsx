@@ -37,13 +37,13 @@ export default function Footer() {
       <div className='email-block'>
         <div className='dark-mask'></div>
         <div className='email-block-content'>
-          <h2 className='text-light font-zh-h2'>
+          <h2 className='font-zh-h2'>
             訂閱我們的電子報
             <br />
             接收最新消息
           </h2>
           <form className='d-flex' onSubmit={handleSubmit(onSubmit)}>
-            <FormControl className='w-50' error={!!errors.email}>
+            <FormControl className='email-input' error={!!errors.email}>
               <Controller
                 name='email'
                 control={control}

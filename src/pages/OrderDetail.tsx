@@ -64,7 +64,7 @@ export default function OrderDetail() {
             <tbody>
               {Object.values(products)?.map((item) => (
                 <tr key={item.id}>
-                  <td>
+                  <td className='d-flex justify-content-center'>
                     <img
                       className='cart-image'
                       src={item.product.imageUrl}
@@ -125,6 +125,14 @@ export default function OrderDetail() {
                 寄送地址：
                 {selectedOrder?.user?.address}
               </li>
+              {selectedOrder?.message && (
+                <li>
+                  留言備註：
+                  {selectedOrder?.message}
+                </li>
+              )}
+            </ul>
+            <ul className='mb-4'>
               <li>
                 訂單成立時間：
                 {formatDate(selectedOrder?.create_at ?? 0)}
@@ -133,6 +141,12 @@ export default function OrderDetail() {
                 訂單付款狀態：
                 {selectedOrder?.is_paid ? '已付款' : '未付款'}
               </li>
+              {selectedOrder?.is_paid && (
+                <li>
+                  訂單付款時間：
+                  {formatDate(selectedOrder?.paid_date ?? 0)}
+                </li>
+              )}
             </ul>
           </div>
           <div className='col-12 col-lg-6'>

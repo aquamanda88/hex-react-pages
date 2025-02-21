@@ -27,6 +27,12 @@
     .MuiInputBase-root.MuiFilledInput-underline::before {
       border-bottom: none;
     }
+    h2 {
+      color: $white;
+    }
+    .email-input {
+      width: 50%;
+    }
     button {
       border-radius: 0;
     }
@@ -51,7 +57,7 @@ footer {
 
 .link-light .MuiSvgIcon-root {
   transition: all 0.3s;
-  @include text-color($white);
+  color: $white;
 }
 
 .link-light .MuiSvgIcon-root:hover {
@@ -67,4 +73,29 @@ footer {
 
 .copyright-statement {
   line-height: 2;
+}
+
+@media (max-width: 991px) {
+  .email-block .email-block-content {
+    text-align: center;
+  }
+
+  .email-block .email-block-content form {
+    .email-input {
+      width: 70%;
+    }
+    button {
+      width: 30%;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .email-block .email-block-content form {
+    flex-direction: column;
+    .email-input,
+    button {
+      width: 100%;
+    }
+  }
 }
