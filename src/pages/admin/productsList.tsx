@@ -240,7 +240,7 @@ export default function AdminProductsList() {
    *
    * @param data - 商品表單欄位
    */
-  const getAddProductRequest = (data: ProductForm) => {
+  const getAddProductRequest = (data: ProductForm) => {   
     const newTempProduct: AddProductRequest = {
       data: {
         title: data.title,
@@ -255,8 +255,8 @@ export default function AdminProductsList() {
         unit: data.unit,
         origin_price: Number(data.origin_price),
         price: Number(data.price),
-        imageUrl: data.imageUrl,
-        imagesUrl: data.imagesUrl,
+        imageUrl: tempProduct?.imageUrl,
+        imagesUrl: tempProduct?.imagesUrl,
         is_enabled: data.is_enabled ? 1 : 0,
       },
     };
@@ -379,7 +379,7 @@ export default function AdminProductsList() {
               ...prev,
               imagesUrl: updatedImagesUrl,
             }));
-          } else {
+          } else {            
             setTempProduct({
               ...tempProduct,
               imageUrl: imageUrl,
