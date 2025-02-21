@@ -5,7 +5,6 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import { IconButton } from '@mui/material';
 import { Menu } from './Icons';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
@@ -61,9 +60,9 @@ export default function Drawers({ dropdownItems }: DrawersProps) {
 
   return (
     <>
-      <IconButton onClick={toggleDrawer('top', !state.top)}>
+      <button type='button' className='btn' onClick={toggleDrawer('top', !state.top)}>
         <Menu />
-      </IconButton>
+      </button>
       <Drawer
         anchor='top'
         open={state.top}

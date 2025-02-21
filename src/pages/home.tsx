@@ -90,25 +90,31 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <ul className='secondary-content-items row'>
-          {contentItems.map((item, index) => (
-            <li
-              className={`${index === 1 ? 'flex-md-row-reverse' : 'flex-md-row'}`}
-              data-aos={`${index === 1 ? 'fade-left' : 'fade-right'}`}
-              key={index}
-            >
-              <img
-                className='col-12 col-md-6'
-                src={item.imgUrl}
-                alt={item.title}
-              />
-              <div className='secondary-text col-12 col-md-6'>
-                <h3>{item.title}</h3>
-                <p>{item.content}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
+      </div>
+      <div className='secondary-content-container'>
+        <div className='container'>
+          <ul className='secondary-content-items row'>
+            {contentItems.map((item, index) => (
+              <li
+                className={`${index === 1 ? 'flex-md-row-reverse' : 'flex-md-row'}`}
+                data-aos={`${index === 1 ? 'fade-left' : 'fade-right'}`}
+                key={index}
+              >
+                <img
+                  className='col-12 col-md-6'
+                  src={item.imgUrl}
+                  alt={item.title}
+                />
+                <div className='secondary-text col-12 col-md-6'>
+                  <h3>{item.title}</h3>
+                  <p>{item.content}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className='container'>
         <h2 className='block-title'>熱門作品</h2>
         <ul className='top-product-items'>
           {products.map((item) => (

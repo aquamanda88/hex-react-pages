@@ -36,7 +36,7 @@ export default function Footer() {
     <>
       <div className='email-block'>
         <div className='dark-mask'></div>
-        <div className='email-block-content'>
+        <div className='email-block-content container'>
           <h2 className='font-zh-h2'>
             訂閱我們的電子報
             <br />

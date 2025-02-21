@@ -65,7 +65,7 @@ export default function NavBar() {
   return (
     <>
       <nav className='navbar navbar-light'>
-        <div className='container-fluid'>
+        <div className='container'>
           <div className='navbar-items'>
             <h1>
               <Link className='font-en-h2-medium' to='/home'>
