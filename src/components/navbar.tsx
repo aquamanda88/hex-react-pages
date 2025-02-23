@@ -1,23 +1,12 @@
-import { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { Person, ShoppingCart, Bookmark, Feed } from './Icons';
-import {
-  Badge,
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-} from '@mui/material';
+import { ShoppingCart } from './Icons';
+import { Badge, IconButton } from '@mui/material';
 import { calculateCartCount, selectCount } from '../redux/countSlice';
 import cartApiService from '../services/api/user/cart.service';
-import { Drawers } from './Index';
 
 export default function NavBar() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const count = useSelector(selectCount);
@@ -41,14 +30,6 @@ export default function NavBar() {
     },
   ];
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   /**
    * 呼叫取得購物車資料 API
    */
@@ -64,65 +45,59 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className='navbar navbar-light'>
-        <div className='container'>
-          <div className='navbar-items'>
+      <nav className='navbar navbar-expand-lg'>
+        <div className='container-fluid'>
+          <div className='container navbar-menu-bar'>
             <h1>
               <Link className='font-en-h2-medium' to='/home'>
                 Olive Branch
               </Link>
             </h1>
-            <div className='d-flex align-items-center'>
-              <div className='dropdown-btn d-block d-md-none'>
-                <Drawers dropdownItems={dropdownItems} />
-              </div>
-              <div className='d-none d-md-flex align-items-center'>
-                <ul className='navbar-list d-flex'>
-                  <li className={pathname === '/products' ? 'active' : ''}>
-                    <Link className='link-gray' to='/products'>
-                      全部作品
-                    </Link>
-                  </li>
-                </ul>
-                <div className='page-items d-flex'>
-                  <IconButton onClick={() => navigate('/cart')}>
-                    <Badge badgeContent={count} color='primary'>
-                      <ShoppingCart />
-                    </Badge>
-                  </IconButton>
-                  <IconButton onClick={handleClick}>
-                    <Person />
-                  </IconButton>
-                </div>
-              </div>
-            </div>
+            <ul className='navbar-menu'>
+              <li>
+                <Link to='/products'>全部作品</Link>
+              </li>
+              <li>
+                <Link to='/favorites'>我的收藏</Link>
+              </li>
+              <li>
+                <Link to='/orders'>訂單記錄</Link>
+              </li>
+              <li>
+                <IconButton onClick={() => navigate('/cart')}>
+                  <Badge badgeContent={count} color='primary'>
+                    <ShoppingCart />
+                  </Badge>
+                </IconButton>
+              </li>
+            </ul>
+            <button
+              className='navbar-toggler'
+              type='button'
+              data-bs-toggle='collapse'
+              data-bs-target='#navbarSupportedContent'
+              aria-controls='navbarSupportedContent'
+              aria-expanded='false'
+              aria-label='Toggle navigation'
+            >
+              <span className='navbar-toggler-icon'></span>
+            </button>
           </div>
-          <Menu
-            id='basic-menu'
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            <Link to='/favorites'>
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <Bookmark />
-                </ListItemIcon>
-                <ListItemText>我的收藏</ListItemText>
-              </MenuItem>
-            </Link>
-            <Link to='/orders'>
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <Feed />
-                </ListItemIcon>
-                <ListItemText>訂單記錄</ListItemText>
-              </MenuItem>
-            </Link>
-          </Menu>
+          <div className='collapse navbar-collapse' id='navbarSupportedContent'>
+            <ul className='navbar-nav me-auto'>
+              {dropdownItems.map((item, index) => (
+                <li className='nav-item'>
+                  <Link
+                    className='nav-link font-zh-p-medium'
+                    to={item.url}
+                    key={index}
+                  >
+                    {item.content}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </nav>
     </>
