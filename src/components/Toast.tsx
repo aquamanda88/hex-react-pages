@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { IconButton, Snackbar } from '@mui/material';
-import { Close } from './Icons';
+import { Cancel, CheckCircle, Close } from './Icons';
 import { messages, toastOpen, toggleToast } from '../redux/toastSlice';
 
 export default function Toast() {
@@ -30,7 +30,12 @@ export default function Toast() {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             onClose={handleClose}
             action={action}
-            message={message.text}
+            message={
+              <div className='toast-body'>
+                {message.status ? <CheckCircle /> : <Cancel />}
+                <span>{message.text}</span>
+              </div>
+            }
           />
         );
       })}

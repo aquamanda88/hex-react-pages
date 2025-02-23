@@ -20,7 +20,7 @@ export default function FavoritesList() {
   const dispatch = useDispatch();
 
   /**
-   * 處理收藏清單事件
+   * 處理我的收藏事件
    *
    * @param index - 產品陣列索引值
    * @param id - 產品 ID
@@ -37,7 +37,7 @@ export default function FavoritesList() {
       dispatch(toggleToast(true));
       dispatch(
         updateMessage({
-          text: '已從收藏清單移除',
+          text: '已從我的收藏移除',
           status: true,
         })
       );
@@ -45,7 +45,7 @@ export default function FavoritesList() {
       dispatch(toggleToast(true));
       dispatch(
         updateMessage({
-          text: '已加入收藏清單',
+          text: '已加入我的收藏',
           status: true,
         })
       );
@@ -101,10 +101,10 @@ export default function FavoritesList() {
   };
 
   /**
-   * 確認目前該產品是否已加入收藏清單
+   * 確認目前該產品是否已加入我的收藏
    *
    * @param productId - 產品 ID
-   * @returns 該產品是否已加入收藏清單
+   * @returns 該產品是否已加入我的收藏
    */
   const checkFavoriteItem = (productId: string): boolean => {
     return favoritesList
@@ -115,7 +115,7 @@ export default function FavoritesList() {
   /**
    * 計算總頁數
    *
-   * @param productsLength - 收藏清單長度
+   * @param productsLength - 我的收藏長度
    * @returns 總頁數
    */
   const checkPagesCount = (productsLength: number): number => {
@@ -151,7 +151,7 @@ export default function FavoritesList() {
 
   return (
     <>
-      <h2 className='page-title'>收藏清單</h2>
+      <h2 className='page-title'>我的收藏</h2>
       {products && products.length > 0 ? (
         <div className='content-layout container'>
           <div className='row mb-4'>
@@ -227,7 +227,7 @@ export default function FavoritesList() {
         <div className='layout'>
           <div className='d-flex justify-content-center'>
             <h2 className='font-zh-h2'>
-              您的收藏清單中沒有任何商品，
+              您的收藏中沒有任何商品，
               <Link to='/products' className='text-color-blue d-inline-flex'>
                 <p className='btn-icon'>馬上去逛逛</p>
               </Link>

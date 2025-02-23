@@ -5,19 +5,38 @@
 
   &.toast-success {
     .MuiSnackbarContent-root {
-      color: #00623f;
-      background-color: #ecfad0;
+      color: $success-200;
+      background-color: $success-100;
+      .toast-body .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+        color: $success-200;
+      }
     }
   }
 
   &.toast-danger {
     .MuiSnackbarContent-root {
-      color: #cd2745;
-      background-color: #fef3ef;
+      color: $danger-200;
+      background-color: $danger-100;
+      .toast-body .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+        color: $danger-200;
+      }
+    }
+  }
+
+  .MuiSnackbarContent-action .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+    color: $gray-700;
+  }
+
+  .toast-body {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+      color: $gray-700;
     }
   }
 
   .MuiSnackbarContent-message {
-    @include font(20px, 0.04em, 1.2);
+    @include font(18px, 0.04em, 1.2);
   }
 }

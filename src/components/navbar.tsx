@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { ShoppingCart } from './Icons';
 import { Badge, IconButton } from '@mui/material';
@@ -7,6 +7,7 @@ import { calculateCartCount, selectCount } from '../redux/countSlice';
 import cartApiService from '../services/api/user/cart.service';
 
 export default function NavBar() {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const count = useSelector(selectCount);
@@ -55,13 +56,28 @@ export default function NavBar() {
             </h1>
             <ul className='navbar-menu'>
               <li>
-                <Link to='/products'>全部作品</Link>
+                <Link
+                  className={pathname === '/products' ? 'marker-pen' : ''}
+                  to='/products'
+                >
+                  <span className='font-zh-p-medium'>全部作品</span>
+                </Link>
               </li>
               <li>
-                <Link to='/favorites'>我的收藏</Link>
+                <Link
+                  className={pathname === '/favorites' ? 'marker-pen' : ''}
+                  to='/favorites'
+                >
+                  <span className='font-zh-p-medium'>我的收藏</span>
+                </Link>
               </li>
               <li>
-                <Link to='/orders'>訂單記錄</Link>
+                <Link
+                  className={pathname === '/orders' ? 'marker-pen' : ''}
+                  to='/orders'
+                >
+                  <span className='font-zh-p-medium'>訂單記錄</span>
+                </Link>
               </li>
               <li>
                 <IconButton onClick={() => navigate('/cart')}>

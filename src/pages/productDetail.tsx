@@ -26,7 +26,7 @@ export default function ProductDetail() {
   const dispatch = useDispatch();
 
   /**
-   * 處理收藏清單事件
+   * 處理我的收藏事件
    *
    * @param id - 產品 ID
    */
@@ -41,7 +41,7 @@ export default function ProductDetail() {
       dispatch(toggleToast(true));
       dispatch(
         updateMessage({
-          text: '已從收藏清單移除',
+          text: '已從我的收藏移除',
           status: true,
         })
       );
@@ -49,7 +49,7 @@ export default function ProductDetail() {
       dispatch(toggleToast(true));
       dispatch(
         updateMessage({
-          text: '已加入收藏清單',
+          text: '已加入我的收藏',
           status: true,
         })
       );
@@ -145,10 +145,10 @@ export default function ProductDetail() {
   };
 
   /**
-   * 確認目前該產品是否已加入收藏清單
+   * 確認目前該產品是否已加入我的收藏
    *
    * @param productId - 商品 ID
-   * @returns 該產品是否已加入收藏清單
+   * @returns 該產品是否已加入我的收藏
    */
   const checkFavoriteItem = (productId: string): boolean => {
     return favoritesList
@@ -164,7 +164,7 @@ export default function ProductDetail() {
 
   return (
     <>
-    <h2 className='page-title'>作品資訊</h2>
+    <h2 className='page-title page-title-mb-0'>作品資訊</h2>
       <div className='product-detail-container container'>
         <div className={`${isProductLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />

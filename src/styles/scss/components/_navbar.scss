@@ -101,6 +101,10 @@ nav.navbar {
   }
 }
 
+.marker-pen span {
+  background-image: linear-gradient(transparent 50%, $brown-200 50%);
+}
+
 @media (min-width: 992px) {
   .navbar-nav {
     display: none;
@@ -110,10 +114,13 @@ nav.navbar {
     align-items: center;
     a {
       transition: all 0.3s;
-      padding: 16px;
+      padding: 24px 16px;
     }
     a:hover {
       color: $blue-600;
+    }
+    a.marker-pen:hover {
+      color: $gray-900;
     }
   }
 }
