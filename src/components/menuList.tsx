@@ -7,18 +7,17 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import authService from '../services/api/admin/auth.service';
 import Spinners from './Spinners';
-import { Drafts, Source } from './Icons';
+import { ConfirmationNumber, Drafts, Source } from './Icons';
 
 export default function MenuList() {
   const token = sessionStorage.getItem('token') ?? '';
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const currentPath = useLocation().pathname.split('/admin/')[1];
-
   const navItems = [
     { path: 'products', label: '商品總覽', icon: <Source /> },
     { path: 'orders', label: '管理訂單', icon: <Drafts /> },
-    { path: 'coupons', label: '管理優惠券', icon: <Drafts /> },
+    { path: 'coupons', label: '管理優惠券', icon: <ConfirmationNumber /> },
   ];
 
   /**

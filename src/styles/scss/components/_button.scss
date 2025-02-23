@@ -38,7 +38,7 @@
   }
 
   &.btn-danger {
-    @include bg-color(#cd2745);
+    @include bg-color($danger-200);
     @include text-color($white);
     .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
       @include text-color($white);

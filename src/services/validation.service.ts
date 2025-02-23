@@ -27,6 +27,10 @@ export const errorMessages = {
   telInvalid: '請輸入有效的聯絡電話',
   // 地址
   addressRequire: '請輸入收件地址',
+  // 優惠券代碼
+  couponTitleRequire: '請輸入優惠券名稱',
+  // 優惠券代碼
+  couponCodeRequire: '請輸入優惠券代碼',
 };
 
 /** 表單驗證服務 */
@@ -65,6 +69,28 @@ export class ValidationService {
   static titleValidator() {
     return {
       required: errorMessages.titleRequire,
+    };
+  }
+
+  /**
+   * 取得優惠券名稱驗證規則
+   *
+   * @returns rules
+   */
+  static couponTitleValidator() {
+    return {
+      required: errorMessages.couponTitleRequire,
+    };
+  }
+
+  /**
+   * 取得優惠券代碼驗證規則
+   *
+   * @returns rules
+   */
+  static couponCodeValidator() {
+    return {
+      required: errorMessages.couponCodeRequire,
     };
   }
 
@@ -189,6 +215,8 @@ export class ValidationService {
         return /^\d/.test(value);
       case 'price':
         return /^\d/.test(value);
+      case 'code':
+        return /^[0-9a-zA-Z]*$/.test(value);
       default:
         return true;
     }

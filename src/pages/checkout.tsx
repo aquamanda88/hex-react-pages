@@ -35,7 +35,11 @@ interface CheckoutProps {
 export default function Checkout({ activeStep }: CheckoutProps) {
   const [isProductLoading, setIsProductLoading] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-  const [cartData, setCartData] = useState<CartDataDatum>();
+  const [cartData, setCartData] = useState<CartDataDatum>({
+    carts: [],
+    total: 0,
+    final_total: 0,
+  });
   const [orderDataRequest, setOrderDataRequest] = useState<OrderDataRequest>();
   const [orderUserData, setOrderUserData] = useState<OrderFormData>();
   const [selectedOrderData, setSelectedOrderData] = useState<OrderDatum>();
@@ -349,7 +353,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                           <th>作品資訊</th>
                           <th className='text-end'>單價</th>
                           <th>數量</th>
-                          <th className='text-end'>總計</th>
+                          <th className='text-end'>（含折扣）總計</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -446,9 +450,25 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                       </ul>
                     </div>
                     <div className='col-12 col-lg-6'>
-                      <div className='d-flex justify-content-between'>
-                        <h4>總金額</h4>
-                        <h3>TWD {formatPrice(cartData?.total)}</h3>
+                      <div className='count-table'>
+                        <div className='d-flex justify-content-between'>
+                          <h6 className='font-zh-p-regular'>總金額</h6>
+                          <h5 className='font-zh-h5'>
+                            TWD {formatPrice(cartData?.total)}
+                          </h5>
+                        </div>
+                        <div className='d-flex justify-content-between'>
+                          <h6 className='font-zh-p-regular mb-0'>折抵金額</h6>
+                          <h5 className='font-zh-h5 mb-0'>
+                            - TWD{' '}
+                            {formatPrice(cartData.total - cartData.final_total)}
+                          </h5>
+                        </div>
+                        <hr />
+                        <div className='d-flex justify-content-between'>
+                          <h4>結帳金額</h4>
+                          <h3>TWD {formatPrice(cartData?.final_total)}</h3>
+                        </div>
                       </div>
                       <div className='row'>
                         <div className='col-6'>
@@ -489,7 +509,7 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                               <th>作品資訊</th>
                               <th className='text-end'>單價</th>
                               <th>數量</th>
-                              <th className='text-end'>總計</th>
+                              <th className='text-end'>（含折扣）總計</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -603,9 +623,13 @@ export default function Checkout({ activeStep }: CheckoutProps) {
                           </ul>
                         </div>
                         <div className='col-12 col-lg-6'>
-                          <div className='d-flex justify-content-between'>
-                            <h4>總金額</h4>
-                            <h3>TWD {formatPrice(selectedOrderData?.total)}</h3>
+                          <div className='count-table'>
+                            <div className='d-flex justify-content-between'>
+                              <h4>結帳金額</h4>
+                              <h3>
+                                TWD {formatPrice(selectedOrderData?.total)}
+                              </h3>
+                            </div>
                           </div>
                           <div className='row'>
                             {selectedOrderData?.is_paid ? (

@@ -37,3 +37,25 @@ export interface CouponFullDatum extends CouponDatum {
   /** 優惠券 ID */
   id: string;
 }
+
+/** 套用優惠券資料 request */
+export interface CouponUsingRequest {
+  /** 回傳格式 */
+  data: {
+    /** 優惠券使用代碼 */
+    code?: string;
+  };
+}
+
+/** 套用優惠券資料 response */
+export interface CouponUsingResponse {
+  /** 是否成功 */
+  success: boolean;
+  /** 回傳格式 */
+  data: {
+    /** 購物車最終總價 */
+    final_total: number;
+  };
+  /** 回傳訊息 */
+  message: string;
+}

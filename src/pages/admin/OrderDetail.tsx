@@ -13,6 +13,7 @@ import {
 import authService from '../../services/api/admin/auth.service';
 import ordersApiService from '../../services/api/admin/orders.service';
 import { CartsDatum } from '../../core/models/cart.model';
+import { Check, Close } from '../../components/Icons';
 
 export default function AdminOrderDetail() {
   const token = sessionStorage.getItem('token') ?? '';
@@ -55,6 +56,22 @@ export default function AdminOrderDetail() {
     {
       header: '數量',
       accessor: (item: CartsDatum) => `${item.qty} ${item.product.unit}`,
+      tdClass: 'text-center',
+    },
+    {
+      header: '是否有套用優惠券',
+      accessor: (item: CartsDatum) =>
+        item.coupon ? (
+          <Check className='text-success' />
+        ) : (
+          <Close className='text-danger' />
+        ),
+      tdClass: 'text-center',
+    },
+    {
+      header: '優惠券名稱',
+      accessor: (item: CartsDatum) =>
+        item.coupon?.title ? item.coupon?.title : '－',
       tdClass: 'text-center',
     },
   ];

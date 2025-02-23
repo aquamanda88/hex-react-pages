@@ -6,6 +6,9 @@
   .MuiInputBase-multiline {
     padding: 16px 14px;
   }
+  .MuiInputBase-root.MuiInput-underline input {
+    padding: 4px 0;
+  }
 }
 
 .form-input-group {

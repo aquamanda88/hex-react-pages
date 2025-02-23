@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
+import { Controller, useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
-import { Button, IconButton, TextField } from '@mui/material';
+import { Button, FormControl, IconButton, TextField } from '@mui/material';
 import { Spinners } from '../components/Index';
 import { Close, InsertPhoto } from '../components/Icons';
 import { calculateCartCount } from '../redux/countSlice';
@@ -12,7 +13,9 @@ import {
   formatPrice,
   formatUnknownText,
 } from '../services/formatValue.service';
+import validationService from '../services/validation.service';
 import cartApiService from '../services/api/user/cart.service';
+import couponApiService from '../services/api/user/coupons.service';
 import Swal from 'sweetalert2';
 
 export default function Cart() {
@@ -21,6 +24,18 @@ export default function Cart() {
   const [changedCart, setChangedCart] = useState<CartDataRequest[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const {
+    control,
+    clearErrors,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: 'onSubmit',
+    defaultValues: {
+      code: '',
+    },
+  });
 
   /**
    * 處理開啟刪除商品 modal 事件
@@ -94,6 +109,14 @@ export default function Cart() {
     if (!/^\d+$/.test(pasteData)) {
       e.preventDefault();
     }
+  };
+
+  /**
+   * 送出套用優惠券表單
+   */
+  const onSubmit = (data: { code: string }) => {
+    clearErrors();
+    applyCoupon(data.code);
   };
 
   /**
@@ -213,6 +236,36 @@ export default function Cart() {
       });
   };
 
+  /**
+   * 呼叫套用優惠券 API
+   *
+   * @param code - 優惠券代碼
+   */
+  const applyCoupon = async (code: string) => {
+    setIsProductLoading(true);
+    const couponUsingRequest = {
+      data: {
+        code,
+      },
+    };
+
+    couponApiService
+      .applyCoupon(couponUsingRequest)
+      .then(({ data: { message, success } }) => {
+        getCarts();
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: message,
+            status: success,
+          })
+        );
+      })
+      .finally(() => {
+        setIsProductLoading(false);
+      });
+  };
+
   useEffect(() => {
     if (changedCart.length > 0) {
       editCartItem(changedCart);
@@ -240,7 +293,7 @@ export default function Cart() {
                     <th>作品資訊</th>
                     <th className='text-end'>單價</th>
                     <th>數量</th>
-                    <th className='text-end'>總計</th>
+                    <th className='text-end'>（含折扣）總計</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -293,7 +346,7 @@ export default function Cart() {
                             item.product.content?.artists_zh_tw
                           )}
                         </p>
-                        <p>媒材：{item.product.category}</p>
+                        <p>分類：{item.product.category}</p>
                       </td>
                       <td className='text-end col-md-2'>
                         <p className='font-en-p-medium'>
@@ -339,12 +392,59 @@ export default function Cart() {
             >
               清空購物車
             </Button>
-
+            <form
+              className='d-flex align-items-center'
+              id='form'
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              <FormControl error={!!errors.code}>
+                <Controller
+                  name='code'
+                  control={control}
+                  rules={validationService.couponCodeValidator()}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label='優惠券代碼'
+                      type='text'
+                      variant='standard'
+                      error={!!errors.code}
+                      helperText={validationService.getHelperText(errors.code)}
+                      onChange={(e) => {
+                        field.onChange(e);
+                      }}
+                    />
+                  )}
+                />
+              </FormControl>
+              <Button
+                className='btn btn-primary mb-4'
+                variant='outlined'
+                type='submit'
+              >
+                套用優惠券
+              </Button>
+            </form>
             <div className='row justify-content-end'>
               <div className='col-12 col-lg-6'>
-                <div className='d-flex justify-content-between'>
-                  <h4>總金額</h4>
-                  <h3>TWD {formatPrice(cart?.final_total)}</h3>
+                <div className='count-table'>
+                  <div className='d-flex justify-content-between'>
+                    <h6 className='font-zh-p-regular'>總金額</h6>
+                    <h5 className='font-zh-h5'>
+                      TWD {formatPrice(cart?.total)}
+                    </h5>
+                  </div>
+                  <div className='d-flex justify-content-between'>
+                    <h6 className='font-zh-p-regular mb-0'>折抵金額</h6>
+                    <h5 className='font-zh-h5 mb-0'>
+                      - TWD {formatPrice(cart?.total - cart?.final_total)}
+                    </h5>
+                  </div>
+                  <hr />
+                  <div className='d-flex justify-content-between'>
+                    <h4>結帳金額</h4>
+                    <h3>TWD {formatPrice(cart?.final_total)}</h3>
+                  </div>
                 </div>
                 <div className='d-flex justify-content-end'>
                   <Button

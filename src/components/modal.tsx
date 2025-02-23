@@ -13,6 +13,8 @@ interface ModalProps {
   children: ReactNode;
   /** 是否全螢幕，為選填 */
   isFullScreen?: boolean;
+  /** 是否關閉 modal-content，為選填 */
+  isCloseModalContent?: boolean;
   /** 確認按鈕的顯示文字 */
   confirmBtnText?: string;
   /** 確認按鈕的處理函式 */
@@ -24,6 +26,7 @@ export default function Modal({
   setOpen,
   children,
   isFullScreen = false,
+  isCloseModalContent,
   confirmBtnText,
   handleConfirm,
 }: ModalProps) {
@@ -48,7 +51,9 @@ export default function Modal({
               </IconButton>
             </DialogActions>
           </div>
-          <div className='modal-content'>{children}</div>
+          <div className={`${isCloseModalContent ? 'p-0' : ''} modal-content`}>
+            {children}
+          </div>
           <div className='modal-footer sticky-bottom bg-white d-flex justify-content-center'>
             <div className='d-flex justify-content-center py-2 gap-2'>
               <Button

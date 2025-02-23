@@ -37,11 +37,10 @@ const goToPage = (path: string) => {
  * 顯示 HTTP 錯誤訊息
  *
  * @param message - API 回傳錯誤訊息
- * @param status - API 錯誤狀態
  * @returns 無回傳值
  */
-function formatErrorMessage(message: string, status?: number) {
-  const text = status ? `(${status}) ${message}` : message;
+function formatErrorMessage(message: string) {
+  const text = message;
   const options: SweetAlertOptions = {
     icon: 'error',
     text,
@@ -66,12 +65,6 @@ function formatErrorMessage(message: string, status?: number) {
         goToPage('products');
         break;
     }
-
-    switch (status) {
-      case 404:
-        goToPage('pageNotFound');
-        break;
-    }
   });
 }
 
@@ -79,10 +72,10 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      const { data, status } = error.response;
+      const { data } = error.response;
       const { message } = data;
       const formattedMessage = message.message ? message.message : message;
-      formatErrorMessage(formattedMessage, status);
+      formatErrorMessage(formattedMessage);
     } else {
       formatErrorMessage(error.message);
     }

@@ -34,7 +34,7 @@
 
 // 內文-regular
 .font-zh-p-regular {
-  @include font(16px, 0.02em, 1);
+  @include font(16px, 0.02em, 1.2);
 }
 
 // 備註文字-medium
