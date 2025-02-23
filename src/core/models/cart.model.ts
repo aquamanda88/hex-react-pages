@@ -1,3 +1,4 @@
+import { CouponFullDatum } from "./coupon.model";
 import { ProductFullDatum } from "./utils.model";
 
 /** 產品資料 request */
@@ -37,7 +38,7 @@ export interface CartDataDatum {
 /** 購物車資料 */
 export interface CartsDatum {
   /** 優惠券使用資料 */
-  coupon?: CouponDatum;
+  coupon?: CouponFullDatum;
   /** 購物車總價 */
   total: number;
   /** 購物車最終總價 */
@@ -50,20 +51,4 @@ export interface CartsDatum {
   product_id: string;
   /** 數量 */
   qty: number;
-}
-
-/** 優惠券資料 */
-export interface CouponDatum {
-  /** 優惠券 ID */
-  id: string;
-  /** 優惠券名稱 */
-  title: string;
-  /** 是否啟用 */
-  is_enabled: number;
-  /** 打折數 */
-  percent: number;
-  /** 優惠券使用截止日期 - 單位 (秒) */
-  due_date: number;
-  /** 優惠券使用代碼 */
-  code: string;
 }

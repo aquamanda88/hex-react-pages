@@ -25,7 +25,7 @@ const DataTable = <T,>({ data, columns, actions }: DataTableProps<T>) =>{
         </tr>
       </thead>
       <tbody>
-        {data.length > 0 ? (
+        {data && data.length > 0 ? (
           data.map((item, rowIndex) => (
             <tr key={rowIndex}>
               {columns.map((col, colIndex) => (

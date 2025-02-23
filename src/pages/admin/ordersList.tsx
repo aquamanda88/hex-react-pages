@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
 import { Button, IconButton, Pagination, Skeleton, Stack } from '@mui/material';
+import { toggleToast, updateMessage } from '../../redux/toastSlice';
+import { ArrowForwardIos, Delete } from '../../components/Icons';
 import { DataTable, Spinners } from '../../components/Index';
 import { PaginationDatum } from '../../core/models/utils.model';
 import { OrdersDatum } from '../../core/models/order.model';
@@ -12,10 +15,7 @@ import {
 } from '../../services/formatValue.service';
 import authService from '../../services/api/admin/auth.service';
 import ordersApiService from '../../services/api/admin/orders.service';
-import { ArrowForwardIos, Delete } from '../../components/Icons';
 import Swal from 'sweetalert2';
-import { useDispatch } from 'react-redux';
-import { toggleToast, updateMessage } from '../../redux/toastSlice';
 
 export default function AdminOrdersList() {
   const token = sessionStorage.getItem('token') ?? '';
@@ -159,7 +159,7 @@ export default function AdminOrdersList() {
     ordersApiService
       .deleteOrderItem(id)
       .then(({ data: { message, success } }) => {
-        getOrders();
+        getOrders(currentPage);
         dispatch(toggleToast(true));
         dispatch(
           updateMessage({
@@ -181,7 +181,7 @@ export default function AdminOrdersList() {
     ordersApiService
       .deleteOrders()
       .then(({ data: { message, success } }) => {
-        getOrders();
+        getOrders(currentPage);
         dispatch(toggleToast(true));
         dispatch(
           updateMessage({

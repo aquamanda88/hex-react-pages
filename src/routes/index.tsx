@@ -5,6 +5,7 @@ import {
   AdminOrderDetail,
   AdminOrdersList,
   AdminProductsList,
+  AdminCouponsList,
   Cart,
   Checkout,
   FavoritesList,
@@ -93,6 +94,10 @@ const routes = [
       {
         path: 'order/:id',
         element: <AdminOrderDetail />,
+      },
+      {
+        path: 'coupons',
+        element: <AdminCouponsList />,
       },
     ],
   },

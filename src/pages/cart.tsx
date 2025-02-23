@@ -224,7 +224,7 @@ export default function Cart() {
   return (
     <>
       <h2 className='page-title'>購物車</h2>
-      <div className='container'>
+      <div className='content-layout container'>
         <div className={`${isProductLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />
         </div>

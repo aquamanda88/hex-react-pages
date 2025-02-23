@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
 import {
   Button,
   TextField,
@@ -15,6 +16,7 @@ import {
 } from '@mui/material';
 import { Column } from '../../components/DataTable';
 import { DataTable, Modal, Spinners } from '../../components/Index';
+import { toggleToast, updateMessage } from '../../redux/toastSlice';
 import {
   Add,
   Check,
@@ -40,8 +42,6 @@ import {
 import validationService from '../../services/validation.service';
 import authService from '../../services/api/admin/auth.service';
 import productApiService from '../../services/api/admin/products.service';
-import { useDispatch } from 'react-redux';
-import { toggleToast, updateMessage } from '../../redux/toastSlice';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -423,7 +423,7 @@ export default function AdminProductsList() {
     productApiService
       .addProductItem(addProductRequest)
       .then(({ data: { message, success } }) => {
-        getProducts();
+        getProducts(currentPage);
         dispatch(toggleToast(true));
         dispatch(
           updateMessage({
@@ -453,7 +453,7 @@ export default function AdminProductsList() {
     productApiService
       .editProductItem(id, editProductRequest)
       .then(({ data: { message, success } }) => {
-        getProducts();
+        getProducts(currentPage);
         dispatch(toggleToast(true));
         dispatch(
           updateMessage({
@@ -477,7 +477,7 @@ export default function AdminProductsList() {
     productApiService
       .deleteProductItem(deleteItem?.id ?? '')
       .then(({ data: { message, success } }) => {
-        getProducts();
+        getProducts(currentPage);
         dispatch(toggleToast(true));
         dispatch(
           updateMessage({

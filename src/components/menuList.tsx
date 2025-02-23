@@ -18,6 +18,7 @@ export default function MenuList() {
   const navItems = [
     { path: 'products', label: '商品總覽', icon: <Source /> },
     { path: 'orders', label: '管理訂單', icon: <Drafts /> },
+    { path: 'coupons', label: '管理優惠券', icon: <Drafts /> },
   ];
 
   /**

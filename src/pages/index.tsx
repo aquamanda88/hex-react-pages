@@ -12,6 +12,7 @@ export { default as OrderDetail } from './OrderDetail';
 export { default as AdminProductsList } from './admin/ProductsList';
 export { default as AdminOrdersList } from './admin/OrdersList';
 export { default as AdminOrderDetail } from './admin/OrderDetail';
+export { default as AdminCouponsList } from './admin/CouponsList';
 export { default as Week01 } from './subPages/week01';
 export { default as Week02 } from './subPages/week02';
 export { default as Week03 } from './subPages/week03';
