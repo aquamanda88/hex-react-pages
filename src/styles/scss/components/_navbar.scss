@@ -105,8 +105,15 @@ nav.navbar {
   background-image: linear-gradient(transparent 50%, $brown-200 50%);
 }
 
+.navbar-toggler:focus {
+  box-shadow: none;
+  .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium {
+    color: $blue-700;
+  }
+}
+
 @media (min-width: 992px) {
-  .navbar-nav {
+  .collapse.navbar-collapse .navbar-nav {
     display: none;
   }
   .navbar-menu {

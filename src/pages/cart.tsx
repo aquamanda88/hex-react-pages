@@ -224,7 +224,7 @@ export default function Cart() {
   return (
     <>
       <h2 className='page-title'>購物車</h2>
-      <div className='content-layout container'>
+      <div className='container'>
         <div className={`${isProductLoading ? 'd-flex' : 'd-none'} loading`}>
           <Spinners />
         </div>
@@ -360,7 +360,7 @@ export default function Cart() {
           </>
         ) : (
           <div className='layout'>
-            <div className='d-flex justify-content-center'>
+            <div className='d-flex justify-content-center text-center'>
               <h2 className='font-zh-h2'>
                 您的購物車中沒有任何商品，
                 <Link to='/products' className='text-color-blue d-inline-flex'>

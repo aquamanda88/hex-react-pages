@@ -70,7 +70,6 @@ li.flex-md-row-reverse img {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-top: 36px;
   padding-bottom: 36px;
   gap: 24px;
 }
@@ -143,9 +142,13 @@ li.flex-md-row-reverse img {
     margin-bottom: 24px;
   }
 
+  .secondary-content-items {
+    gap: 36px;
+  }
+
   .secondary-content-items li {
     flex-direction: column;
-    gap: 48px;
+    gap: 36px;
   }
 
   .secondary-content-items li.flex-md-row-reverse img {
@@ -153,7 +156,7 @@ li.flex-md-row-reverse img {
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 575px) {
   .top-product-items {
     flex-direction: column;
   }
@@ -161,5 +164,8 @@ li.flex-md-row-reverse img {
     .top-image-item {
       max-width: 100%;
     }
+  }
+  .secondary-content-items li.flex-md-row-reverse img {
+    padding-left: 0;
   }
 }

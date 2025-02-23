@@ -1,12 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { ShoppingCart } from './Icons';
+import { Menu, ShoppingCart } from './Icons';
 import { Badge, IconButton } from '@mui/material';
 import { calculateCartCount, selectCount } from '../redux/countSlice';
 import cartApiService from '../services/api/user/cart.service';
 
 export default function NavBar() {
+  const [isClickNavLink, setIsClickNavLink] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,16 +19,16 @@ export default function NavBar() {
       content: '全部作品',
     },
     {
-      url: '/cart',
-      content: '購物車',
-    },
-    {
       url: '/favorites',
       content: '我的收藏',
     },
     {
       url: '/orders',
       content: '訂單記錄',
+    },
+    {
+      url: '/cart',
+      content: '購物車',
     },
   ];
 
@@ -42,7 +43,8 @@ export default function NavBar() {
 
   useEffect(() => {
     getCarts();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isClickNavLink]);
 
   return (
     <>
@@ -55,51 +57,42 @@ export default function NavBar() {
               </Link>
             </h1>
             <ul className='navbar-menu'>
-              <li>
-                <Link
-                  className={pathname === '/products' ? 'marker-pen' : ''}
-                  to='/products'
-                >
-                  <span className='font-zh-p-medium'>全部作品</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className={pathname === '/favorites' ? 'marker-pen' : ''}
-                  to='/favorites'
-                >
-                  <span className='font-zh-p-medium'>我的收藏</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className={pathname === '/orders' ? 'marker-pen' : ''}
-                  to='/orders'
-                >
-                  <span className='font-zh-p-medium'>訂單記錄</span>
-                </Link>
-              </li>
-              <li>
-                <IconButton onClick={() => navigate('/cart')}>
-                  <Badge badgeContent={count} color='primary'>
-                    <ShoppingCart />
-                  </Badge>
-                </IconButton>
-              </li>
+              {dropdownItems.map((item, index) => (
+                <li key={index}>
+                  {item.url !== '/cart' ? (
+                    <Link
+                      className={pathname === item.url ? 'marker-pen' : ''}
+                      to={item.url}
+                    >
+                      <span className='font-zh-p-medium'>{item.content}</span>
+                    </Link>
+                  ) : (
+                    <IconButton onClick={() => navigate(item.url)}>
+                      <Badge badgeContent={count} color='primary'>
+                        <ShoppingCart />
+                      </Badge>
+                    </IconButton>
+                  )}
+                </li>
+              ))}
             </ul>
             <button
               className='navbar-toggler'
               type='button'
               data-bs-toggle='collapse'
-              data-bs-target='#navbarSupportedContent'
-              aria-controls='navbarSupportedContent'
-              aria-expanded='false'
+              data-bs-target='#navbarDropdownContent'
+              aria-controls='navbarDropdownContent'
+              aria-expanded='true'
               aria-label='Toggle navigation'
+              onClick={() => setIsClickNavLink(false)}
             >
-              <span className='navbar-toggler-icon'></span>
+              <Menu />
             </button>
           </div>
-          <div className='collapse navbar-collapse' id='navbarSupportedContent'>
+          <div
+            className={`${isClickNavLink ? '' : 'show'} collapse navbar-collapse`}
+            id='navbarDropdownContent'
+          >
             <ul className='navbar-nav me-auto'>
               {dropdownItems.map((item, index) => (
                 <li className='nav-item'>
@@ -107,6 +100,7 @@ export default function NavBar() {
                     className='nav-link font-zh-p-medium'
                     to={item.url}
                     key={index}
+                    onClick={() => setIsClickNavLink(true)}
                   >
                     {item.content}
                   </Link>

@@ -152,89 +152,91 @@ export default function FavoritesList() {
   return (
     <>
       <h2 className='page-title'>我的收藏</h2>
-      {products && products.length > 0 ? (
-        <div className='content-layout container'>
-          <div className='row mb-4'>
-            {isProductLoading ? (
-              <>
-                {[...Array(skeletonCount)].map((_, index) => (
-                  <div
-                    key={index}
-                    className='col col-12'
-                    style={{ width: skeletonWidth }}
-                  >
-                    <Skeleton variant='rectangular' height='350px' />
-                  </div>
-                ))}
-              </>
-            ) : (
-              products.map((item, index) => {
-                return (
-                  <div
-                    className='product-list-grid position-relative'
-                    key={item.id}
-                  >
-                    <Link
-                      to={`/product/${item.id}`}
-                      className='product-image-item stretched-link'
+      <div className='content-layout container'>
+        {products && products.length > 0 ? (
+          <>
+            <div className='row mb-4'>
+              {isProductLoading ? (
+                <>
+                  {[...Array(skeletonCount)].map((_, index) => (
+                    <div
+                      key={index}
+                      className='col col-12'
+                      style={{ width: skeletonWidth }}
                     >
-                      <img
-                        src={item.imageUrl}
-                        className='image-item'
-                        alt={item.imageUrl}
-                      ></img>
-                    </Link>
-                    <div className='product-info-item'>
-                      <div className='item-title d-flex justify-content-between align-items-start'>
-                        <h3 className='font-zh-h5'>{item.title}</h3>
-                        <Checkbox
-                          checked={isFavoriteChecked[index] || false}
-                          icon={<FavoriteBorder />}
-                          checkedIcon={<Favorite />}
-                          onChange={() =>
-                            handleFavoriteChange(index, item.id ?? '')
-                          }
-                          sx={{
-                            '& .MuiSvgIcon-root': {
-                              color: 'gray',
-                            },
-                          }}
-                        />
-                      </div>
-                      <p className='font-en-h4-medium mb-0'>
-                        TWD {formatPrice(item.price)}
-                      </p>
-                      <p className='font-en-p-regular text-secondary'>
-                        <del>TWD {formatPrice(item.origin_price)}</del>
-                      </p>
+                      <Skeleton variant='rectangular' height='350px' />
                     </div>
-                  </div>
-                );
-              })
-            )}
+                  ))}
+                </>
+              ) : (
+                products.map((item, index) => {
+                  return (
+                    <div
+                      className='product-list-grid position-relative'
+                      key={item.id}
+                    >
+                      <Link
+                        to={`/product/${item.id}`}
+                        className='product-image-item stretched-link'
+                      >
+                        <img
+                          src={item.imageUrl}
+                          className='image-item'
+                          alt={item.imageUrl}
+                        ></img>
+                      </Link>
+                      <div className='product-info-item'>
+                        <div className='item-title d-flex justify-content-between align-items-start'>
+                          <h3 className='font-zh-h5'>{item.title}</h3>
+                          <Checkbox
+                            checked={isFavoriteChecked[index] || false}
+                            icon={<FavoriteBorder />}
+                            checkedIcon={<Favorite />}
+                            onChange={() =>
+                              handleFavoriteChange(index, item.id ?? '')
+                            }
+                            sx={{
+                              '& .MuiSvgIcon-root': {
+                                color: 'gray',
+                              },
+                            }}
+                          />
+                        </div>
+                        <p className='font-en-h4-medium mb-0'>
+                          TWD {formatPrice(item.price)}
+                        </p>
+                        <p className='font-en-p-regular text-secondary'>
+                          <del>TWD {formatPrice(item.origin_price)}</del>
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+            <div className='d-flex justify-content-center'>
+              <Stack spacing={2}>
+                <Pagination
+                  count={pagination}
+                  page={currentPage}
+                  onChange={handlePageChange}
+                />
+              </Stack>
+            </div>
+          </>
+        ) : (
+          <div className='layout'>
+            <div className='d-flex justify-content-center text-center'>
+              <h2 className='font-zh-h2'>
+                您的收藏中沒有任何商品，
+                <Link to='/products' className='text-color-blue d-inline-flex'>
+                  <p className='btn-icon'>馬上去逛逛</p>
+                </Link>
+              </h2>
+            </div>
           </div>
-          <div className='d-flex justify-content-center'>
-            <Stack spacing={2}>
-              <Pagination
-                count={pagination}
-                page={currentPage}
-                onChange={handlePageChange}
-              />
-            </Stack>
-          </div>
-        </div>
-      ) : (
-        <div className='layout'>
-          <div className='d-flex justify-content-center'>
-            <h2 className='font-zh-h2'>
-              您的收藏中沒有任何商品，
-              <Link to='/products' className='text-color-blue d-inline-flex'>
-                <p className='btn-icon'>馬上去逛逛</p>
-              </Link>
-            </h2>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }
