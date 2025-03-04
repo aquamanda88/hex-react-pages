@@ -95,11 +95,10 @@ export default function NavBar() {
           >
             <ul className='navbar-nav me-auto'>
               {dropdownItems.map((item, index) => (
-                <li className='nav-item'>
+                <li className='nav-item' key={index}>
                   <Link
                     className='nav-link font-zh-p-medium'
                     to={item.url}
-                    key={index}
                     onClick={() => setIsClickNavLink(true)}
                   >
                     {item.content}

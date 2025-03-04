@@ -73,7 +73,7 @@ export default function AdminCouponsList() {
     { header: '優惠券代碼', accessor: 'code', tdClass: 'text-center' },
     {
       header: '折價比例',
-      accessor: (item: CouponFullDatum) => `${100 - item.percent}% OFF`,
+      accessor: (item: CouponFullDatum) => `${item.percent}% OFF`,
       tdClass: 'text-center',
     },
     {

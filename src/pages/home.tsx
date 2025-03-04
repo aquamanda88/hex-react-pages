@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
+import { useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
+import { toggleToast, updateMessage } from '../redux/toastSlice';
+import { AxiosError } from 'axios';
 import { ProductFullDatum } from '../core/models/utils.model';
-import productApiService from '../services/api/user/products.service';
-import AOS from 'aos';
+import { CouponFullDatum } from '../core/models/coupon.model';
 import { formatPrice } from '../services/formatValue.service';
+import productApiService from '../services/api/user/products.service';
+import couponApiService from '../services/api/admin/coupons.service';
+import AOS from 'aos';
 
 export default function Home() {
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
+  const [coupons, setCoupons] = useState<CouponFullDatum[]>([]);
+  const dispatch = useDispatch();
 
   const contentItems = [
     {
@@ -31,6 +38,33 @@ export default function Home() {
   ];
 
   /**
+   * 處理複製優惠券代碼到剪貼簿事件
+   *
+   */
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(coupons[0].code ?? '');
+      dispatch(toggleToast(true));
+      dispatch(
+        updateMessage({
+          text: '已複製優惠碼：' + coupons[0].code,
+          status: true,
+        })
+      );
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        dispatch(toggleToast(true));
+        dispatch(
+          updateMessage({
+            text: error.response?.data?.message,
+            status: false,
+          })
+        );
+      }
+    }
+  };
+
+  /**
    * 呼叫取得商品列表 API
    *
    */
@@ -43,9 +77,19 @@ export default function Home() {
     });
   };
 
+  /**
+   * 呼叫取得優惠券列表 API
+   */
+  const getCoupons = async () => {
+    couponApiService.getCoupons().then(({ data: { coupons } }) => {
+      setCoupons(coupons);
+    });
+  };
+
   useEffect(() => {
     AOS.init();
     getAllProducts();
+    getCoupons();
   }, []);
 
   return (
@@ -112,6 +156,19 @@ export default function Home() {
               </li>
             ))}
           </ul>
+        </div>
+      </div>
+      <div className='container-fluid position-relative p-0'>
+        <div className='coupon-mask'></div>
+        <div className='coupon-block'>
+          <h2 className='text-white z-1'>使用 coupon 取得七折優惠</h2>
+          <Button
+            className='btn btn-primary'
+            variant='contained'
+            onClick={handleCopy}
+          >
+            點擊複製 coupon
+          </Button>
         </div>
       </div>
       <div className='container'>
