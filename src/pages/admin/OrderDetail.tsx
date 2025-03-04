@@ -169,7 +169,7 @@ export default function AdminOrderDetail() {
                         <div className='info-item'>
                           {selectedOrder?.paid_date && (
                             <p className='mb-0'>
-                              付款時間：{formatDate(selectedOrder?.paid_date)}
+                              訂單付款時間：{formatDate(selectedOrder?.paid_date)}
                             </p>
                           )}
                           <p className='mb-0'>

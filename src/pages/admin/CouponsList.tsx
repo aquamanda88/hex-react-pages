@@ -18,27 +18,28 @@ import {
 } from '@mui/material';
 import { Column } from '../../components/DataTable';
 import { DataTable, Modal, Spinners } from '../../components/Index';
-import { toggleToast, updateMessage } from '../../redux/toastSlice';
 import { Add, Check, Close, Delete, Edit } from '../../components/Icons';
-import { PaginationDatum } from '../../core/models/utils.model';
-import validationService from '../../services/validation.service';
-import authService from '../../services/api/admin/auth.service';
-import couponApiService from '../../services/api/admin/coupons.service';
+import { toggleToast, updateMessage } from '../../redux/toastSlice';
 import {
   CouponDataRequest,
   CouponDatum,
   CouponFullDatum,
 } from '../../core/models/coupon.model';
+import { PaginationDatum } from '../../core/models/utils.model';
+import { format } from 'date-fns/fp/format';
 import { formatDate } from '../../services/formatValue.service';
+import validationService from '../../services/validation.service';
+import authService from '../../services/api/admin/auth.service';
+import couponApiService from '../../services/api/admin/coupons.service';
 import Swal from 'sweetalert2';
 
-const defaultValues: CouponFullDatum = {
+const defaultValues = {
   id: '',
   title: '',
   code: '',
   is_enabled: 0,
   percent: 10,
-  due_date: 0,
+  due_date: `${new Date().getFullYear()}-12-31`,
 };
 
 export default function AdminCouponsList() {
@@ -111,14 +112,7 @@ export default function AdminCouponsList() {
     formState: { errors },
   } = useForm({
     mode: 'all',
-    defaultValues: {
-      id: '',
-      code: '',
-      title: '',
-      is_enabled: 0,
-      percent: 0,
-      due_date: 0,
-    },
+    defaultValues,
   });
 
   /**
@@ -179,13 +173,30 @@ export default function AdminCouponsList() {
   };
 
   /**
-   * 處理新增 編輯優惠券事件
+   * 處理新增/編輯優惠券事件
+   * 
+    @param data - 欲新增/編輯的優惠券資料
    */
-  const onSubmit = (data: CouponDatum) => {
+  const onSubmit = (data: {
+    id: string;
+    title: string;
+    code: string;
+    is_enabled: number;
+    percent: number;
+    due_date: string;
+  }) => {
+    const transformedData: CouponDatum = {
+      ...data,
+      due_date: Date.parse(`${data.due_date}T00:00:00`) / 1000,
+    };
+
     if (modalType === 'add') {
-      addCouponItem(getAddCouponRequest(data));
+      addCouponItem(getAddCouponRequest(transformedData));
     } else if (modalType === 'edit') {
-      editCouponItem(tempProduct?.id ?? '', getAddCouponRequest(data));
+      editCouponItem(
+        tempProduct?.id ?? '',
+        getAddCouponRequest(transformedData)
+      );
     }
   };
 
@@ -201,10 +212,9 @@ export default function AdminCouponsList() {
         code: data.code,
         is_enabled: data.is_enabled,
         percent: Number(data.percent),
-        due_date: Math.floor(new Date('2025-03-03').getTime() / 1000),
+        due_date: data.due_date,
       },
     };
-
     return newTempProduct;
   };
 
@@ -215,15 +225,26 @@ export default function AdminCouponsList() {
    */
   const setCouponValues = (editItem?: CouponFullDatum) => {
     const item = editItem ?? defaultValues;
-
     const { title, code, is_enabled, percent, due_date } = item;
 
     setValue('title', title);
     setValue('code', code ?? '');
     setValue('is_enabled', is_enabled ?? 0);
     setValue('percent', percent ?? 0);
-    setValue('due_date', due_date ?? 0);
-    setTempProduct(item);
+    if (typeof due_date === 'number') {
+      const dateString = format('yyyy-MM-dd')(new Date(due_date * 1000));
+      setValue('due_date', dateString);
+    } else if (typeof due_date === 'string') {
+      setValue('due_date', due_date.toString());
+    }
+
+    const dueDateAsNumber = Date.parse(`${due_date}T00:00:00`) / 1000;
+    const updatedItem = {
+      ...item,
+      due_date: dueDateAsNumber,
+    };
+
+    setTempProduct(updatedItem);
   };
 
   /**
@@ -493,7 +514,7 @@ export default function AdminCouponsList() {
                             <TextField
                               {...field}
                               label='到期時間'
-                              type='text'
+                              type='date'
                               onChange={(e) => {
                                 if (validationService.isValidInput(e)) {
                                   field.onChange(e);
@@ -502,7 +523,6 @@ export default function AdminCouponsList() {
                             />
                           )}
                         />
-                        {formatDate(tempProduct?.due_date)}
                       </FormControl>
                     </div>
                   </div>
