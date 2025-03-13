@@ -5,15 +5,13 @@ import { Button } from '@mui/material';
 import { toggleToast, updateMessage } from '../redux/toastSlice';
 import { AxiosError } from 'axios';
 import { ProductFullDatum } from '../core/models/utils.model';
-import { CouponFullDatum } from '../core/models/coupon.model';
 import { formatPrice } from '../services/formatValue.service';
 import productApiService from '../services/api/user/products.service';
-import couponApiService from '../services/api/admin/coupons.service';
 import AOS from 'aos';
 
 export default function Home() {
   const [products, setProducts] = useState<ProductFullDatum[]>([]);
-  const [coupons, setCoupons] = useState<CouponFullDatum[]>([]);
+  const [couponCode] = useState('happy2025');
   const dispatch = useDispatch();
 
   const contentItems = [
@@ -43,11 +41,11 @@ export default function Home() {
    */
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(coupons[0].code ?? '');
+      await navigator.clipboard.writeText(couponCode ?? '');
       dispatch(toggleToast(true));
       dispatch(
         updateMessage({
-          text: '已複製優惠碼：' + coupons[0].code,
+          text: '已複製優惠碼：' + couponCode,
           status: true,
         })
       );
@@ -77,19 +75,9 @@ export default function Home() {
     });
   };
 
-  /**
-   * 呼叫取得優惠券列表 API
-   */
-  const getCoupons = async () => {
-    couponApiService.getCoupons().then(({ data: { coupons } }) => {
-      setCoupons(coupons);
-    });
-  };
-
   useEffect(() => {
     AOS.init();
     getAllProducts();
-    getCoupons();
   }, []);
 
   return (
