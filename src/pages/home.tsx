@@ -17,19 +17,19 @@ export default function Home() {
   const contentItems = [
     {
       imgUrl:
-        'https://storage.googleapis.com/vue-course-api.appspot.com/olive-branch/1739985852802.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=lW4J08of3JXG3AQaGz8JXZCWyUH7Fo5yIMNQHxuTx9FetGi7YkRM1DIlgAQYIL8gkMq6W7liBsVP7Z9DeHr4e%2BL%2FyBO7dB9Mm1JpKqsj6clIBCMyKnt6CwivcCssehSBQ6hx61GLpiCjAAsB9lJe3MJ9A2Uwcfm6lZ2aFLFQvtxyDQOkmaqxlIiPTiJ%2F1BoNcvOmFHjV4Qza5zdjGAlXyKyRF1OkOPlSTSR6skA3D%2BbpnCWkl8ln0t6Ro44z89Lydeq4nTMN6FVe6IIEcBCQIekaOTUnPBFYY3VTmU0NJVbDY5Wh%2B%2BoREusl%2FsBKRUqznbIr3%2BfCfWHdxFID8E3BuQ%3D%3D',
+        'https://storage.googleapis.com/vue-course-api.appspot.com/olive-branch/1739985852802.jpg',
       title: '博物館級細節還原',
       content: '採用高精度技術與頂級畫布，重現大師筆下的光影與質感。',
     },
     {
       imgUrl:
-        'https://storage.googleapis.com/vue-course-api.appspot.com/olive-branch/1739985500663.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=FxCKUkI9zBnoVTdQ2IGZUNUCCUXHMKXE40S9Cjbs916K3uVRVfKvYKrBZTxJnERyqNxqesIAdCMqSQraESTRYYhtjU%2F5lBP83yP9mHFErkVPdbGpMMopfQCGTYWk3DHbPcw0YQsINoDwcNnD1WtK3VL9%2FrTtGsvEXbSOuqxaDEFUEHY6f0IFOXLKxmlOIeXRH4AGsXA5yndqCmpC5DAQibOZ5XwqFjuj1tbkj736jfOt9cQFzO35h2g1e55MOk6Qk6JCCmdpTVpC%2BSzxX8D2zWe5KSu0muzW7cPgGgOCJsKIYr5K77KinOtluuzHEKrr75RTQZWitJo4N0aIgKdQLw%3D%3D',
+        'https://storage.googleapis.com/vue-course-api.appspot.com/olive-branch/1739985500663.jpg',
       title: '多種尺寸與客製化選擇',
       content: '滿足不同空間需求，讓藝術成為您生活的一部分。',
     },
     {
       imgUrl:
-        'https://storage.googleapis.com/vue-course-api.appspot.com/olive-branch/1739986028820.jpg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=OmJ2b4WfsLHrJIeurzOXsqxIyheTi%2BHX0jbzztO%2B6XpZNwQ6QvtKKaALJXWAKtG3HyZaBfQPFwQZKSguwEZKBjWmRTA9kZORxe7Qpj2sILQixro4ZVF%2Bp25JB0Kp2I5jf4lolBrTlyBoVyQ5PiGxDP47WVyhx9OB%2Bw1yruV%2F7IInlZaype8Ex17BT6Ul69bLKh4kFqjExDbfox%2FAtMPfVV5TneucMyz1uzgbUE3qQCxYS7F3HXXkuOqSEPxUzyBmtBjHa54uelqzCz%2Byy9FO3oKeWLpilzQ3ECfzLrlmW6jbqv7yOqs%2B4ab9ME%2FblGEVrEWZMYmDXYBNDpdz5uB8SQ%3D%3D',
+        'https://storage.googleapis.com/vue-course-api.appspot.com/olive-branch/1739986028820.jpg',
       title: '價格親民，收藏無負擔',
       content: '讓人人都能擁有經典名作，輕鬆提升居家品味。',
     },
